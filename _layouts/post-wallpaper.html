@@ -1,0 +1,98 @@
+---
+layout: default
+---
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">{{ page.title }}</h1>
+    <p class="post-meta">
+      <span class="post-category post-category-{{ page.category }}"></span>
+      <time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
+        {{ page.date | date: "%Y-%m-%d" }}</time>
+        {% if page.author %}
+         • <span
+        itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">{{ page.author }}
+        </span></span>
+        {% endif %}
+        {% if page.tags %}
+        <ul class="post-tags-list">
+          {% for tag in page.tags %}
+            <li><a href="/tags/#{{ tag }}">{{ tag }}</a></li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </p>
+        <!-- mobile image -->
+        <!--img src="{{ page.headimage }}" alt="{{ page.description }}" title="{{ page.description }}"-->
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+
+    <div class="page-content-preview-image"><img src="{{ page.date | date: "/images/%Y/%m/%Y%m%d.jpg" }}"></div>
+    <div class="page-content-buttons">
+      <a href="https://locklive.gumroad.com/l/{{ page.date | date: "%Y%m%d" }}">購買支持我們</a>
+      <a href="{{site.app_link}}">下載 App</a>
+      </div>
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4189184568187692"
+           crossorigin="anonymous"></script>
+      <ins class="adsbygoogle"
+           style="display:block; text-align:center;"
+           data-ad-layout="in-article"
+           data-ad-format="fluid"
+           data-ad-client="ca-pub-4189184568187692"
+           data-ad-slot="6305085632"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    {{ content }}
+
+<div class="page-content-preview-video">
+    <video src="{{ page.date | date: "/images/%Y/%m/%Y%m%d.mov" }}" controls="controls" class="video_preview" Webkit-playsinline="true" disablePictureInPicture="true" disableRemotePlayback="true">
+    </video>
+</div>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4189184568187692"
+     crossorigin="anonymous"></script>
+<!-- xLiveWallpaper-banner -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-4189184568187692"
+     data-ad-slot="5231677111"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+{% include wallpage-help.html %}
+
+    <div class="page-content-preview-image"><img src="{{ page.date | date: "/images/%Y/%m/%Y%m%d.jpg" }}"></div>
+    <div class="page-content-buttons">
+      <a href="https://locklive.gumroad.com/l/{{ page.date | date: "%Y%m%d" }}">Get this wallpaper</a>
+      <a href="{{site.app_link}}">Download App</a>
+      </div>
+
+  </div>
+<!-- only show tags in the post -->
+ <h3>Related Posts</h3>
+ <ul>
+   {% for post in site.related_posts %}
+     <li><a href="{{ post.url }}">{{ post.title }}</a></li>
+   {% endfor %}
+ </ul>
+ <h3>All Tags</h3>
+ <ul class="site-tags-list">
+   {% for tag in site.tags %}
+     <li><a href="/tags/#{{ tag[0] }}">{{ tag[0] }}</a></li>
+   {% endfor %}
+ </ul>
+</article>
+<style>
+  .page-content:before {
+    background-image: url('{{ page.date | date: "/images/%Y/%m/%Y%m%d.jpg" }}');
+    display: block;
+  }
+
+  .page-content:after {
+    display: block;
+  }
+</style>

@@ -1,0 +1,73 @@
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely edit after that. If you find
+# yourself editing this file very often, consider using Jekyll's data files
+# feature for the data you need to update frequently.
+#
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'bundle exec jekyll serve'. If you change this file, please restart the server process.
+#
+# If you need help with YAML syntax, here are some quick references for you:
+# https://learn-the-web.algonquindesign.ca/topics/markdown-yaml-cheat-sheet/#yaml
+# https://learnxinyminutes.com/docs/yaml/
+#
+# Site settings
+# These are used to personalize your new site. If you look in the HTML files,
+# you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
+# You can create any custom variable you would like, and they will be accessible
+# in the templates via {{ site.myvariable }}.
+
+sitename: xLiveWallpaper
+domain: www.gpwzw.com/
+title: xLiveWallpaper iPhone & iPad लाइव वॉलपेपर - मोबाइल के लिए मुफ्त 4K एनिमेटेड वॉलपेपर
+email: lockliveapp@gmail.com
+description: >- # this means to ignore newlines until "baseurl:"
+  अपने मोबाइल डिवाइस के लिए 4K रिजोल्यूशन में 100 से ज्यादा लाइव वॉलपेपर ब्राउज़ और डाउनलोड करें।
+  फिल्म, एनीमे, गेमिंग, कार, प्रकृति और कई अन्य श्रेणियों में से चयन करें।
+
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "" # the base hostname & protocol for your site, e.g. http://example.com
+twitter_username:
+github_username:
+me: xLiveWallpaper
+copyright: '&copy; 2025 xLiveWallpaper  सभी अधिकार सुरक्षित हैं।'
+app_link: https://apps.apple.com/app/apple-store/id6747997192?pt=611621&ct=gpwzw&mt=8
+
+ad: >- # this means to ignore newlines until "baseurl:"
+  No. 1 iPhone live wallpaper app in AppStore Awards 2026
+  ऐप स्टोर अवार्ड्स 2026 में आईफोन लाइव वॉलपेपर ऐप में नंबर 1
+  Create your own live wallpapers with ease
+  आसानी से अपना खुद का लाइव वॉलपेपर बनाएं
+  Enjoy stunning live wallpapers on your iPhone
+  अपने आईफोन पर आश्चर्यजनक लाइव वॉलपेपर का आनंद लें
+  Get xLiveWallpaper now and bring your iPhone to live!
+  अभी एक्सलाइववॉलपेपर प्राप्त करें और अपने आईफोन को जीवंत बनाएं!
+
+# Build settings
+theme: minima
+plugins:
+  - jekyll-feed
+  - jekyll-paginate
+
+# Exclude from processing.
+# The following items will not be processed, by default.
+# Any item listed under the `exclude:` key here will be automatically added to
+# the internal "default list".
+#
+# Excluded items can be processed by explicitly listing the directories or
+# their entries' file path in the `include:` list.
+# exclude:
+#   - .sass-cache/
+#   - .jekyll-cache/
+#   - gemfiles/
+#   - Gemfile
+#   - Gemfile.lock
+#   - node_modules/
+#   - vendor/bundle/
+#   - vendor/cache/
+#   - vendor/gems/
+#   - vendor/ruby/
+
+paginate: 12
+paginate_path: "/page-:num/"

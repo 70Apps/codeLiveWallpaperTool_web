@@ -1,0 +1,22 @@
+<script>
+  const imgList = document.querySelectorAll('.ph-badge');
+
+  imgList.forEach(img => {
+    let src_ph = img.getAttribute('src-ph-badge');
+    // 创建一个新的img对象
+    var newImage = new Image();
+
+    newImage.onload = function(){
+      // 图片加载成功后再更新
+      img.src = "https://images.weserv.nl/?url="+escape(src_ph);
+      img.removeAttribute('src-ph-badge');
+    }
+
+    newImage.onerror = function(){
+      // 加载错误的处理
+    }
+
+    // 设置新图片的src
+    newImage.src = "https://images.weserv.nl/?url="+escape(src_ph);
+  });
+</script>

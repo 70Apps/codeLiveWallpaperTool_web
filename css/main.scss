@@ -1,0 +1,70 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+@charset "utf-8";
+
+
+
+// Our variables
+$base-font-family: -apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,"PingFang SC","Hiragino Sans GB",STHeiti,"Microsoft YaHei","Microsoft JhengHei","Source Han Sans SC","Noto Sans CJK SC","Source Han Sans CN","Noto Sans SC","Source Han Sans TC","Noto Sans CJK TC","WenQuanYi Micro Hei",SimSun,sans-serif;
+$base-font-size:   16px;
+$base-font-weight: 400;
+$small-font-size:  $base-font-size * 0.875;
+$base-line-height: 1.5;
+
+$spacing-unit:     30px;
+
+$text-color:       rgb(230, 237, 243);
+$text-color-dark:       rgb(150, 157, 163);
+$text-color-highlight:       #ddb784;
+$background-color: rgb(13, 17, 23);
+$background-color-light:  rgb(36, 41, 47);
+$background-color-light-even: lighten($background-color-light, 5%);
+$background-color-light-more: lighten($background-color-light, 10%);
+$background-color-dark:  darken($background-color, 5%);
+
+$brand-color:      #fb941f;
+$brand-color-light: lighten($brand-color, 15%);
+$brand-color-dark:  darken($brand-color, 25%);
+
+$grey-color:       rgb(33, 38, 45);
+$grey-color-light: lighten($grey-color, 5%);
+$grey-color-dark:  darken($grey-color, 5%);
+
+
+$focus-color:      #ffc83f;
+
+// Width of the content area
+$content-width:    1110px;
+
+$on-palm:          600px;
+$on-laptop:        800px;
+$on-pc:            1080px;
+
+
+
+// Use media queries like this:
+// @include media-query($on-palm) {
+//     .wrapper {
+//         padding-right: calc($spacing-unit / 2);
+//         padding-left: calc($spacing-unit / 2);
+//     }
+// }
+@mixin media-query($device) {
+    @media screen and (max-width: $device) {
+        @content;
+    }
+}
+
+
+
+// Import partials from `sass_dir` (defaults to `_sass`)
+@import
+        "base",
+        "layout",
+        "user-define",
+        "app-list",
+        "toc",
+        "rouge",
+        "syntax-highlighting-dark-fix"
+;

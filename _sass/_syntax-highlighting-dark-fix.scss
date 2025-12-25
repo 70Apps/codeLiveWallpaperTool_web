@@ -1,0 +1,8 @@
+.highlight table { margin:5px 0;border:0;background: linear-gradient($background-color-light-even 50%, $background-color-light 50%); background-size: 100% 48px;}
+.highlight table th { padding:0 5px; border:0;background-color: transparent!important;}
+.highlight table td { padding:0 5px; border:0;background-color: transparent!important;}
+.highlight table td.gl { width:0; text-align: right;border-right: 1px solid $background-color-light-more;}
+.highlight table pre { padding: 0; margin: 0; border:0;padding-right: 2px;line-height: 24px;}
+div.highlight, figure.highlight {background-color: transparent!important;}
+pre.highlight, pre.highlight .w { color: #93a1a1; }
+figure.highlight>pre { color: #93a1a1; background-color: $background-color-light;}

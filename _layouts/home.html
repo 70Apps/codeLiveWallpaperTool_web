@@ -1,0 +1,90 @@
+---
+layout: default
+title: locklive livewallpaper
+---
+<h1 class="home-title-1">Live Wallpaper</h1>
+<h2 class="home-title-2">iPhone & iPad Live Wallpapers<br> आईफोन और आईपैड लाइव वॉलपेपर</h2>
+<h3 class="home-title-3">xLiveWallpaper Team <br>एक्सलाइववॉलपेपर टीम</h3>
+
+
+
+<div class="home">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4189184568187692"
+       crossorigin="anonymous"></script>
+  <!-- xLiveWallpaper-banner -->
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-4189184568187692"
+       data-ad-slot="5231677111"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>
+       (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+<div class="post-list-container">
+  <ul class="post-list">
+    <!-- This loops through the paginated posts -->
+{% for post in paginator.posts %}
+<li>
+  <a class="post-list-link" href="{{ post.url | prepend: site.baseurl }}">
+    <div class="post-list-show-image">
+      <div class="post-list-show-image-image" data-bg="{{ post.date | date: "/images/%Y/%m/%Y%m%d.jpg" }}"></div>
+    </div>
+    <div class="post-list-title">{{ post.title }}</div>
+      <div class="post-list-description">{{ post.description }}</div>
+      <div class="post-list-info">
+        <span class="post-category post-category-{{ post.category }}"></span>
+        <span class="post-meta">{{ post.date | date: "%Y-%m-%d" }}</span>
+      </div>
+  </a>
+</li>
+{% endfor %}
+  </ul>
+</div>
+
+<!-- 分页链接 -->
+ {% if paginator.total_pages > 1 %}
+<div class="pagination">
+  {% if paginator.previous_page %}
+    <a href="{{ paginator.previous_page_path | relative_url }}">Previou</a>
+  {% else %}
+    <span>Previou</span>
+  {% endif %}
+
+  {% for page in (1..paginator.total_pages) %}
+    {% if page == paginator.page %}
+      <em>{{ page }}</em>
+    {% elsif page == 1 %}
+      <a href="{{ site.paginate_path | relative_url | replace: 'page-:num/', '' }}">{{ page }}</a>
+    {% else %}
+      <a href="{{ site.paginate_path | relative_url | replace: ':num', page }}">{{ page }}</a>
+    {% endif %}
+  {% endfor %}
+
+  {% if paginator.next_page %}
+    <a href="{{ paginator.next_page_path | relative_url }}">Next</a>
+  {% else %}
+    <span>Next</span>
+  {% endif %}
+</div>
+{% endif %}
+</div>
+<script>
+  // 检查浏览器是否支持webp
+  function isSupportWebP() {
+    return document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0;
+  }
+
+  // 如果支持webp,则在img标签src上添加后缀
+  const imgList = document.querySelectorAll('.post-list-show-image-image');
+ var i=0;
+ imgList.forEach(img => {
+   let src = img.getAttribute('data-bg');
+   console.log(src);
+   img.style.backgroundImage = "url('" + src + "')";
+   setTimeout(function(){img.style.opacity=1;},300+300*i);
+   i++;
+ });
+ const h1 = document.querySelectorAll('h1.home-title-1');
+ h1[0].innerHTML = "xLiveWallpaper"
+</script>
