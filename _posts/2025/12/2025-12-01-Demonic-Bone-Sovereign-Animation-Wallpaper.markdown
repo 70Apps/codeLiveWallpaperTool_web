@@ -51,6 +51,6 @@ tags : [Cartoon, Chinese]
 
 🖼️Skeleton physics simulation/Spiritual energy flow effects/Bamboo forest swaying motion
 
-{% include wallpage-action-id.md %}
+{% include wallpage-action-in.md %}
 
 #LiveWallpaper #LockLive #xLiveWallpaper

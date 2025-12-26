@@ -51,6 +51,6 @@ tags : [DC, Comics]
 
 🖼️Speed force field animation/Time freeze effect/Character action changes
 
-{% include wallpage-action-id.md %}
+{% include wallpage-action-in.md %}
 
 #LiveWallpaper #LockLive #xLiveWallpaper

@@ -64,6 +64,6 @@ tags : [Game]
 
 🖼️Blinking expression animation/Ribbon flow effects/Firework particle system
 
-{% include wallpage-action-id.md %}
+{% include wallpage-action-in.md %}
 
 #LiveWallpaper #LockLive #xLiveWallpaper

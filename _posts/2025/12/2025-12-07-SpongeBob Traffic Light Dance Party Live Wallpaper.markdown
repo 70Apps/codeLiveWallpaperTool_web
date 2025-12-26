@@ -51,6 +51,6 @@ tags : [SpongeBob, Cartoon]
 
 🖼️Character dance animation/Light beat synchronization/Background music visualization
 
-{% include wallpage-action-id.md %}
+{% include wallpage-action-in.md %}
 
 #LiveWallpaper #LockLive #xLiveWallpaper

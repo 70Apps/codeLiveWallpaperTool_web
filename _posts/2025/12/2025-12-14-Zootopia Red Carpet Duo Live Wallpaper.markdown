@@ -51,6 +51,6 @@ tags : [Zootopia, Cartoon]
 
 🖼️Spotlight scanning effect/Character walk animation/Audience cheering scene
 
-{% include wallpage-action-id.md %}
+{% include wallpage-action-in.md %}
 
 #LiveWallpaper #LockLive #xLiveWallpaper

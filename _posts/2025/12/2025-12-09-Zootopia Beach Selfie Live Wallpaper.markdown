@@ -51,6 +51,6 @@ tags : [Zootopia, Cartoon]
 
 🖼️Selfie animation effects/Wave animation/Sunlight reflection changes
 
-{% include wallpage-action-id.md %}
+{% include wallpage-action-in.md %}
 
 #LiveWallpaper #LockLive #xLiveWallpaper

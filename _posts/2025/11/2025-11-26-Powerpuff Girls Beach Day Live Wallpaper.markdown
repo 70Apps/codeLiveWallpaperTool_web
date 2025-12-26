@@ -16,7 +16,7 @@ tags : [Cartoon,Powerpuff]
 
 🖼️फ्लोटिंग रिंग एनीमेशन/लहर मूवमेंट इफेक्ट/किरदारों के भाव में परिवर्तन
 
-{% include wallpage-action-id.md %}
+{% include wallpage-action-in.md %}
 
 #LiveWallpaper #LockLive #xLiveWallpaper
 

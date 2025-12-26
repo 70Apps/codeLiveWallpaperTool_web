@@ -51,6 +51,6 @@ tags : [Zootopia, Cartoon]
 
 🖼️Heart effect animation/Character selfie action/Night view background changes
 
-{% include wallpage-action-id.md %}
+{% include wallpage-action-in.md %}
 
 #LiveWallpaper #LockLive #xLiveWallpaper

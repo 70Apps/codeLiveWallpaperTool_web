@@ -51,6 +51,6 @@ tags : [Demon Slayer, Japanese]
 
 🖼️Persimmon tree leaves swaying animation/Character memory scene/Warm light variation
 
-{% include wallpage-action-id.md %}
+{% include wallpage-action-in.md %}
 
 #LiveWallpaper #LockLive #xLiveWallpaper

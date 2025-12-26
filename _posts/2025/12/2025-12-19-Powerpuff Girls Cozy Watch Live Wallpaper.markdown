@@ -51,6 +51,6 @@ tags : [Powerpuff, Cartoon]
 
 🖼️Character interaction animation/Clock glow effect/Night scene changes
 
-{% include wallpage-action-id.md %}
+{% include wallpage-action-in.md %}
 
 #LiveWallpaper #LockLive #xLiveWallpaper

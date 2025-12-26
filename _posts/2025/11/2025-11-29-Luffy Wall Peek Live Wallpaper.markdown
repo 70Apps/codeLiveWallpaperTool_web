@@ -62,6 +62,6 @@ tags : [OnePiece, Japanese]
 
 🖼️Wall debris animation/Luffy peeking motion/Straw hat wobble effect
 
-{% include wallpage-action-id.md %}
+{% include wallpage-action-in.md %}
 
 #LiveWallpaper #LockLive #xLiveWallpaper

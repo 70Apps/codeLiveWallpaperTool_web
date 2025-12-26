@@ -51,6 +51,6 @@ tags : [Zootopia, Cartoon]
 
 🖼️Character running animation/Road scene changes/Audience cheering animation
 
-{% include wallpage-action-id.md %}
+{% include wallpage-action-in.md %}
 
 #LiveWallpaper #LockLive #xLiveWallpaper

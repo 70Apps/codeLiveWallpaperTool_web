@@ -15,7 +15,7 @@ tags : [Zootopia, Cartoon]
 
 🖼️बर्फ के टुकड़े गिरने का एनीमेशन/पात्र चमक प्रभाव/क्रिसमस दृश्य परिवर्तन
 
-{% include wallpage-action-id.md %}
+{% include wallpage-action-in.md %}
 
 #LiveWallpaper #LockLive #xLiveWallpaper #Zootopia2 #Gary #Christmas #HolidayMagic #DisneyAnimation
 

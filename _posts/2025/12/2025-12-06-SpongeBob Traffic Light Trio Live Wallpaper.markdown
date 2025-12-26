@@ -51,6 +51,6 @@ tags : [SpongeBob, Cartoon]
 
 🖼️Light flashing animation/Character transformation effects/Color change gradients
 
-{% include wallpage-action-id.md %}
+{% include wallpage-action-in.md %}
 
 #LiveWallpaper #LockLive #xLiveWallpaper

@@ -15,7 +15,7 @@ tags : [Cartoon, Chinese]
 
 🖼️घूंघट की भौतिक अनुकरण/केश प्रवाह एनीमेशन/आध्यात्मिक ऊर्जा कण
 
-{% include wallpage-action-id.md %}
+{% include wallpage-action-in.md %}
 
 #LiveWallpaper #LockLive #xLiveWallpaper
 

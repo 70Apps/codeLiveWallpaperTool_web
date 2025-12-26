@@ -65,6 +65,6 @@ tags : [Cartoon]
 🖼️Cigar smoke effects/Tom's tail swaying/Jerry trembling animation  
 
 
-{% include wallpage-action-id.md %}
+{% include wallpage-action-in.md %}
 
 #LiveWallpaper #LockLive #xLiveWallpaper

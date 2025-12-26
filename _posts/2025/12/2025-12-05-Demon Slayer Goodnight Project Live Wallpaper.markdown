@@ -51,6 +51,6 @@ tags : [Demon Slayer, Japanese]
 
 🖼️Character silhouette animation/Moonlight variation effects/Night sky background dynamics
 
-{% include wallpage-action-id.md %}
+{% include wallpage-action-in.md %}
 
 #LiveWallpaper #LockLive #xLiveWallpaper

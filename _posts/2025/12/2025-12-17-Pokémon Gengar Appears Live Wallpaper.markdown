@@ -51,6 +51,6 @@ tags : [Pokémon, Cartoon]
 
 🖼️Ghostly aura animation/Shadow variation effects/Character smile animation
 
-{% include wallpage-action-id.md %}
+{% include wallpage-action-in.md %}
 
 #LiveWallpaper #LockLive #xLiveWallpaper

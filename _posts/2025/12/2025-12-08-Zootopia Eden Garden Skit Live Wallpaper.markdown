@@ -51,6 +51,6 @@ tags : [Zootopia, Cartoon]
 
 🖼️Character interaction animation/Plant swaying effects/Light and shadow gradation
 
-{% include wallpage-action-id.md %}
+{% include wallpage-action-in.md %}
 
 #LiveWallpaper #LockLive #xLiveWallpaper

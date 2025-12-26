@@ -63,6 +63,6 @@ tags : [Marvel]
 
 🖼️Reactor breathing light effects/Metal texture dynamics/Armor detail lighting  
 
-{% include wallpage-action-id.md %}
+{% include wallpage-action-in.md %}
 
 #LiveWallpaper #LockLive #xLiveWallpaper
