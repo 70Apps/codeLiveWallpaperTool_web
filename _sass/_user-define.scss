@@ -249,7 +249,7 @@ ul.site-tags-list li a {
 .page-content-buttons a {
   display: inline-block;
   padding: calc($spacing-unit / 4) calc($spacing-unit / 2);
-  background-color: #fb941f;
+  background-color: $brand-color;
   color: white;
   border-radius: 10px;
   font-size: 14px;
