@@ -18,31 +18,23 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-sitename: xLiveWallpaper
+sitename: WallpaperTools
 domain: www.gpwzw.com/
-title: xLiveWallpaper iPhone & iPad लाइव वॉलपेपर - मोबाइल के लिए मुफ्त 4K एनिमेटेड वॉलपेपर
+title: Wallpaper Master Web Tools
 email: lockliveapp@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  अपने मोबाइल डिवाइस के लिए 4K रिजोल्यूशन में 100 से ज्यादा लाइव वॉलपेपर ब्राउज़ और डाउनलोड करें।
-  फिल्म, एनीमे, गेमिंग, कार, प्रकृति और कई अन्य श्रेणियों में से चयन करें।
+  Some web tools for wallpaper, including wallpaper mutiple size generator, wallpaper mockup generator, wallpaper color extractor, etc.
 
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username:
 github_username:
-me: xLiveWallpaper
-copyright: '&copy; 2025 xLiveWallpaper  सभी अधिकार सुरक्षित हैं।'
+me: WallpaperTools
+copyright: '&copy; 2026 gpwzw.com. All rights reserved.'
 app_link: https://apps.apple.com/app/apple-store/id6747997192?pt=611621&ct=gpwzw&mt=8
 
 ad: >- # this means to ignore newlines until "baseurl:"
-  No. 1 iPhone live wallpaper app in AppStore Awards 2026
-  ऐप स्टोर अवार्ड्स 2026 में आईफोन लाइव वॉलपेपर ऐप में नंबर 1
-  Create your own live wallpapers with ease
-  आसानी से अपना खुद का लाइव वॉलपेपर बनाएं
-  Enjoy stunning live wallpapers on your iPhone
-  अपने आईफोन पर आश्चर्यजनक लाइव वॉलपेपर का आनंद लें
-  Get xLiveWallpaper now and bring your iPhone to live!
-  अभी एक्सलाइववॉलपेपर प्राप्त करें और अपने आईफोन को जीवंत बनाएं!
+  Wallpaper master web tools is free to use. If you like it, please consider supporting the developer by buying the pro version of Wallpaper Master on the App Store. Your support keeps the development going and is greatly appreciated!
 
 # Build settings
 theme: minima

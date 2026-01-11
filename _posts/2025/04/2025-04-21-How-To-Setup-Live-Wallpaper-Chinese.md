@@ -5,7 +5,7 @@ title:  如何設定動態桌布：安卓影片檔與iPhone實況格式操作指
 description: 無論是安卓的影片桌布還是iPhone的原況照片效果，本指南將詳細教學如何下載並設定本網站提供的專用動態桌布檔案。
 keyword: lock screen, live photo, screensavers, live wallpaper
 tags : [Tutorial]
-ogimage: https://www.gpwzw.com/images/ogimage.png
+ogimage: https://xlivewallpaper.70apps.com/images/ogimage.png
 ---
 
 

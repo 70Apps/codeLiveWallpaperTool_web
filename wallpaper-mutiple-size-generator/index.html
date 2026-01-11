@@ -1,0 +1,81 @@
+---
+layout: web-app
+title: Wallpaper Mutiple Size Generator
+permalink: /wallpaper-mutiple-size-generator/
+---
+<!-- a one webpage utility tool for wallpaper mutiple size generation -->
+
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <main class="generator">
+    <div class="container">
+      <header class="hero">
+        <h1>Wallpaper Multiple Size Generator</h1>
+        <p class="lead">Generate curated wallpaper sizes for iPhone, iPad, MacBook and Apple Watch from a single image.</p>
+      </header>
+
+      <form id="wallpaper-form" class="controls">
+        <div class="controls-row">
+          <div class="upload-left">
+            <figure class="upload-preview">
+              <img id="image-preview" src="" alt="Preview">
+              <figcaption class="visually-hidden">Uploaded image preview</figcaption>
+            </figure>
+          </div>
+
+          <div class="upload-right">
+            <label for="image-upload" class="file-label btn-primary">Choose an image</label>
+            <input type="file" id="image-upload" class="visually-hidden" accept="image/*" required>
+
+            <div class="format-selector">
+              <label>Select Export Image Format</label>
+              <div class="format-toggle" role="tablist" aria-label="Image format">
+                <button type="button" class="format-btn" data-format="png">PNG</button>
+                <button type="button" class="format-btn" data-format="jpeg">JPEG</button>
+                <button type="button" class="format-btn active" data-format="webp">WEBP</button>
+                <span class="tips">* Upgrade Chrome to Support WebP Format</span>
+              </div>
+              <input type="hidden" id="image-format" value="webp">
+            </div>
+          </div>
+
+        </div>
+
+        <section id="preview-grid" class="preview-grid" aria-live="polite">
+          <div class="preview-item">
+            <h3>iPhone</h3>
+            <div class="preview-media">
+              <img id="iphone-preview" src="" alt="iPhone Preview">
+            </div>
+            <button type="button" class="download-btn" data-device="iphone">Download iPhone</button>
+          </div>
+          <div class="preview-item">
+            <h3>iPad</h3>
+            <div class="preview-media">
+              <img id="ipad-preview" src="" alt="iPad Preview">
+            </div>
+            <button type="button" class="download-btn" data-device="ipad">Download iPad</button>
+          </div>
+          <div class="preview-item">
+            <h3>MacBook</h3>
+            <div class="preview-media">
+              <img id="macbook-preview" src="" alt="MacBook Preview">
+            </div>
+            <button type="button" class="download-btn" data-device="macbook">Download MacBook</button>
+          </div>
+          <div class="preview-item">
+            <h3>Apple Watch</h3>
+            <div class="preview-media">
+              <img id="applewatch-preview" src="" alt="Apple Watch Preview">
+            </div>
+            <button type="button" class="download-btn" data-device="applewatch">Download Apple Watch</button>
+          </div>
+        </section>
+
+        <div class="actions">
+          <button type="button" id="download-button" class="btn-primary">Download All Wallpapers</button>
+        </div>
+      </form>
+    </div>
+  </main>
+<script src="script.js"></script>
