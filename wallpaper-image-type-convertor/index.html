@@ -1,0 +1,95 @@
+---
+layout: web-app
+title: Wallpaper Image Type Convertor
+permalink: /wallpaper-image-type-convertor/
+---
+<!-- a one webpage utility tool for wallpaper Image Type Convertor -->
+<!-- 上传图片，计算最接受的设备比例，截取后，生成图片，支持多格式导出 -->
+
+  <link rel="stylesheet" href="style.css">
+  <main class="generator">
+    <div class="container">
+      <header class="hero">
+        <h1>Wallpaper Image Type Convertor</h1>
+        <p class="lead">Generate curated wallpaper sizes for iPhone, iPad, MacBook and Apple Watch from a single image.</p>
+      </header>
+
+      <form id="wallpaper-form" class="controls">
+        <div class="controls-row">
+          <div class="upload-left">
+            <figure class="upload-preview">
+              <img id="image-preview" src="" alt="Preview">
+              <figcaption class="visually-hidden">Uploaded image preview</figcaption>
+            </figure>
+          </div>
+
+          <div class="upload-right">
+            <label for="image-upload" class="file-label btn-primary">Choose an image</label>
+            <input type="file" id="image-upload" class="visually-hidden" accept="image/*" required>
+
+            <div class="format-selector">
+              <label>Select Export Image Format</label>
+              <div class="format-toggle" role="tablist" aria-label="Image format">
+                <button type="button" class="format-btn" data-format="png">PNG</button>
+                <button type="button" class="format-btn" data-format="jpeg">JPEG</button>
+                <button type="button" class="format-btn active" data-format="webp">WEBP</button>
+                <span class="tips">* Upgrade Chrome to Support WebP Format</span>
+              </div>
+              <input type="hidden" id="image-format" value="webp">
+            </div>
+          </div>
+
+        </div>
+
+        <section id="preview-grid" class="preview-grid" aria-live="polite">
+          <div class="preview-item hidden">
+            <h3>iPhone</h3>
+            <div class="preview-media">
+              <img id="iphone-preview" src="" alt="iPhone Preview">
+            </div>
+            <button type="button" class="download-btn" data-device="iphone">Download iPhone</button>
+          </div>
+          <div class="preview-item hidden">
+            <h3>iPad</h3>
+            <div class="preview-media">
+              <img id="ipad-preview" src="" alt="iPad Preview">
+            </div>
+            <button type="button" class="download-btn" data-device="ipad">Download iPad</button>
+          </div>
+          <div class="preview-item hidden">
+            <h3>MacBook</h3>
+            <div class="preview-media">
+              <img id="macbook-preview" src="" alt="MacBook Preview">
+            </div>
+            <button type="button" class="download-btn" data-device="macbook">Download MacBook</button>
+          </div>
+          <div class="preview-item hidden">
+            <h3>Apple Watch</h3>
+            <div class="preview-media">
+              <img id="applewatch-preview" src="" alt="Apple Watch Preview">
+            </div>
+            <button type="button" class="download-btn" data-device="applewatch">Download Apple Watch</button>
+          </div>
+          <div class="preview-item hidden">
+            <h3>Flip Phone</h3>
+            <div class="preview-media">
+              <img id="flipphone-preview" src="" alt="Flip Phone Preview">
+            </div>
+            <button type="button" class="download-btn" data-device="flipphone">Download Flip Phone</button>
+          </div>
+          <div class="preview-item hidden">
+            <h3>Old Phone</h3>
+            <div class="preview-media">
+              <img id="oldphone-preview" src="" alt="Old Phone Preview">
+            </div>
+            <button type="button" class="download-btn" data-device="oldphone">Download Old Phone</button>
+          </div>
+        </section>
+
+        <div class="actions">
+          <!-- Download-all removed per request -->
+        </div>
+      </form>
+    </div>
+  </main>
+<script src="script.js"></script>
