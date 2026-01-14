@@ -1,66 +1,137 @@
 // app-list: responsive grid of app buttons
+
+/**
+ * Page content
+ */
+.app-list-container {
+  padding: $spacing-unit 0 0;
+  clear:both;
+  display: grid;
+}
+
 .app-list {
-  margin: 0.5%;
-  padding: 0.5%;
+  margin-left: 0;
   list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: $spacing-unit;
 
-  > li {
-    box-sizing: border-box;
-    // calculate flex-basis so four items fit per row accounting for gaps
-    // each row has 3 gaps between 4 items
-    flex: 0 0 calc((100% - 3 * #{$spacing-unit}) / 4);
-    max-width: calc((100% - 3 * #{$spacing-unit}) / 4);
-    padding: 0;
+  >li {
+    display: block;
+    margin-bottom: calc($spacing-unit / 2);
 
-    a {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 80px; // requested fixed height
-      width: 100%;
-      box-sizing: border-box; /* include padding in width to avoid overflow */
-      padding: ($spacing-unit / 2);
+    .app-list-link {
+      display: grid;
+      grid-template-columns: 1fr 3fr;
+
       background-color: $background-color-light;
       font-size: 16px;
       color: $text-color;
       text-align: center;
-      border: 1px solid transparent;
-      border-radius: 8px;
-      transition: background-color .12s ease, transform .08s ease, box-shadow .12s ease;
+      border-radius: $spacing-unit / 2;
+      border:1px solid $brand-color;
 
-      &:visited { color: $text-color; }
 
-      &:hover,
-      &:focus {
-        background-color: $brand-color;
-        color: #fff;
+      &:visited {
+        color: $text-color;
+      }
+
+      &:hover {
+        color: $text-color;
         text-decoration: none;
-        box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-        transform: translateY(-2px);
-        outline: none;
+        background-color: $background-color-light-more;
       }
 
       &:active {
-        transform: translateY(0);
-        box-shadow: none;
+        color: $text-color;
+        text-decoration: none;
+        background-color: $background-color-light-more;
       }
+    }
+
+    div.app-list-show-image {
+      display: block;
+      width: 100%;
+    }
+
+    div.app-list-title {
+      color: $text-color;
+      height: 60px;
+      line-height: 24px;
+      font-size: $base-font-size * 1.2;
+      margin: calc($spacing-unit / 2);
     }
   }
 }
 
-// tablet / medium screens: keep two per row if desired (optional)
-@media screen and (max-width: 1024px) {
-  .app-list > li { flex: 0 0 49%; max-width: 49%; }
-}
 
-// small screens: single column
-@media screen and (max-width: 800px) {
+@media screen and (min-width: 480px) {
   .app-list {
-    gap: $spacing-unit;
-  }
-  .app-list > li { flex: 0 0 100%; max-width: 100%; }
-}
+    margin-left: 0.5%;
 
+    >li {
+      margin-bottom: $spacing-unit;
+      width: 50%;
+      float: left;
+
+      .app-list-link {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+        margin-left: calc($spacing-unit / 2);
+        margin-right: calc($spacing-unit / 2);
+      }
+
+      div.app-list-show-image {}
+
+      div.app-list-title {
+        color: $text-color;
+        line-height: 24px;
+        font-size: $base-font-size * 1.2;
+        margin: calc($spacing-unit / 2);
+        text-align: left;
+      }
+    }
+  }
+}
+@media screen and (min-width: 1240px) {
+  .app-list {
+    margin-left: 0.5%;
+
+    >li {
+      margin-bottom: $spacing-unit;
+      width: 25%;
+      float: left;
+
+      .app-list-link {
+        display: flex;
+      flex-direction: column;
+        margin-left: calc($spacing-unit / 2);
+        margin-right: calc($spacing-unit / 2);
+      }
+
+      a.app-list-link:hover {}
+
+      div.app-list-show-image {
+        position: relative;
+        display: block;
+        width: 100%;
+        height:160px;
+        img {
+          position: relative;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -130px);
+        }
+
+      }
+
+      div.app-list-title {
+        text-align: center;
+      }
+
+      div.app-list-info {
+        position: absolute;
+        width: 80%;
+        bottom: 0;
+        margin-left: calc($spacing-unit / 4);
+      }
+    }
+  }
+}

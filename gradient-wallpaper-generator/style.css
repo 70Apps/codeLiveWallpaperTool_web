@@ -33,6 +33,51 @@
 	.format-btn:not(.active):hover{background:rgba(255,255,255,0.01)}
 	.format-selector .tips{font-size:12px;color:#aaa;padding:6px 0 0 8px;}
 
+	/* gradient controls */
+	.gradient-controls{display:flex;flex-direction:column;gap:8px;align-items:center;width:100%}
+	.gradient-controls .colors{display:flex;gap:8px}
+	.gradient-swatch{width:140px;height:48px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);box-shadow: inset 0 1px 0 rgba(255,255,255,0.02)}
+
+/* recommendation swatches ，支持左右滚动	*/
+.recommend-swatches{display:flex;gap:8px;align-items:center;width:100%;}
+.recommend-swatches .recommend{display:flex;gap:8px;}
+.recommend-swatches .recommend::-webkit-scrollbar{display:none;}
+.recommend-swatches .recommend{width:100%;}
+@media screen and (min-width: 800px) { 
+}
+
+.recommend{width:100%;margin-bottom:12px;height:100px;overflow-x: scroll;}
+.recommend > label{display:block;color:#cfe7ff;margin-bottom:8px;font-weight:700}
+.recommend-list{display:flex;gap:10px;flex-wrap:nowrap}
+.recommend-swatch{display:flex;flex-direction:column;align-items:center;gap:6px;padding:6px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:rgba(255,255,255,0.01);cursor:pointer;min-width:72px}
+.recommend-swatch:focus{outline:2px solid rgba(96,165,250,0.12);outline-offset:2px}
+.swatch-preview{width:64px;height:64px;border-radius:6px;display:block}
+.swatch-meta{font-size:0.8rem;color:#9aa4b2}
+
+/* larger controls for easier color/angle picking */
+main.generator .gradient-controls .colors input[type="color"]{
+	width:64px;
+	height:64px;
+	padding:4px;
+	border-radius:8px;
+	border:1px solid rgba(255,255,255,0.06);
+	background:transparent;
+	cursor:pointer;
+}
+
+main.generator .gradient-controls input[type="range"]{
+	width:100%;
+	height:28px;
+	background:transparent;
+}
+main.generator .gradient-controls input[type="range"]::-webkit-slider-thumb{ -webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.4)}
+main.generator #angle-value{font-weight:700;font-size:1.05rem;margin-left:8px}
+
+/* make the swatch preview larger and reuse upload-preview container */
+main.generator .gradient-swatch{width:220px;height:92px}
+main.generator .upload-preview::after{display:none}
+main.generator .upload-preview .color-swatch{width:100%;height:100%;border-radius:8px;background:linear-gradient(180deg,#ff7a18,#af002d)}
+
 	/* disabled/unsupported state */
 	.format-btn.disabled,
 	.format-btn[disabled]{
@@ -68,7 +113,7 @@
 	}
 	main.generator .upload-preview.img-loaded::after{display:none}
 
-	main.generator .upload-preview img{width:100%;height:100%;object-fit:contain;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.4);opacity:0;transition:opacity .18s ease}
+	main.generator .upload-preview img{width:100%;object-fit:contain;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.4);opacity:0;transition:opacity .18s ease}
 	main.generator .upload-preview img.loaded{opacity:1}
 
 	/* two-column layout: iPhone on left (40%), others stacked on right (60%) */
@@ -122,7 +167,7 @@
 
 	/* controls row: left (upload + format) and right (preview) */
 	main.generator .controls-row{display:flex;gap:18px;align-items:start;margin-top:12px}
-	main.generator .upload-right{flex:0 0 45%;display:flex;flex-direction:column;gap:12px;align-items:flex-end}
+	main.generator .upload-right{flex:0 0 45%;display:flex;flex-direction:column;gap:12px;align-items:center}
 	main.generator .upload-left{flex:1 1 55%;display:flex;align-items:center;justify-content:center}
 
 	@media (max-width:800px){
@@ -151,7 +196,7 @@
 	main.generator .download-btn:active{transform:translateY(0)}
 	main.generator .download-btn:focus{outline:2px solid rgba(96,165,250,0.14);outline-offset:2px}
 
-	main.generator .actions{display:flex;gap:12px;margin-top:8px;justify-content: flex-end;}
+	main.generator .actions{display:flex;gap:12px;margin-top:8px;justify-content: center;}
 	main.generator .btn-primary{background:#2563eb;color:#fff;border:none;padding:10px 16px;border-radius:10px;cursor:pointer;box-shadow:0 6px 18px rgba(37,99,235,0.12);transition:transform .12s ease,box-shadow .12s ease}
 	main.generator .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(37,99,235,0.16)}
 
@@ -164,8 +209,9 @@
         main.generator .actions{justify-content: center;width:100%}
 	}
 	.upload-preview{max-width:100%}
-}
+	.toolbar{text-align: center;}
 
 /* utility class to hide elements until needed */
 .hidden{display:none!important}
+}
 

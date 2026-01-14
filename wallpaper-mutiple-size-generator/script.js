@@ -20,6 +20,12 @@ document.getElementById('image-upload').addEventListener('change', function(even
     }
 });
 
+// hide preview grid and download-all button on init
+const previewGrid = document.getElementById('preview-grid');
+const downloadAllBtn = document.getElementById('download-button');
+if (previewGrid) previewGrid.classList.add('hidden');
+if (downloadAllBtn) downloadAllBtn.classList.add('hidden');
+
 function generateWallpapers(img) {
     // 验证传入的图片对象
     if (!img || !img.complete) {
@@ -95,6 +101,9 @@ function generateWallpapers(img) {
         canvas.width = 0;
         canvas.height = 0;
     }
+    // reveal preview area and download-all button after generation
+    if (previewGrid) previewGrid.classList.remove('hidden');
+    if (downloadAllBtn) downloadAllBtn.classList.remove('hidden');
 }
 
 // 添加单个设备壁纸下载功能

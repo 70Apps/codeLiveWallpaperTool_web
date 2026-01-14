@@ -1,0 +1,97 @@
+---
+layout: web-app
+title: Gradient Wallpaper Generator
+permalink: /gradient-wallpaper-generator/
+---
+<!-- a one webpage utility tool for gradient wallpaper generation -->
+
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<main class="generator">
+  <div class="container">
+    <header class="hero">
+      <h1>Gradient Wallpaper Generator</h1>
+      <p class="lead">Generate beautiful gradient wallpapers for all your devices</p>
+    </header>
+
+    <form id="wallpaper-form" class="controls">
+      <div class="controls-row">
+        <div class="upload-left">
+          <figure class="upload-preview">
+            <div id="image-preview" class="color-swatch" aria-hidden="true"></div>
+            <figcaption class="visually-hidden">Color swatch preview</figcaption>
+          </figure>
+        </div>
+
+        <div class="upload-right">
+          <div class="gradient-controls">
+            <label>Gradient Colors</label>
+            <div class="colors">
+              <input type="color" id="color-a" value="#ff7a18">
+              <input type="color" id="color-b" value="#af002d">
+            </div>
+
+            <label for="angle">Direction: <span id="angle-value">180</span>°</label>
+            <input type="range" id="angle" min="0" max="360" value="180">
+          </div>
+
+          <div class="format-selector">
+            <label>Select Export Image Format</label>
+            <div class="format-toggle" role="tablist" aria-label="Image format">
+              <button type="button" class="format-btn" data-format="png">PNG</button>
+              <button type="button" class="format-btn" data-format="jpeg">JPEG</button>
+              <button type="button" class="format-btn active" data-format="webp">WEBP</button>
+              <span class="tips">* Upgrade Chrome to Support WebP Format</span>
+            </div>
+            <input type="hidden" id="image-format" value="webp">
+          </div>
+        </div>
+
+      </div>
+      <div class="recommend-swatches">
+        <div class="recommend"></div>
+      </div>
+      <div class="toolbar">
+        <button type="button" id="randomize-button" class="btn-primary">Randomize Colors</button>
+        <button type="button" id="generate-button" class="btn-primary">Generate Wallpapers</button>
+        <button type="button" id="undo-button" class="btn-primary">UNDO</button>
+        <button type="button" id="redo-button" class="btn-primary">REDO</button>
+      </div>
+      <section id="preview-grid" class="preview-grid" aria-live="polite">
+        <div class="preview-item">
+          <h3>iPhone</h3>
+          <div class="preview-media">
+            <img id="iphone-preview" src="" alt="iPhone Preview">
+          </div>
+          <button type="button" class="download-btn" data-device="iphone">Download iPhone</button>
+        </div>
+        <div class="preview-item">
+          <h3>iPad</h3>
+          <div class="preview-media">
+            <img id="ipad-preview" src="" alt="iPad Preview">
+          </div>
+          <button type="button" class="download-btn" data-device="ipad">Download iPad</button>
+        </div>
+        <div class="preview-item">
+          <h3>MacBook</h3>
+          <div class="preview-media">
+            <img id="macbook-preview" src="" alt="MacBook Preview">
+          </div>
+          <button type="button" class="download-btn" data-device="macbook">Download MacBook</button>
+        </div>
+        <div class="preview-item">
+          <h3>Apple Watch</h3>
+          <div class="preview-media">
+            <img id="applewatch-preview" src="" alt="Apple Watch Preview">
+          </div>
+          <button type="button" class="download-btn" data-device="applewatch">Download Apple Watch</button>
+        </div>
+      </section>
+
+      <div class="actions">
+        <button type="button" id="download-button" class="btn-primary">Download All Wallpapers</button>
+      </div>
+    </form>
+  </div>
+</main>
+<script src="script.js"></script>

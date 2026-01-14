@@ -17,13 +17,13 @@ $spacing-unit:     30px;
 $text-color:       rgb(230, 237, 243);
 $text-color-dark:       rgb(150, 157, 163);
 $text-color-highlight:       #ddb784;
-$background-color: rgb(13, 17, 23);
-$background-color-light:  rgb(11, 33, 11);
+$background-color: #110011;
+$background-color-light:  #221122;
 $background-color-light-even: lighten($background-color-light, 5%);
 $background-color-light-more: lighten($background-color-light, 10%);
 $background-color-dark:  darken($background-color, 5%);
 
-$brand-color:      #119911;
+$brand-color:        #e75624;
 $brand-color-light: lighten($brand-color, 15%);
 $brand-color-dark:  darken($brand-color, 25%);
 
@@ -32,7 +32,7 @@ $grey-color-light: lighten($grey-color, 5%);
 $grey-color-dark:  darken($grey-color, 5%);
 
 
-$focus-color:      #119911;
+$focus-color:     #f97d1a;
 
 // Width of the content area
 $content-width:    1110px;
