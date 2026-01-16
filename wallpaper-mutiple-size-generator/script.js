@@ -132,12 +132,20 @@ function downloadSingleWallpaper(device) {
     }
 
     // sizes keyed by lowercase device id used in data-device
-    const sizes = {
+    /*
+    change export sizes here if needed  
+        'iPhone': [1980, 4302],
+        'iPad': [2064, 1548],
+        'MacBook': [4512, 2538],
+        'Apple Watch': [1664, 1984]
+         */ 
+        const sizes = {
         'iphone': [1440, 3118],
         'ipad': [2880, 2160],
-        'macbook': [3840, 2160],
-        'applewatch': [2160, 2160]
-    };
+        'macbook': [4512, 2538],
+        'applewatch': [1664, 1984]
+        };
+
 
     const key = device.toLowerCase();
     const dims = sizes[key];
