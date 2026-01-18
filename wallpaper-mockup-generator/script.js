@@ -16,11 +16,36 @@ const MOCKUP_SETTINGS = {
 };
 
 const MOCKUP_BACKGROUND_SETTINGS = [
-
     { a: '#ff7a18', b: '#af002d', deg: 180 },
     { a: '#00c9ff', b: '#92fe9d', deg: 180 },
     { a: '#f79734', b: '#f64f35', deg: 180 },
-    { a: '#654ea3', b: '#da98b4', deg: 180 }
+    { a: '#654ea3', b: '#da98b4', deg: 180 },
+    { a: '#ff5858', b: '#f093fb', deg: 180 },
+    { a: '#ff7eb3', b: '#ff758c', deg: 180 },
+    { a: '#a6c1ee', b: '#f6f7fa', deg: 180 },
+    { a: '#d4fc79', b: '#96e6a1', deg: 180 },
+    { a: '#a1c4fd', b: '#c2e9fb', deg: 180 },
+    { a: '#fbc2eb', b: '#a6c1ee', deg: 315},
+    { a: '#43e97b', b: '#38f9d7', deg: 270 },
+    { a: '#fa709a', b: '#fee140', deg: 90 },
+    { a: '#30cfd0', b: '#330867', deg: 180 },
+    { a: '#fddb92', b: '#d1fdff', deg: 180 },
+    { a: '#a18cd1', b: '#fbc2eb', deg: 180 },
+    { a: '#fad0c4', b: '#ffd1ff', deg: 180 },
+    { a: '#ff9a9e', b: '#fad0c4', deg: 180 },
+    { a: '#c1dfc4', b: '#deecdd', deg: 180 },
+    { a: '#667eea', b: '#764ba2', deg: 180 },
+    { a: '#89f7fe', b: '#66a6ff', deg: 180 },
+    { a: '#fdfbfb', b: '#ebedee', deg: 180 },
+    { a: '#e0c3fc', b: '#8ec5fc', deg: 180 },
+    { a: '#f6d365', b: '#fda085', deg: 180 },
+    { a: '#96fbc4', b: '#f9f586', deg: 180 },
+    { a: '#cfd9df', b: '#e2ebf0', deg: 180 },
+    { a: '#a8edea', b: '#fed6e3', deg: 180 },
+    { a: '#f5f7fa', b: '#c3cfe2', deg: 180 },
+    { a: '#667eea', b: '#89f7fe', deg: 180 },
+    { a: '#ffecd2', b: '#fcb69f', deg: 180 },
+    { a: '#fcb69f', b: '#ffecd2', deg: 180 },
 ]
 var mockup_background_current = MOCKUP_BACKGROUND_SETTINGS[0];
 function initBackgroundSelectors() {
@@ -61,9 +86,7 @@ document.getElementById('image-upload').addEventListener('change', function(even
 
 // hide preview grid and download-all button on init
 const previewGrid = document.getElementById('preview-grid');
-const downloadAllBtn = document.getElementById('download-button');
 if (previewGrid) previewGrid.classList.add('hidden');
-if (downloadAllBtn) downloadAllBtn.classList.add('hidden');
 
 function generateWallpapers(img) {
     // 验证传入的图片对象
@@ -134,8 +157,9 @@ function generateWallpapers(img) {
         canvas.height = 0;
     }
     // reveal preview area and download-all button after generation
-    if (previewGrid) previewGrid.classList.remove('hidden');
-    if (downloadAllBtn) downloadAllBtn.classList.remove('hidden');
+    // if (previewGrid) previewGrid.classList.remove('hidden');
+    
+    makeMockupPreview()
 }
 
 // 添加单个设备壁纸下载功能
@@ -469,6 +493,10 @@ function makeMockupPreview() {
         const mockupSection = document.getElementById('mockup-grid');
         if (mockupSection) {
             mockupSection.classList.remove('hidden');
+        }
+        const downloadBtn = document.getElementById('button-download-mockup');
+        if (downloadBtn) {
+            downloadBtn.classList.remove('hidden');
         }
     });
 }

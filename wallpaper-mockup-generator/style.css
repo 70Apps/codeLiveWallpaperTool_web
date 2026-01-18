@@ -398,10 +398,22 @@
 	.mockup-item-background-selector {
 		margin: 16px;
 		.mockup-bg-btn {
-			width: 64px;
-			height: 64px;
+			width: 75px;
+			height: 75px;
 		}
 	}
+	@media (max-width:800px) {
+	display: block;
+	grid-template-columns: 1fr 0.6fr;
+	.mockup-item-background-selector {
+		margin: 4px;
+		.mockup-bg-btn {
+			width: 48px;
+			height: 48px;
+		}
+	}
+	}
+
 }
 
 /* utility class to hide elements until needed */
