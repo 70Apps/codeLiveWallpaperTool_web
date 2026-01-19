@@ -5,84 +5,89 @@ permalink: /wallpaper-bing-today/
 ---
 <!-- a one webpage utility tool for wallpaper mutiple size generation -->
 
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <main class="generator">
-    <div class="container">
-      <header class="hero">
-        <h1>Bing.com Today Wallpaper</h1>
-        <p class="lead">Generate today wallpaper from bing.com</p>
-      </header>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<main class="generator">
+  <div class="container">
+    <header class="hero">
+      <h1>Bing.com Today Wallpaper</h1>
+      <p class="lead">Generate today wallpaper from bing.com</p>
+    </header>
 
-      <form id="wallpaper-form" class="controls">
-        <div class="controls-row">
-          <div class="upload-left">
-            <figure class="upload-preview">
-              <img id="image-preview" src="" alt="Preview">
-              <figcaption class="visually-hidden">Uploaded image preview</figcaption>
-            </figure>
-          </div>
+    <form id="wallpaper-form" class="controls">
+      <div class="controls-row">
+        <div class="upload-left">
+          <figure class="upload-preview">
+            <img id="image-preview" src="" alt="Preview">
+            <figcaption class="visually-hidden">Uploaded image preview</figcaption>
+          </figure>
+        </div>
 
-          <div class="upload-right">
+        <div class="upload-right">
 
           <button type="button" id="update-button" class="btn-primary">Update Now</button>
           <div class="toolbar">
-          <button type="button" id="prev-button" class="btn-primary"><<</button>
-            <span id="date-selected"></span>
-          <button type="button" id="next-button" class="btn-primary">>></button>
+            <button type="button" id="prev-button" class="btn-primary"> << </button>
+                <span id="date-selected"></span>
+                <button type="button" id="next-button" class="btn-primary"> >> </button>
           </div>
           <div class="region-bar">
 
           </div>
 
-            <div class="format-selector">
-              <label>Select Export Image Format</label>
-              <div class="format-toggle" role="tablist" aria-label="Image format">
-                <button type="button" class="format-btn" data-format="png">PNG</button>
-                <button type="button" class="format-btn" data-format="jpeg">JPEG</button>
-                <button type="button" class="format-btn active" data-format="webp">WEBP</button>
-                <span class="tips">* Upgrade Chrome to Support WebP Format</span>
-              </div>
-              <input type="hidden" id="image-format" value="webp">
+          <div class="format-selector">
+            <label>Select Export Image Format</label>
+            <div class="format-toggle" role="tablist" aria-label="Image format">
+              <button type="button" class="format-btn" data-format="png">PNG</button>
+              <button type="button" class="format-btn" data-format="jpeg">JPEG</button>
+              <button type="button" class="format-btn active" data-format="webp">WEBP</button>
             </div>
+            <input type="hidden" id="image-format" value="webp">
           </div>
-
         </div>
 
-        <section id="preview-grid" class="preview-grid" aria-live="polite">
-          <div class="preview-item">
-            <h3>iPhone</h3>
-            <div class="preview-media">
-              <img id="iphone-preview" src="" alt="iPhone Preview">
-            </div>
-            <button type="button" class="download-btn" data-device="iphone">Download iPhone</button>
+      </div>
+
+      <section id="preview-grid" class="preview-grid" aria-live="polite">
+        <div class="preview-item">
+          <h3>iPhone</h3>
+          <div class="preview-media">
+            <img id="iphone-preview" src="" alt="iPhone Preview">
           </div>
-          <div class="preview-item">
-            <h3>iPad</h3>
-            <div class="preview-media">
-              <img id="ipad-preview" src="" alt="iPad Preview">
-            </div>
-            <button type="button" class="download-btn" data-device="ipad">Download iPad</button>
-          </div>
-          <div class="preview-item">
-            <h3>MacBook</h3>
-            <div class="preview-media">
-              <img id="macbook-preview" src="" alt="MacBook Preview">
-            </div>
-            <button type="button" class="download-btn" data-device="macbook">Download MacBook</button>
-          </div>
-          <div class="preview-item">
-            <h3>Apple Watch</h3>
-            <div class="preview-media">
-              <img id="applewatch-preview" src="" alt="Apple Watch Preview">
-            </div>
-            <button type="button" class="download-btn" data-device="applewatch">Download Apple Watch</button>
-          </div>
-        </section>
-        <div class="actions">
-          <button type="button" id="download-button" class="btn-primary">Download All Wallpapers</button>
+          <button type="button" class="download-btn" data-device="iphone">Download iPhone</button>
         </div>
-      </form>
+        <div class="preview-item">
+          <h3>iPad</h3>
+          <div class="preview-media">
+            <img id="ipad-preview" src="" alt="iPad Preview">
+          </div>
+          <button type="button" class="download-btn" data-device="ipad">Download iPad</button>
+        </div>
+        <div class="preview-item">
+          <h3>MacBook</h3>
+          <div class="preview-media">
+            <img id="macbook-preview" src="" alt="MacBook Preview">
+          </div>
+          <button type="button" class="download-btn" data-device="macbook">Download MacBook</button>
+        </div>
+        <div class="preview-item">
+          <h3>Apple Watch</h3>
+          <div class="preview-media">
+            <img id="applewatch-preview" src="" alt="Apple Watch Preview">
+          </div>
+          <button type="button" class="download-btn" data-device="applewatch">Download Apple Watch</button>
+        </div>
+      </section>
+      <div class="actions">
+        <button type="button" id="download-button" class="btn-primary">Download All Wallpapers</button>
+      </div>
+    </form>
+  </div>
+  <div class="thanks-note">
+    <h3>Thanks to</h3>
+    <div class="thanks-links">
+      <a href="https://github.com/TimothyYe/bing-wallpaper">TimothyYe GitHub</a>
     </div>
-  </main>
+  </div>
+</main>
 <script src="script.js"></script>
