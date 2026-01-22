@@ -24,7 +24,7 @@ new BING_REGION("France (Canada)", "fr-CA"),
 new BING_REGION("Italy", "it-IT"),
 new BING_REGION("Spain", "es-ES"),
 new BING_REGION("Brazil", "pt-BR"),
-new BING_REGION("Chinese", "zh-CN"),
+new BING_REGION("China", "zh-CN"),
 new BING_REGION("Rest of World", "en-ROW")
 ];
 
@@ -98,7 +98,7 @@ copyright_link: "https://www.bing.com/search?q=%E4%BA%9A%E4%BC%AF%E6%8B%89%E7%BD
     .then(data => {
         const imageUrl = data.url;
         const img = new Image();
-        img.crossOrigin = "Anonymous"; // to avoid CORS issues
+        img.crossOrigin = "anonymous"; // to avoid CORS issues
         img.onload = function() {
             generateWallpapers(img);
         }
@@ -110,6 +110,7 @@ copyright_link: "https://www.bing.com/search?q=%E4%BA%9A%E4%BC%AF%E6%8B%89%E7%BD
     })
     .catch(error => {
         console.error('Error fetching Bing wallpaper:', error);
+        alert('Error fetching Bing wallpaper.');
     });
 });
 // hide preview grid and download-all button on init
