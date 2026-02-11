@@ -1,0 +1,166 @@
+---
+layout: web-app
+title: Grid Wallpaper Generator
+permalink: /wallpaper-grid-generator/
+---
+<!-- 手机界面风格的格子壁纸生成器 -->
+
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+<main class="mobile-generator">
+  <div class="mobile-container">
+    <!-- Header -->
+    <header class="header">
+      <h1>Grid Wallpaper</h1>
+      <p class="subtitle">Create beautiful grid pattern wallpapers</p>
+    </header>
+
+    <!-- Preview Section -->
+    <section class="preview-section">
+      <div class="phone-preview">
+        <div class="phone-frame">
+          <div id="preview-screen" class="preview-screen"></div>
+        </div>
+      </div>
+      <div class="preview-info">
+        <h3>Current Settings</h3>
+        <div class="color-displays">
+          <div id="bg-color-display" class="color-display bg-display"></div>
+          <div id="grid-color-display" class="color-display grid-display"></div>
+        </div>
+        <div class="info-text">
+          <p id="size-info">Size: <span id="size-value">20</span>px</p>
+          <p id="width-info">Width: <span id="width-value">1</span>px</p>
+          <p id="opacity-info">Opacity: <span id="opacity-value">80</span>%</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Controls Section -->
+    <section class="controls-section">
+      <!-- Color Controls -->
+      <div class="color-controls">
+        <div class="color-group">
+          <label for="bg-color">Background</label>
+          <input type="color" id="bg-color" class="color-picker bg-picker" value="#f8fafc">
+        </div>
+        <div class="color-group">
+          <label for="grid-color">Grid Lines</label>
+          <input type="color" id="grid-color" class="color-picker grid-picker" value="#3b82f6">
+        </div>
+        <div class="color-swap">
+          <button type="button" id="swap-colors-btn" class="swap-btn" title="Swap Colors">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M16 3h5v5M4 20L21 3M21 16v5h-5M8 8l-5 5"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Grid Size Control -->
+      <div class="grid-size-control">
+        <div class="control-header">
+          <label for="grid-size">Grid Size</label>
+          <span id="size-display">20px</span>
+        </div>
+        <div class="slider-container">
+          <input type="range" id="grid-size" min="10" max="100" value="20" class="control-slider">
+        </div>
+      </div>
+
+      <!-- Line Width Control -->
+      <div class="line-width-control">
+        <div class="control-header">
+          <label for="line-width">Line Width</label>
+          <span id="width-display">1px</span>
+        </div>
+        <div class="slider-container">
+          <input type="range" id="line-width" min="1" max="10" value="1" class="control-slider">
+        </div>
+      </div>
+
+      <!-- Opacity Control -->
+      <div class="opacity-control">
+        <div class="control-header">
+          <label for="grid-opacity">Grid Opacity</label>
+          <span id="opacity-display">80%</span>
+        </div>
+        <div class="slider-container">
+          <input type="range" id="grid-opacity" min="10" max="100" value="80" class="control-slider">
+        </div>
+      </div>
+
+      <!-- Grid Style Selection -->
+      <div class="style-controls">
+        <div class="control-header">
+          <label>Grid Style</label>
+        </div>
+        <div class="style-buttons">
+          <button type="button" class="style-btn active" data-style="square">Square</button>
+          <button type="button" class="style-btn" data-style="dots">Dots</button>
+          <button type="button" class="style-btn" data-style="lines-h">Lines H</button>
+          <button type="button" class="style-btn" data-style="lines-v">Lines V</button>
+        </div>
+      </div>
+
+      <!-- Format Selection -->
+      <div class="format-controls">
+        <div class="control-header">
+          <label>Export Format</label>
+        </div>
+        <div class="format-buttons">
+          <button type="button" class="format-btn active" data-format="png">PNG</button>
+          <button type="button" class="format-btn" data-format="jpeg">JPEG</button>
+          <button type="button" class="format-btn" data-format="webp">WEBP</button>
+        </div>
+        <input type="hidden" id="image-format" value="png">
+        <p class="format-tip">* WEBP requires modern browser support</p>
+      </div>
+    </section>
+
+    <!-- Action Buttons -->
+    <section class="action-section">
+      <button type="button" id="randomize-btn" class="btn-secondary">Random</button>
+      <button type="button" id="generate-btn" class="btn-primary">Generate Wallpaper</button>
+    </section>
+
+    <!-- Device Previews (Hidden initially) -->
+    <section id="device-previews" class="device-previews hidden">
+      <h3>Generated Wallpapers</h3>
+      <div class="device-grid">
+        <div class="device-item">
+          <h4>iPhone</h4>
+          <div class="device-preview">
+            <img id="iphone-preview" src="" alt="iPhone Preview">
+          </div>
+          <button type="button" class="download-btn" data-device="iphone">Download</button>
+        </div>
+        <div class="device-item">
+          <h4>iPad</h4>
+          <div class="device-preview">
+            <img id="ipad-preview" src="" alt="iPad Preview">
+          </div>
+          <button type="button" class="download-btn" data-device="ipad">Download</button>
+        </div>
+        <div class="device-item">
+          <h4>MacBook</h4>
+          <div class="device-preview">
+            <img id="macbook-preview" src="" alt="MacBook Preview">
+          </div>
+          <button type="button" class="download-btn" data-device="macbook">Download</button>
+        </div>
+        <div class="device-item">
+          <h4>Apple Watch</h4>
+          <div class="device-preview">
+            <img id="applewatch-preview" src="" alt="Apple Watch Preview">
+          </div>
+          <button type="button" class="download-btn" data-device="applewatch">Download</button>
+        </div>
+      </div>
+      <button type="button" id="download-all-btn" class="btn-primary download-all">Download All</button>
+    </section>
+  </div>
+</main>
+
+<script src="script.js"></script>

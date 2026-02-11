@@ -1,0 +1,145 @@
+---
+layout: web-app
+title: Glow Wallpaper Generator
+permalink: /wallpaper-glow-generator/
+---
+<!-- 手机界面风格的渐变发光壁纸生成器 -->
+
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+<main class="mobile-generator">
+  <div class="mobile-container">
+    <!-- Header -->
+    <header class="header">
+      <h1>Glow Wallpaper</h1>
+      <p class="subtitle">Create stunning gradient wallpapers with edge glow</p>
+    </header>
+
+    <!-- Preview Section -->
+    <section class="preview-section">
+      <div class="phone-preview">
+        <div class="phone-frame">
+          <div id="preview-screen" class="preview-screen"></div>
+        </div>
+      </div>
+      <div class="preview-info">
+        <h3>Current Colors</h3>
+        <div class="color-displays">
+          <div id="bg-color-display" class="color-display bg-display"></div>
+          <div id="fg-color-display" class="color-display fg-display"></div>
+        </div>
+        <div class="info-text">
+          <p id="glow-info">Glow: <span id="glow-value">30</span>%</p>
+          <p id="direction-info">Direction: <span id="direction-value">135</span>°</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Controls Section -->
+    <section class="controls-section">
+      <!-- Color Controls -->
+      <div class="color-controls">
+        <div class="color-group">
+          <label for="bg-color">Background (Dark)</label>
+          <input type="color" id="bg-color" class="color-picker bg-picker" value="#0f0f23">
+        </div>
+        <div class="color-group">
+          <label for="fg-color">Foreground (Light)</label>
+          <input type="color" id="fg-color" class="color-picker fg-picker" value="#3b82f6">
+        </div>
+        <div class="color-swap">
+          <button type="button" id="swap-colors-btn" class="swap-btn" title="Swap Colors">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M16 3h5v5M4 20L21 3M21 16v5h-5M8 8l-5 5"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Glow Controls -->
+      <div class="glow-controls">
+        <div class="control-header">
+          <label for="glow-intensity">Edge Glow Intensity</label>
+          <span id="glow-display">30%</span>
+        </div>
+        <div class="slider-container">
+          <input type="range" id="glow-intensity" min="0" max="100" value="30" class="glow-slider">
+        </div>
+      </div>
+
+      <!-- Direction Controls -->
+      <div class="direction-controls">
+        <div class="control-header">
+          <label>Gradient Direction</label>
+          <span id="direction-display">135°</span>
+        </div>
+        <div class="direction-buttons">
+          <button type="button" class="direction-btn" data-angle="0">0°</button>
+          <button type="button" class="direction-btn" data-angle="45">45°</button>
+          <button type="button" class="direction-btn" data-angle="90">90°</button>
+          <button type="button" class="direction-btn active" data-angle="135">135°</button>
+          <button type="button" class="direction-btn" data-angle="180">180°</button>
+        </div>
+      </div>
+
+      <!-- Format Selection -->
+      <div class="format-controls">
+        <div class="control-header">
+          <label>Export Format</label>
+        </div>
+        <div class="format-buttons">
+          <button type="button" class="format-btn active" data-format="png">PNG</button>
+          <button type="button" class="format-btn" data-format="jpeg">JPEG</button>
+          <button type="button" class="format-btn" data-format="webp">WEBP</button>
+        </div>
+        <input type="hidden" id="image-format" value="png">
+        <p class="format-tip">* WEBP requires modern browser support</p>
+      </div>
+    </section>
+
+    <!-- Action Buttons -->
+    <section class="action-section">
+      <button type="button" id="randomize-btn" class="btn-secondary">Random</button>
+      <button type="button" id="generate-btn" class="btn-primary">Generate Wallpaper</button>
+    </section>
+
+    <!-- Device Previews (Hidden initially) -->
+    <section id="device-previews" class="device-previews hidden">
+      <h3>Generated Wallpapers</h3>
+      <div class="device-grid">
+        <div class="device-item">
+          <h4>iPhone</h4>
+          <div class="device-preview">
+            <img id="iphone-preview" src="" alt="iPhone Preview">
+          </div>
+          <button type="button" class="download-btn" data-device="iphone">Download</button>
+        </div>
+        <div class="device-item">
+          <h4>iPad</h4>
+          <div class="device-preview">
+            <img id="ipad-preview" src="" alt="iPad Preview">
+          </div>
+          <button type="button" class="download-btn" data-device="ipad">Download</button>
+        </div>
+        <div class="device-item">
+          <h4>MacBook</h4>
+          <div class="device-preview">
+            <img id="macbook-preview" src="" alt="MacBook Preview">
+          </div>
+          <button type="button" class="download-btn" data-device="macbook">Download</button>
+        </div>
+        <div class="device-item">
+          <h4>Apple Watch</h4>
+          <div class="device-preview">
+            <img id="applewatch-preview" src="" alt="Apple Watch Preview">
+          </div>
+          <button type="button" class="download-btn" data-device="applewatch">Download</button>
+        </div>
+      </div>
+      <button type="button" id="download-all-btn" class="btn-primary download-all">Download All</button>
+    </section>
+  </div>
+</main>
+
+<script src="script.js"></script>
