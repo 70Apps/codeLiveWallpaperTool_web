@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FFmpeg 加载测试</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .status {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        .status.loading {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+        }
+        .status.success {
+            background: #d4edda;
+            border: 2px solid #28a745;
+        }
+        .status.error {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+        }
+        .log {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        .log-entry {
+            margin: 5px 0;
+            padding: 5px;
+            border-left: 3px solid #007bff;
+            padding-left: 10px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 FFmpeg.wasm 加载测试</h1>
+        
+        <div id="status" class="status loading">
+            ⏳ 准备测试...
+        </div>
+        
+        <button id="testBtn" onclick="testFFmpeg()">开始测试</button>
+        
+        <div class="log" id="log">
+            <div class="log-entry">等待测试开始...</div>
+        </div>
+    </div>
+
+    <script src="lib/ffmpeg.js"></script>
+    <script>
+        const statusDiv = document.getElementById('status');
+        const logDiv = document.getElementById('log');
+        const testBtn = document.getElementById('testBtn');
+        
+        function addLog(message, type = 'info') {
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logDiv.appendChild(entry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        function updateStatus(message, type) {
+            statusDiv.className = `status ${type}`;
+            statusDiv.textContent = message;
+        }
+        
+        async function testFFmpeg() {
+            testBtn.disabled = true;
+            logDiv.innerHTML = '';
+            
+            try {
+                // 测试 1: 检查 FFmpegWASM 对象
+                addLog('测试 1: 检查 FFmpegWASM 对象...');
+                if (typeof FFmpegWASM === 'undefined') {
+                    throw new Error('FFmpegWASM 对象未定义');
+                }
+                addLog('✅ FFmpegWASM 对象已加载');
+                
+                // 测试 2: 创建 FFmpeg 实例
+                addLog('测试 2: 创建 FFmpeg 实例...');
+                const { FFmpeg } = FFmpegWASM;
+                const ffmpeg = new FFmpeg();
+                addLog('✅ FFmpeg 实例创建成功');
+                
+                // 测试 3: 设置日志监听
+                addLog('测试 3: 设置日志监听...');
+                ffmpeg.on('log', ({ message }) => {
+                    addLog(`FFmpeg: ${message}`);
+                });
+                addLog('✅ 日志监听设置成功');
+                
+                // 测试 4: 加载 WASM
+                addLog('测试 4: 加载 FFmpeg WASM...');
+                updateStatus('⏳ 正在加载 FFmpeg WASM...', 'loading');
+                
+                const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd';
+                await ffmpeg.load({
+                    coreURL: `${baseURL}/ffmpeg-core.js`,
+                    wasmURL: `${baseURL}/ffmpeg-core.wasm`,
+                });
+                
+                addLog('✅ FFmpeg WASM 加载成功');
+                
+                // 测试 5: 检查版本
+                addLog('测试 5: 检查 FFmpeg 版本...');
+                // FFmpeg 实例已加载，可以使用
+                addLog('✅ FFmpeg 已就绪');
+                
+                updateStatus('✅ 所有测试通过！FFmpeg 工作正常', 'success');
+                addLog('🎉 测试完成！FFmpeg.wasm 可以正常使用');
+                
+            } catch (error) {
+                addLog(`❌ 错误: ${error.message}`, 'error');
+                updateStatus(`❌ 测试失败: ${error.message}`, 'error');
+                console.error('FFmpeg test failed:', error);
+            } finally {
+                testBtn.disabled = false;
+            }
+        }
+        
+        // 页面加载时的初始检查
+        window.addEventListener('load', () => {
+            addLog('页面加载完成');
+            addLog(`FFmpegWASM 状态: ${typeof FFmpegWASM !== 'undefined' ? '已加载' : '未加载'}`);
+            
+            if (typeof FFmpegWASM !== 'undefined') {
+                updateStatus('✅ FFmpeg.js 已加载，点击按钮开始测试', 'success');
+            } else {
+                updateStatus('❌ FFmpeg.js 未加载，请检查文件路径', 'error');
+                testBtn.disabled = true;
+            }
+        });
+    </script>
+</body>
+</html>

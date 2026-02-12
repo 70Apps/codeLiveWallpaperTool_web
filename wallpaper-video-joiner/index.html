@@ -67,6 +67,12 @@ permalink: /wallpaper-video-joiner/
             <section class="settings-section" id="settingsSection" style="display: none;">
                 <h2>⚙️ 合成设置</h2>
                 
+                <!-- FFmpeg 状态指示器 -->
+                <div class="ffmpeg-status" id="ffmpegStatus">
+                    <span class="status-icon">⏳</span>
+                    <span class="status-text">正在加载 FFmpeg...</span>
+                </div>
+                
                 <div class="settings-grid">
                     <div class="setting-group">
                         <label>输出尺寸</label>
@@ -96,7 +102,7 @@ permalink: /wallpaper-video-joiner/
                     </div>
 
                     <div class="setting-group">
-                        <label>分屏比例</label>
+                        <label>拼合线位置</label>
                         <div class="ratio-control">
                             <div class="ratio-display">
                                 <span class="ratio-label">上部分：<strong id="topRatio">50</strong>%</span>
@@ -109,7 +115,7 @@ permalink: /wallpaper-video-joiner/
                                 <span>95%</span>
                             </div>
                         </div>
-                        <p class="resolution-hint">🎚️ 调整上下视频的高度比例</p>
+                        <p class="resolution-hint">📍 调整视频裁剪比例（视频1取上部X%，视频2取下部(100-X)%）</p>
                     </div>
                 </div>
 
@@ -143,7 +149,10 @@ permalink: /wallpaper-video-joiner/
             <section class="preview-section" id="previewSection" style="display: none;">
                 <h2>👁️ 合成预览</h2>
                 <div class="preview-container">
-                    <canvas id="previewCanvas"></canvas>
+                    <div class="canvas-wrapper">
+                        <canvas id="previewCanvas"></canvas>
+                        <div class="split-line" id="splitLine"></div>
+                    </div>
                     <div class="preview-controls">
                         <button class="btn-preview" id="updatePreviewBtn">🔄 更新预览</button>
                         <input type="range" id="previewTime" min="0" max="100" value="0" step="0.1">
@@ -196,5 +205,6 @@ permalink: /wallpaper-video-joiner/
         </footer>
     </div>
 
-    <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.12.6/dist/umd/ffmpeg.js"></script>
+    <!-- 本地 FFmpeg.wasm 库 -->
+    <script src="lib/ffmpeg.js"></script>
     <script src="script.js"></script>

@@ -342,6 +342,48 @@ section h2 {
     padding: 0 5px;
 }
 
+/* FFmpeg 状态指示器 */
+.ffmpeg-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    background: var(--background);
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 2px solid var(--border-color);
+}
+
+.ffmpeg-status.loading {
+    border-color: var(--warning-color);
+}
+
+.ffmpeg-status.success {
+    border-color: var(--success-color);
+    background: rgba(16, 185, 129, 0.1);
+}
+
+.ffmpeg-status.fallback {
+    border-color: var(--warning-color);
+    background: rgba(245, 158, 11, 0.1);
+}
+
+.status-icon {
+    font-size: 1.2rem;
+}
+
+.status-text {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.status-detail {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-left: auto;
+}
+
 /* 按钮 */
 .btn-process,
 .btn-download,
@@ -410,10 +452,45 @@ section h2 {
     gap: 20px;
 }
 
+.canvas-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
 #previewCanvas {
     max-width: 100%;
     border-radius: 12px;
     box-shadow: var(--shadow);
+    display: block;
+}
+
+.split-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        var(--primary-color) 10%, 
+        var(--primary-color) 90%, 
+        transparent 100%);
+    pointer-events: none;
+    z-index: 10;
+    transition: top 0.3s ease;
+}
+
+.split-line::before {
+    content: '拼合线';
+    position: absolute;
+    right: 10px;
+    top: -20px;
+    background: var(--primary-color);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
 }
 
 .preview-controls {

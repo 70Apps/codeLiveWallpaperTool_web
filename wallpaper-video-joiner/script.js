@@ -54,6 +54,8 @@ const outputInfo = document.getElementById('outputInfo');
 const splitRatio = document.getElementById('splitRatio');
 const topRatio = document.getElementById('topRatio');
 const bottomRatio = document.getElementById('bottomRatio');
+const ffmpegStatus = document.getElementById('ffmpegStatus');
+const splitLine = document.getElementById('splitLine');
 
 // 初始化
 async function init() {
@@ -94,9 +96,10 @@ async function init() {
         topRatio.textContent = ratio;
         bottomRatio.textContent = 100 - ratio;
         
-        // 如果预览已显示，更新预览
+        // 如果预览已显示，更新预览和拼合线
         if (previewSection.style.display === 'block') {
             drawPreview();
+            updateSplitLine();
         }
     });
     
@@ -107,6 +110,15 @@ async function init() {
 // 加载 FFmpeg
 async function loadFFmpeg() {
     try {
+        // 更新状态：加载中
+        updateFFmpegStatus('loading', '正在加载 FFmpeg...', '');
+        
+        // 检查 FFmpeg 是否已加载
+        if (typeof FFmpegWASM === 'undefined') {
+            console.error('FFmpeg library not loaded');
+            throw new Error('FFmpeg 库未加载');
+        }
+        
         const { FFmpeg } = FFmpegWASM;
         ffmpeg = new FFmpeg();
         
@@ -122,14 +134,55 @@ async function loadFFmpeg() {
             }
         });
         
-        progressText.textContent = '正在加载 FFmpeg...';
-        await ffmpeg.load();
+        console.log('开始加载 FFmpeg WASM...');
+        
+        // 使用 CDN 加载 WASM 文件
+        const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd';
+        await ffmpeg.load({
+            coreURL: `${baseURL}/ffmpeg-core.js`,
+            wasmURL: `${baseURL}/ffmpeg-core.wasm`,
+        });
+        
         ffmpegLoaded = true;
         console.log('FFmpeg loaded successfully');
+        
+        // 更新状态：成功
+        updateFFmpegStatus('success', 'FFmpeg 已就绪', 'MP4 格式');
     } catch (error) {
         console.error('Failed to load FFmpeg:', error);
-        alert('FFmpeg 加载失败，将使用备用方案（WebM 格式）');
+        ffmpegLoaded = false;
+        
+        // 更新状态：备用方案
+        updateFFmpegStatus('fallback', '使用备用方案', 'WebM 格式');
+        
+        // 显示友好的错误提示
+        const errorMsg = 'FFmpeg 加载失败，将使用备用方案（WebM 格式）\n\n' +
+                        '可能的原因：\n' +
+                        '1. 网络连接问题\n' +
+                        '2. 浏览器不支持 WebAssembly\n' +
+                        '3. CDN 访问受限\n\n' +
+                        '备用方案会生成 WebM 格式视频，质量略低但功能完整。';
+        
+        console.warn(errorMsg);
     }
+}
+
+// 更新 FFmpeg 状态显示
+function updateFFmpegStatus(status, text, detail) {
+    if (!ffmpegStatus) return;
+    
+    const icons = {
+        loading: '⏳',
+        success: '✅',
+        fallback: '⚠️'
+    };
+    
+    ffmpegStatus.className = 'ffmpeg-status ' + status;
+    ffmpegStatus.innerHTML = `
+        <span class="status-icon">${icons[status]}</span>
+        <span class="status-text">${text}</span>
+        ${detail ? `<span class="status-detail">${detail}</span>` : ''}
+    `;
 }
 
 // 计算输出尺寸（保持比例）
@@ -360,7 +413,7 @@ function drawPreview() {
     
     const ctx = previewCanvas.getContext('2d');
     
-    // 获取分屏比例
+    // 获取拼合线位置比例
     const ratio = parseInt(splitRatio.value) / 100;
     const topHeight = Math.round(outputSize.height * ratio);
     const bottomHeight = outputSize.height - topHeight;
@@ -369,65 +422,83 @@ function drawPreview() {
     ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, outputSize.width, outputSize.height);
     
-    // 计算视频1的缩放和位置（只取上半部分）
-    const v1Ratio = v1Width / (v1Height / 2);
+    // 视频1：从顶部开始取 ratio% 的高度
+    const v1SourceY = 0;
+    const v1SourceHeight = v1Height * ratio;  // 取视频1的前 ratio% 高度
+    const v1SourceRatio = v1Width / v1SourceHeight;
     const topTargetRatio = outputSize.width / topHeight;
     
     let v1DrawWidth, v1DrawHeight, v1OffsetX, v1OffsetY;
-    let v1SourceY = 0;
-    let v1SourceHeight = v1Height / 2;
     
-    if (v1Ratio > topTargetRatio) {
+    if (v1SourceRatio > topTargetRatio) {
+        // 源视频更宽，按高度缩放
         v1DrawHeight = topHeight;
-        v1DrawWidth = v1DrawHeight * v1Ratio;
+        v1DrawWidth = v1DrawHeight * v1SourceRatio;
         v1OffsetX = (outputSize.width - v1DrawWidth) / 2;
         v1OffsetY = 0;
     } else {
+        // 源视频更高，按宽度缩放
         v1DrawWidth = outputSize.width;
-        v1DrawHeight = v1DrawWidth / v1Ratio;
+        v1DrawHeight = v1DrawWidth / v1SourceRatio;
         v1OffsetX = 0;
         v1OffsetY = (topHeight - v1DrawHeight) / 2;
     }
     
-    // 绘制视频1的上半部分到画布上半部分
+    // 绘制视频1的上部分到画布上部分
     ctx.drawImage(
         video1Element,
         0, v1SourceY, v1Width, v1SourceHeight,
         v1OffsetX, v1OffsetY, v1DrawWidth, v1DrawHeight
     );
     
-    // 计算视频2的缩放和位置（只取下半部分）
-    const v2Ratio = v2Width / (v2Height / 2);
+    // 视频2：从底部开始取 (1-ratio)% 的高度
+    const v2SourceHeight = v2Height * (1 - ratio);  // 取视频2的后 (1-ratio)% 高度
+    const v2SourceY = v2Height - v2SourceHeight;    // 从底部往上计算起始位置
+    const v2SourceRatio = v2Width / v2SourceHeight;
     const bottomTargetRatio = outputSize.width / bottomHeight;
     
     let v2DrawWidth, v2DrawHeight, v2OffsetX, v2OffsetY;
-    let v2SourceY = v2Height / 2;
-    let v2SourceHeight = v2Height / 2;
     
-    if (v2Ratio > bottomTargetRatio) {
+    if (v2SourceRatio > bottomTargetRatio) {
+        // 源视频更宽，按高度缩放
         v2DrawHeight = bottomHeight;
-        v2DrawWidth = v2DrawHeight * v2Ratio;
+        v2DrawWidth = v2DrawHeight * v2SourceRatio;
         v2OffsetX = (outputSize.width - v2DrawWidth) / 2;
         v2OffsetY = topHeight;
     } else {
+        // 源视频更高，按宽度缩放
         v2DrawWidth = outputSize.width;
-        v2DrawHeight = v2DrawWidth / v2Ratio;
+        v2DrawHeight = v2DrawWidth / v2SourceRatio;
         v2OffsetX = 0;
         v2OffsetY = topHeight + (bottomHeight - v2DrawHeight) / 2;
     }
     
-    // 绘制视频2的下半部分到画布下半部分
+    // 绘制视频2的下部分到画布下部分
     ctx.drawImage(
         video2Element,
         0, v2SourceY, v2Width, v2SourceHeight,
         v2OffsetX, v2OffsetY, v2DrawWidth, v2DrawHeight
     );
     
+    // 更新拼合线位置
+    updateSplitLine();
+    
     // 显示预览区域
     if (previewSection.style.display === 'none') {
         previewSection.style.display = 'block';
         previewSection.scrollIntoView({ behavior: 'smooth' });
     }
+}
+
+// 更新拼合线位置
+function updateSplitLine() {
+    if (!splitLine || !previewCanvas) return;
+    
+    const ratio = parseInt(splitRatio.value) / 100;
+    const canvasHeight = previewCanvas.offsetHeight; // 使用显示高度，不是实际像素高度
+    const linePosition = canvasHeight * ratio;
+    
+    splitLine.style.top = linePosition + 'px';
 }
 
 // 处理视频
@@ -437,21 +508,40 @@ async function processVideos() {
         return;
     }
     
-    if (!ffmpegLoaded) {
-        alert('FFmpeg 未加载完成，请稍后再试或使用备用方案');
-        return processWithCanvas();
-    }
-    
     processBtn.disabled = true;
     progressSection.style.display = 'block';
     progressSection.scrollIntoView({ behavior: 'smooth' });
     
     try {
-        await processWithFFmpeg();
+        if (ffmpegLoaded) {
+            // 使用 FFmpeg 处理（MP4 输出）
+            console.log('使用 FFmpeg 处理视频...');
+            await processWithFFmpeg();
+        } else {
+            // 使用 Canvas 备用方案（WebM 输出）
+            console.log('使用 Canvas 备用方案处理视频...');
+            progressText.textContent = '使用备用方案处理（WebM 格式）...';
+            await processWithCanvas();
+        }
     } catch (error) {
         console.error('处理失败:', error);
         alert('视频处理失败: ' + error.message + '\n\n将尝试使用备用方案');
-        await processWithCanvas();
+        
+        // 如果 FFmpeg 失败，尝试 Canvas 方案
+        if (ffmpegLoaded) {
+            try {
+                console.log('FFmpeg 失败，切换到 Canvas 备用方案...');
+                await processWithCanvas();
+            } catch (canvasError) {
+                console.error('Canvas 方案也失败:', canvasError);
+                alert('所有处理方案都失败了，请检查浏览器兼容性');
+                processBtn.disabled = false;
+                progressSection.style.display = 'none';
+            }
+        } else {
+            processBtn.disabled = false;
+            progressSection.style.display = 'none';
+        }
     }
 }
 
@@ -493,16 +583,16 @@ async function processWithFFmpeg() {
     // 构建 FFmpeg 命令
     progressText.textContent = '正在合成视频...';
     
-    // 使用 FFmpeg 滤镜：先裁剪上下半部分，再缩放和合并
-    // [0:v] 视频1取上半部分，[1:v] 视频2取下半部分
+    // 使用 FFmpeg 滤镜：根据比例裁剪视频的不同部分
+    // [0:v] 视频1取上部 ratio%，[1:v] 视频2取下部 (1-ratio)%
     await ffmpeg.exec([
         '-i', 'input1.mp4',
         '-i', 'input2.mp4',
         '-filter_complex',
-        // 视频1：裁剪上半部分，然后缩放到目标尺寸
-        `[0:v]crop=iw:ih/2:0:0,scale=${outputSize.width}:${topHeight}:force_original_aspect_ratio=increase,crop=${outputSize.width}:${topHeight}[top];` +
-        // 视频2：裁剪下半部分，然后缩放到目标尺寸
-        `[1:v]crop=iw:ih/2:0:ih/2,scale=${outputSize.width}:${bottomHeight}:force_original_aspect_ratio=increase,crop=${outputSize.width}:${bottomHeight}[bottom];` +
+        // 视频1：从顶部裁剪 ratio% 的高度，然后缩放到目标尺寸
+        `[0:v]crop=iw:ih*${ratio}:0:0,scale=${outputSize.width}:${topHeight}:force_original_aspect_ratio=increase,crop=${outputSize.width}:${topHeight}[top];` +
+        // 视频2：从底部裁剪 (1-ratio)% 的高度，然后缩放到目标尺寸
+        `[1:v]crop=iw:ih*${1-ratio}:0:ih*${ratio},scale=${outputSize.width}:${bottomHeight}:force_original_aspect_ratio=increase,crop=${outputSize.width}:${bottomHeight}[bottom];` +
         // 垂直堆叠
         `[top][bottom]vstack=inputs=2`,
         '-t', minDuration.toString(),
