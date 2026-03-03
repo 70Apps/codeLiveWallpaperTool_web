@@ -13,7 +13,7 @@ This reference summarizes commonly-used Xiaomi phone display pixel canvases acro
 
 ## How to use these numbers
 
-- Values are shown as width × height in portrait orientation. Swap numbers for landscape wallpapers.
+- Values20260116 are shown as width × height in portrait orientation. Swap numbers for landscape wallpapers.
 - Use the listed pixel canvases as the export target for wallpapers; prefer center-crop to keep focal areas inside visible safe regions.
 - These are practical references; some Xiaomi variants (regional/custom panels) may differ slightly.
 

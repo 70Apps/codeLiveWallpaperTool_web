@@ -329,6 +329,26 @@ section {
     font-size: 0.85rem;
 }
 
+/* 原画大小选项特殊样式 */
+.device-option.original-size {
+    background: rgba(59, 130, 246, 0.05);
+}
+
+.device-option.original-size:hover {
+    background: rgba(59, 130, 246, 0.15);
+    border-color: var(--primary-color);
+}
+
+/* 原画大小选项被选中时的样式 */
+.device-option.original-size.selected {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: var(--primary-color);
+}
+
+.device-option.original-size.selected span {
+    color: var(--primary-color);
+}
+
 /* 格式选项 */
 .format-options {
     display: flex;

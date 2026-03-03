@@ -1,5 +1,6 @@
 // 设备尺寸配置
 const DEVICE_SIZES = {
+    'original': { width: 0, height: 0, name: 'Original Size' }, // 原画大小，实际尺寸在运行时确定
     'iphone-15-pro-max': { width: 1290, height: 2796, name: 'iPhone 15 Pro Max' },
     'iphone-15-pro': { width: 1179, height: 2556, name: 'iPhone 15 Pro' },
     'iphone-15': { width: 1179, height: 2556, name: 'iPhone 15' },
@@ -13,7 +14,8 @@ const DEVICE_SIZES = {
     'apple-watch-ultra': { width: 410, height: 502, name: 'Apple Watch Ultra' },
     'apple-watch-series-9': { width: 396, height: 484, name: 'Apple Watch Series 9' },
     'pad-2k': { width: 1440, height: 1920, name: '2K Pad' },
-    'pad-1080p': { width: 900, height: 1200, name: '1080P Pad' }
+    'pad-1080p': { width: 900, height: 1200, name: '1080P Pad' },
+    'pad-750p': { width: 750, height: 1000, name: '750P Pad' }
 };
 
 // 全局变量
@@ -21,6 +23,13 @@ let videoFile = null;
 let videoElement = null;
 let extractedFrames = [];
 let selectedFrameIndex = -1;
+
+// 缓存键名
+const CACHE_KEYS = {
+    DEVICE: 'wallpaper-video-cut-device',
+    FORMAT: 'wallpaper-video-cut-format',
+    QUALITY: 'wallpaper-video-cut-quality'
+};
 
 // DOM 元素
 const uploadArea = document.getElementById('uploadArea');
@@ -59,15 +68,33 @@ function init() {
     changeVideoBtn.addEventListener('click', resetApp);
     exportBtn.addEventListener('click', exportWallpaper);
     
-    // 格式选择变化
-    document.querySelectorAll('input[name="format"]').forEach(radio => {
-        radio.addEventListener('change', handleFormatChange);
-    });
-    
-    // 质量滑块
+    // 质量滑块 - input 事件用于实时显示，change 事件用于保存
     qualityInput.addEventListener('input', (e) => {
         qualityValue.textContent = e.target.value;
     });
+    
+    qualityInput.addEventListener('change', (e) => {
+        saveToCache(CACHE_KEYS.QUALITY, e.target.value);
+    });
+    
+    // 设备选择变化 - 保存到缓存并更新样式
+    document.querySelectorAll('input[name="device"]').forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            saveToCache(CACHE_KEYS.DEVICE, e.target.value);
+            updateOriginalSizeHighlight();
+        });
+    });
+    
+    // 格式选择变化 - 保存到缓存并处理显示
+    document.querySelectorAll('input[name="format"]').forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            saveToCache(CACHE_KEYS.FORMAT, e.target.value);
+            handleFormatChange(e);
+        });
+    });
+    
+    // 恢复上次的选择
+    restoreUserPreferences();
 }
 
 // 处理文件选择
@@ -232,6 +259,12 @@ function selectFrame(index) {
         selectedCanvas.height = img.height;
         const ctx = selectedCanvas.getContext('2d');
         ctx.drawImage(img, 0, 0);
+        
+        // 更新原画大小显示
+        const originalSizeText = document.getElementById('originalSizeText');
+        if (originalSizeText) {
+            originalSizeText.textContent = `${img.width}×${img.height}`;
+        }
     };
     img.src = frame.url;
     
@@ -246,6 +279,67 @@ function handleFormatChange(e) {
         qualityGroup.style.display = 'block';
     } else {
         qualityGroup.style.display = 'none';
+    }
+}
+
+// 保存到缓存
+function saveToCache(key, value) {
+    try {
+        localStorage.setItem(key, value);
+    } catch (e) {
+        console.warn('无法保存到缓存:', e);
+    }
+}
+
+// 从缓存读取
+function getFromCache(key, defaultValue) {
+    try {
+        const value = localStorage.getItem(key);
+        return value !== null ? value : defaultValue;
+    } catch (e) {
+        console.warn('无法读取缓存:', e);
+        return defaultValue;
+    }
+}
+
+// 恢复用户偏好设置
+function restoreUserPreferences() {
+    // 恢复设备选择
+    const savedDevice = getFromCache(CACHE_KEYS.DEVICE, 'original');
+    const deviceRadio = document.querySelector(`input[name="device"][value="${savedDevice}"]`);
+    if (deviceRadio) {
+        deviceRadio.checked = true;
+    }
+    
+    // 恢复格式选择
+    const savedFormat = getFromCache(CACHE_KEYS.FORMAT, 'png');
+    const formatRadio = document.querySelector(`input[name="format"][value="${savedFormat}"]`);
+    if (formatRadio) {
+        formatRadio.checked = true;
+        // 触发格式变化处理
+        handleFormatChange({ target: formatRadio });
+    }
+    
+    // 恢复质量设置
+    const savedQuality = getFromCache(CACHE_KEYS.QUALITY, '90');
+    qualityInput.value = savedQuality;
+    qualityValue.textContent = savedQuality;
+    
+    // 更新原画大小选项的高亮状态
+    updateOriginalSizeHighlight();
+}
+
+// 更新原画大小选项的高亮状态
+function updateOriginalSizeHighlight() {
+    const originalOption = document.querySelector('.device-option.original-size');
+    const originalRadio = document.querySelector('input[name="device"][value="original"]');
+    
+    if (originalOption && originalRadio) {
+        if (originalRadio.checked) {
+            originalOption.classList.add('selected');
+        } else {
+            originalOption.classList.remove('selected');
+        }
     }
 }
 
@@ -267,13 +361,6 @@ async function exportWallpaper() {
     const device = DEVICE_SIZES[deviceValue];
     const frame = extractedFrames[selectedFrameIndex];
     
-    // 创建输出画布
-    const outputCanvas = document.createElement('canvas');
-    const ctx = outputCanvas.getContext('2d');
-    
-    outputCanvas.width = device.width;
-    outputCanvas.height = device.height;
-    
     // 加载原始图片
     const img = new Image();
     img.src = frame.url;
@@ -281,6 +368,45 @@ async function exportWallpaper() {
     await new Promise(resolve => {
         img.onload = resolve;
     });
+    
+    // 如果选择原画大小，直接导出原图
+    if (deviceValue === 'original') {
+        // 创建输出画布（原始尺寸）
+        const outputCanvas = document.createElement('canvas');
+        const ctx = outputCanvas.getContext('2d');
+        
+        outputCanvas.width = img.width;
+        outputCanvas.height = img.height;
+        
+        // 绘制原图
+        ctx.drawImage(img, 0, 0);
+        
+        // 转换为 Blob 并下载
+        const mimeType = format === 'png' ? 'image/png' : 
+                         format === 'jpeg' ? 'image/jpeg' : 'image/webp';
+        
+        outputCanvas.toBlob((blob) => {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `wallpaper-original-${img.width}x${img.height}-${Date.now()}.${format}`;
+            a.click();
+            
+            URL.revokeObjectURL(url);
+            
+            exportBtn.disabled = false;
+            exportBtn.textContent = '💾 导出壁纸';
+        }, mimeType, format === 'png' ? undefined : quality);
+        
+        return;
+    }
+    
+    // 创建输出画布（设备尺寸）
+    const outputCanvas = document.createElement('canvas');
+    const ctx = outputCanvas.getContext('2d');
+    
+    outputCanvas.width = device.width;
+    outputCanvas.height = device.height;
     
     // 计算缩放和裁剪
     const imgRatio = img.width / img.height;
