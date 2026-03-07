@@ -1,30 +1,90 @@
 // js for wallpaper mutiple size generator
 
+// Drag and Drop functionality
+const uploadPreview = document.querySelector('.upload-preview');
+const imageUploadInput = document.getElementById('image-upload');
+
+// Prevent default drag behaviors on the entire document
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    document.body.addEventListener(eventName, preventDefaults, false);
+});
+
+function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+}
+
+// Highlight drop area when dragging over it
+['dragenter', 'dragover'].forEach(eventName => {
+    uploadPreview.addEventListener(eventName, highlight, false);
+});
+
+['dragleave', 'drop'].forEach(eventName => {
+    uploadPreview.addEventListener(eventName, unhighlight, false);
+});
+
+function highlight(e) {
+    uploadPreview.classList.add('drag-over');
+}
+
+function unhighlight(e) {
+    uploadPreview.classList.remove('drag-over');
+}
+
+// Handle dropped files
+uploadPreview.addEventListener('drop', handleDrop, false);
+
+// Make upload preview area clickable
+uploadPreview.addEventListener('click', function() {
+    imageUploadInput.click();
+});
+
+function handleDrop(e) {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    
+    if (files.length > 0) {
+        const file = files[0];
+        
+        // Check if it's an image file
+        if (file.type.startsWith('image/')) {
+            handleImageFile(file);
+        } else {
+            alert('Please drop an image file (PNG, JPEG, WEBP, etc.)');
+        }
+    }
+}
+
+function handleImageFile(file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+            generateWallpapers(img);
+        }
+        img.src = e.target.result;
+        // set preview image src and manage load/error UI
+        const previewImg = document.getElementById('image-preview');
+        attachPreviewListeners(previewImg, document.querySelector('.upload-preview'));
+        previewImg.src = img.src;
+    }
+    reader.readAsDataURL(file);
+}
 
 document.getElementById('image-upload').addEventListener('change', function(event) {
     const file = event.target.files[0];
     if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const img = new Image();
-            img.onload = function() {
-                generateWallpapers(img);
-            }
-            img.src = e.target.result;
-            // set preview image src and manage load/error UI
-            const previewImg = document.getElementById('image-preview');
-            attachPreviewListeners(previewImg, document.querySelector('.upload-preview'));
-            previewImg.src = img.src;
-        }
-        reader.readAsDataURL(file);
+        handleImageFile(file);
     }
 });
 
-// hide preview grid and download-all button on init
+// hide preview grid and export section on init
 const previewGrid = document.getElementById('preview-grid');
 const downloadAllBtn = document.getElementById('download-button');
+const exportSection = document.querySelector('.export-section');
 if (previewGrid) previewGrid.classList.add('hidden');
 if (downloadAllBtn) downloadAllBtn.classList.add('hidden');
+if (exportSection) exportSection.classList.add('hidden');
 
 function generateWallpapers(img) {
     // 验证传入的图片对象
@@ -101,9 +161,10 @@ function generateWallpapers(img) {
         canvas.width = 0;
         canvas.height = 0;
     }
-    // reveal preview area and download-all button after generation
+    // reveal preview area and export section after generation
     if (previewGrid) previewGrid.classList.remove('hidden');
     if (downloadAllBtn) downloadAllBtn.classList.remove('hidden');
+    if (exportSection) exportSection.classList.remove('hidden');
 }
 
 // 添加单个设备壁纸下载功能

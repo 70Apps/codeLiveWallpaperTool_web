@@ -13,9 +13,61 @@ const DEVICE_SIZES = {
 const fileInput = document.getElementById('image-upload');
 const previewImgRoot = document.getElementById('image-preview');
 
-fileInput.addEventListener('change', function(event) {
-    const file = event.target.files[0];
-    if (!file) return;
+// Drag and Drop functionality
+const uploadPreview = document.querySelector('.upload-preview');
+
+// Prevent default drag behaviors on the entire document
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    document.body.addEventListener(eventName, preventDefaults, false);
+});
+
+function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+}
+
+// Highlight drop area when dragging over it
+['dragenter', 'dragover'].forEach(eventName => {
+    uploadPreview.addEventListener(eventName, highlight, false);
+});
+
+['dragleave', 'drop'].forEach(eventName => {
+    uploadPreview.addEventListener(eventName, unhighlight, false);
+});
+
+function highlight(e) {
+    uploadPreview.classList.add('drag-over');
+}
+
+function unhighlight(e) {
+    uploadPreview.classList.remove('drag-over');
+}
+
+// Handle dropped files
+uploadPreview.addEventListener('drop', handleDrop, false);
+
+// Make upload preview area clickable
+uploadPreview.addEventListener('click', function() {
+    fileInput.click();
+});
+
+function handleDrop(e) {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    
+    if (files.length > 0) {
+        const file = files[0];
+        
+        // Check if it's an image file
+        if (file.type.startsWith('image/')) {
+            handleImageFile(file);
+        } else {
+            alert('Please drop an image file (PNG, JPEG, WEBP, etc.)');
+        }
+    }
+}
+
+function handleImageFile(file) {
     const reader = new FileReader();
     reader.onload = function(e) {
         const img = new Image();
@@ -28,6 +80,14 @@ fileInput.addEventListener('change', function(event) {
         attachPreviewListeners(previewImgRoot, document.querySelector('.upload-preview'));
         previewImgRoot.src = img.src;
     };
+    reader.readAsDataURL(file);
+}
+
+fileInput.addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    handleImageFile(file);
+});
     reader.readAsDataURL(file);
 });
 
@@ -91,6 +151,10 @@ function generateWallpapers(img) {
             parent.classList.add('best-match');
         }
     }
+
+    // Show export section after generation
+    const exportSection = document.querySelector('.export-section');
+    if (exportSection) exportSection.classList.remove('hidden');
 
     // cleanup
     canvas.width = 0; canvas.height = 0;

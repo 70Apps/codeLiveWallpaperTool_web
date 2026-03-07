@@ -6,8 +6,24 @@ title: locklive livewallpaper
 <h2 class="home-title-2">Tools for wallpaper creator</h2>
 <h3 class="home-title-3">Power by LockLive Team</h3>
 
-{% include home-tools-list.html %}
+{% assign webAppList = site.pages | sort: 'orderid'  %}
+<div class="app-list-container">
+  <ul class="app-list">
 
+  {% for page in webAppList %}
+    {% if page.layout == "web-app"%}
+
+    <li class="app-list-item"> 
+        <a href="{{ page.url | remove: "index.html" }}" class="app-list-link">
+            <div class="app-list-show-image"><img src="/images/icon/{{ page.icon }}.webp"></div>
+            <div class="app-list-title">{{ page.title }}</div>
+        </a>
+    </li>
+
+      {% endif %}
+  {% endfor %}
+  </ul>
+</div>
 <div class="home">
 <div class="post-list-container">
   <ul class="post-list">

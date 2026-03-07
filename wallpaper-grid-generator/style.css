@@ -2,19 +2,19 @@
 
 :root {
   --bg-light: #F8FAFC;
-  --bg-dark: #0F0F0F;
+  --bg-dark: #110011;
   --fg-light: #0F172A;
-  --fg-dark: #F8FAFC;
+  --fg-dark: rgb(230, 237, 243);
   --card-light: #FFFFFF;
-  --card-dark: #1A1A1A;
-  --primary: #FF8400;
+  --card-dark: #221122;
+  --primary: #e75624;
   --primary-fg: #FFFFFF;
   --secondary-light: #F1F5F9;
-  --secondary-dark: #262626;
+  --secondary-dark: #2d1a2d;
   --border-light: #E2E8F0;
-  --border-dark: #404040;
+  --border-dark: rgba(230, 237, 243, 0.12);
   --muted-light: #64748B;
-  --muted-dark: #A1A1AA;
+  --muted-dark: rgb(150, 157, 163);
 }
 
 /* 移动端优先的响应式设计 */
@@ -337,6 +337,7 @@
   background: var(--primary);
   color: var(--primary-fg);
   transform: rotate(180deg) scale(1.05);
+  box-shadow: 0 4px 12px rgba(231, 86, 36, 0.3);
 }
 
 /* Control Headers */
@@ -411,7 +412,7 @@
 
 .control-slider::-webkit-slider-thumb:hover {
   transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(255, 132, 0, 0.4);
+  box-shadow: 0 4px 12px rgba(231, 86, 36, 0.4);
 }
 
 /* Style Controls */
@@ -456,7 +457,7 @@
 .style-btn.active {
   background: var(--primary);
   color: var(--primary-fg);
-  box-shadow: 0 4px 12px rgba(255, 132, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(231, 86, 36, 0.3);
 }
 
 /* Format Controls */
@@ -502,13 +503,13 @@
 }
 
 .format-btn:hover {
-  background: rgba(255, 132, 0, 0.1);
+  background: rgba(231, 86, 36, 0.1);
 }
 
 .format-btn.active {
   background: var(--primary);
   color: var(--primary-fg);
-  box-shadow: 0 2px 8px rgba(255, 132, 0, 0.3);
+  box-shadow: 0 2px 8px rgba(231, 86, 36, 0.3);
 }
 
 .format-btn.disabled {
@@ -574,12 +575,12 @@
   color: var(--primary-fg);
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(255, 132, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(231, 86, 36, 0.3);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 132, 0, 0.4);
+  box-shadow: 0 6px 20px rgba(231, 86, 36, 0.4);
 }
 
 .btn-primary:active {
@@ -705,7 +706,7 @@
 
 .download-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(255, 132, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(231, 86, 36, 0.3);
 }
 
 .download-all {

@@ -2,84 +2,86 @@
 layout: web-app
 title: Video Joiner - Wallpaper Video Merger
 permalink: /wallpaper-video-joiner/
+icon: m_video_joiner
+orderid: 10
 ---
 
     <link rel="stylesheet" href="style.css">
     <div class="container">
         <header>
-            <h1>🎬 视频合成器</h1>
-            <p class="subtitle">上传两个视频，合成上下分屏效果</p>
+            <h1>🎬 Video Joiner</h1>
+            <p class="subtitle">Upload two videos and merge them into split-screen effect</p>
         </header>
 
         <main>
             <!-- 上传区域 -->
             <section class="upload-section">
                 <div class="upload-grid">
-                    <!-- 上半部分视频 -->
+                    <!-- Top Video -->
                     <div class="upload-card">
                         <div class="upload-header">
-                            <h3>📹 上半部分视频</h3>
+                            <h3>📹 Top Video</h3>
                             <span class="upload-badge">Video 1</span>
                         </div>
                         <div class="upload-area" id="uploadArea1">
                             <div class="upload-icon">⬆️</div>
-                            <p>选择或拖放视频</p>
+                            <p>Select or drag video</p>
                             <input type="file" id="videoInput1" accept="video/*" hidden>
                             <button class="btn-upload" id="uploadBtn1">
-                                选择视频
+                                Select Video
                             </button>
                         </div>
                         <div class="video-preview" id="preview1" style="display: none;">
                             <video id="video1" controls></video>
                             <div class="video-info" id="info1"></div>
-                            <button class="btn-remove" id="remove1">🗑️ 移除</button>
+                            <button class="btn-remove" id="remove1">🗑️ Remove</button>
                         </div>
                     </div>
 
-                    <!-- 下半部分视频 -->
+                    <!-- Bottom Video -->
                     <div class="upload-card">
                         <div class="upload-header">
-                            <h3>📹 下半部分视频</h3>
+                            <h3>📹 Bottom Video</h3>
                             <span class="upload-badge">Video 2</span>
                         </div>
                         <div class="upload-area" id="uploadArea2">
                             <div class="upload-icon">⬇️</div>
-                            <p>选择或拖放视频</p>
+                            <p>Select or drag video</p>
                             <input type="file" id="videoInput2" accept="video/*" hidden>
                             <button class="btn-upload" id="uploadBtn2">
-                                选择视频
+                                Select Video
                             </button>
                         </div>
                         <div class="video-preview" id="preview2" style="display: none;">
                             <video id="video2" controls></video>
                             <div class="video-info" id="info2"></div>
-                            <button class="btn-remove" id="remove2">🗑️ 移除</button>
+                            <button class="btn-remove" id="remove2">🗑️ Remove</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="upload-hint" id="uploadHint">
-                    <p>💡 提示：支持不同尺寸的视频，将自动按比例适配</p>
+                    <p>💡 Tip: Supports different video sizes, will auto-adapt proportionally</p>
                 </div>
             </section>
 
-            <!-- 合成设置 -->
+            <!-- Merge Settings -->
             <section class="settings-section" id="settingsSection" style="display: none;">
-                <h2>⚙️ 合成设置</h2>
+                <h2>⚙️ Merge Settings</h2>
                 
-                <!-- FFmpeg 状态指示器 -->
+                <!-- FFmpeg Status Indicator -->
                 <div class="ffmpeg-status" id="ffmpegStatus">
                     <span class="status-icon">⏳</span>
-                    <span class="status-text">正在加载 FFmpeg...</span>
+                    <span class="status-text">Loading FFmpeg...</span>
                 </div>
                 
                 <div class="settings-grid">
                     <div class="setting-group">
-                        <label>输出尺寸</label>
+                        <label>Output Resolution</label>
                         <div class="resolution-options">
                             <label class="resolution-option">
                                 <input type="radio" name="resolution" value="original" checked>
-                                <span>原尺寸</span>
+                                <span>Original</span>
                                 <small id="originalSize">-</small>
                             </label>
                             <label class="resolution-option">
@@ -98,15 +100,15 @@ permalink: /wallpaper-video-joiner/
                                 <small id="size2k">-</small>
                             </label>
                         </div>
-                        <p class="resolution-hint">📐 保持原视频宽高比，自动适配目标高度</p>
+                        <p class="resolution-hint">📐 Maintains original aspect ratio, auto-adapts to target height</p>
                     </div>
 
                     <div class="setting-group">
-                        <label>拼合线位置</label>
+                        <label>Split Line Position</label>
                         <div class="ratio-control">
                             <div class="ratio-display">
-                                <span class="ratio-label">上部分：<strong id="topRatio">50</strong>%</span>
-                                <span class="ratio-label">下部分：<strong id="bottomRatio">50</strong>%</span>
+                                <span class="ratio-label">Top: <strong id="topRatio">50</strong>%</span>
+                                <span class="ratio-label">Bottom: <strong id="bottomRatio">50</strong>%</span>
                             </div>
                             <input type="range" id="splitRatio" min="5" max="95" value="50" step="1">
                             <div class="ratio-marks">
@@ -115,83 +117,83 @@ permalink: /wallpaper-video-joiner/
                                 <span>95%</span>
                             </div>
                         </div>
-                        <p class="resolution-hint">📍 调整视频裁剪比例（视频1取上部X%，视频2取下部(100-X)%）</p>
+                        <p class="resolution-hint">📍 Adjust video crop ratio (Video1 takes top X%, Video2 takes bottom (100-X)%)</p>
                     </div>
                 </div>
 
                 <div class="settings-grid">
                     <div class="setting-group">
-                        <label>视频时长</label>
+                        <label>Video Duration</label>
                         <div class="duration-info">
                             <div class="duration-item">
-                                <span>视频1：</span>
+                                <span>Video 1:</span>
                                 <strong id="duration1">-</strong>
                             </div>
                             <div class="duration-item">
-                                <span>视频2：</span>
+                                <span>Video 2:</span>
                                 <strong id="duration2">-</strong>
                             </div>
                             <div class="duration-item highlight">
-                                <span>输出时长：</span>
+                                <span>Output Duration:</span>
                                 <strong id="outputDuration">-</strong>
                             </div>
                         </div>
-                        <p class="duration-hint">将使用较短视频的时长</p>
+                        <p class="duration-hint">Will use the shorter video's duration</p>
                     </div>
                 </div>
 
                 <button class="btn-process" id="processBtn">
-                    🎬 开始合成
+                    🎬 Start Merging
                 </button>
             </section>
 
-            <!-- 预览区域 -->
+            <!-- Preview Area -->
             <section class="preview-section" id="previewSection" style="display: none;">
-                <h2>👁️ 合成预览</h2>
+                <h2>👁️ Merge Preview</h2>
                 <div class="preview-container">
                     <div class="canvas-wrapper">
                         <canvas id="previewCanvas"></canvas>
                         <div class="split-line" id="splitLine"></div>
                     </div>
                     <div class="preview-controls">
-                        <button class="btn-preview" id="updatePreviewBtn">🔄 更新预览</button>
+                        <button class="btn-preview" id="updatePreviewBtn">🔄 Update Preview</button>
                         <input type="range" id="previewTime" min="0" max="100" value="0" step="0.1">
                         <span id="previewTimeText">0:00</span>
                     </div>
                 </div>
             </section>
 
-            <!-- 处理进度 -->
+            <!-- Processing Progress -->
             <section class="progress-section" id="progressSection" style="display: none;">
-                <h2>⏳ 正在处理</h2>
+                <h2>⏳ Processing</h2>
                 <div class="progress-container">
                     <div class="progress-bar">
                         <div class="progress-fill" id="progressFill"></div>
                     </div>
                     <div class="progress-info">
-                        <span id="progressText">准备中...</span>
+                        <span id="progressText">Preparing...</span>
                         <span id="progressPercent">0%</span>
                     </div>
                 </div>
                 <div class="processing-hint">
-                    <p>⚠️ 处理过程可能需要几分钟，请耐心等待</p>
-                    <p>处理时间取决于视频长度和分辨率</p>
+                    <p>⚠️ Processing may take a few minutes, please be patient</p>
+                    <p>Processing time depends on video length and resolution</p>
                 </div>
             </section>
 
-            <!-- 完成区域 -->
+            <!-- Complete Area -->
             <section class="complete-section" id="completeSection" style="display: none;">
-                <h2>✅ 合成完成</h2>
+                <h2>✅ Merge Complete</h2>
                 <div class="complete-container">
                     <div class="complete-icon">🎉</div>
-                    <h3>视频合成成功！</h3>
-                    <p>您的视频已准备好下载</p>
+                    <h3>Video merged successfully!</h3>
+                    <p>Your video is ready to download</p>
                     <div class="complete-actions">
                         <button class="btn-download" id="downloadBtn">
-                            💾 下载视频 (MP4)
+                            💾 Download Video (MP4)
                         </button>
                         <button class="btn-secondary" id="resetBtn">
-                            🔄 重新开始
+                            🔄 Start Over
                         </button>
                     </div>
                     <div class="output-info" id="outputInfo"></div>
@@ -200,8 +202,8 @@ permalink: /wallpaper-video-joiner/
         </main>
 
         <footer>
-            <p>支持的视频格式：MP4, MOV, WEBM | 支持不同尺寸视频，自动按比例适配</p>
-            <p class="tech-note">⚡ 使用 FFmpeg.wasm 进行视频处理，输出 MP4 格式</p>
+            <p>Supported formats: MP4, MOV, WEBM | Supports different video sizes, auto-adapts proportionally</p>
+            <p class="tech-note">⚡ Uses FFmpeg.wasm for video processing, outputs MP4 format</p>
         </footer>
     </div>
 

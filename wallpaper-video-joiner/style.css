@@ -5,9 +5,9 @@
 }
 
 :root {
-    --primary-color: #3B82F6;
-    --primary-hover: #2563EB;
-    --secondary-color: #8B5CF6;
+    --primary-color: #e75624;
+    --primary-hover: #ff7a47;
+    --secondary-color: #b33a12;
     --success-color: #10B981;
     --danger-color: #EF4444;
     --warning-color: #F59E0B;
@@ -22,19 +22,19 @@
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --primary-color: #60A5FA;
-        --primary-hover: #3B82F6;
-        --secondary-color: #A78BFA;
+        --primary-color: #e75624;
+        --primary-hover: #ff7a47;
+        --secondary-color: #b33a12;
         --success-color: #34D399;
         --danger-color: #F87171;
         --warning-color: #FBBF24;
-        --background: #0F0F0F;
-        --card-bg: #1A1A1A;
-        --text-primary: #F8FAFC;
-        --text-secondary: #A1A1AA;
-        --border-color: #404040;
-        --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        --shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.4);
+        --background: #110011;
+        --card-bg: #221122;
+        --text-primary: rgb(230, 237, 243);
+        --text-secondary: rgb(150, 157, 163);
+        --border-color: rgba(230, 237, 243, 0.12);
+        --shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        --shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.6);
     }
 }
 
@@ -480,7 +480,7 @@ section h2 {
 }
 
 .split-line::before {
-    content: '拼合线';
+    content: 'Split Line';
     position: absolute;
     right: 10px;
     top: -20px;

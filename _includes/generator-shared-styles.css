@@ -157,46 +157,31 @@ main.generator .upload-preview {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	padding: 20px;
-	border-radius: 16px;
+	padding: 12px;
+	border-radius: 12px;
 	background: var(--bg-tertiary);
-	border: 3px dashed var(--border-medium);
-	width: 100%;
-	max-width: 600px;
+	border: 2px dashed var(--border-medium);
+	width: 360px;
 	aspect-ratio: 16 / 9;
 	position: relative;
+	align-self: flex-end;
 	overflow: hidden;
-	transition: all 0.3s ease;
-	cursor: pointer;
+	transition: border-color 0.2s ease;
 }
 
 main.generator .upload-preview:hover {
 	border-color: var(--brand-primary);
-	background: rgba(231, 86, 36, 0.05);
-	transform: translateY(-2px);
-	box-shadow: var(--shadow-md);
-}
-
-main.generator .upload-preview.drag-over {
-	border-color: var(--brand-primary);
-	background: rgba(231, 86, 36, 0.1);
-	border-width: 4px;
-	transform: scale(1.02);
-	box-shadow: 0 0 30px rgba(231, 86, 36, 0.4);
 }
 
 main.generator .upload-preview::after {
-	content: "Click or drag image here";
+	content: "No image selected";
 	color: var(--text-secondary);
-	font-size: 1.1rem;
+	font-size: 0.95rem;
 	position: absolute;
 	pointer-events: none;
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
-	text-align: center;
-	white-space: nowrap;
-	font-weight: 500;
 }
 
 main.generator .upload-preview.img-loaded::after {
@@ -305,18 +290,8 @@ main.generator .preview-item .download-btn {
 main.generator .controls-row {
 	display: flex;
 	gap: 20px;
-	align-items: center;
-	justify-content: center;
+	align-items: start;
 	margin-top: 16px;
-}
-
-main.generator .upload-center {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	width: 100%;
-	max-width: 600px;
 }
 
 main.generator .upload-right {
@@ -419,42 +394,6 @@ main.generator .visually-hidden {
 	max-width: 100%;
 }
 
-/* Export Section */
-.export-section {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 24px;
-	margin-top: 20px;
-	padding: 20px;
-	background: var(--bg-tertiary);
-	border-radius: 12px;
-	border: 1px solid var(--border-subtle);
-}
-
-.export-section .format-selector {
-	flex: 1;
-	gap: 8px;
-}
-
-.export-section .format-selector label {
-	margin-bottom: 8px;
-	display: block;
-}
-
-.export-section .format-toggle {
-	margin-bottom: 8px;
-}
-
-.export-section .actions {
-	margin: 0;
-	flex-shrink: 0;
-}
-
-.export-section .btn-primary {
-	white-space: nowrap;
-}
-
 /* Responsive */
 @media (max-width: 800px) {
 	main.generator .container {
@@ -488,11 +427,6 @@ main.generator .visually-hidden {
 		flex-direction: column;
 	}
 	
-	main.generator .upload-center {
-		width: 100%;
-		max-width: 100%;
-	}
-	
 	main.generator .upload-left,
 	main.generator .upload-right {
 		flex: auto;
@@ -515,23 +449,6 @@ main.generator .visually-hidden {
 	
 	main.generator .actions {
 		justify-content: center;
-		width: 100%;
-	}
-	
-	.export-section {
-		flex-direction: column;
-		align-items: stretch;
-	}
-	
-	.export-section .format-selector {
-		width: 100%;
-	}
-	
-	.export-section .actions {
-		width: 100%;
-	}
-	
-	.export-section .btn-primary {
 		width: 100%;
 	}
 }

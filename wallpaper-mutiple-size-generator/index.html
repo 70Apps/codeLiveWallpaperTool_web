@@ -2,6 +2,8 @@
 layout: web-app
 title: Wallpaper Mutiple Size Generator
 permalink: /wallpaper-mutiple-size-generator/
+icon: m_devices_size
+orderid: 1
 ---
 <!-- a one webpage utility tool for wallpaper mutiple size generation -->
 
@@ -16,29 +18,13 @@ permalink: /wallpaper-mutiple-size-generator/
 
       <form id="wallpaper-form" class="controls">
         <div class="controls-row">
-          <div class="upload-left">
-            <figure class="upload-preview">
+          <div class="upload-center">
+            <figure class="upload-preview" id="upload-preview-area" title="Click or drag image here">
               <img id="image-preview" src="" alt="Preview">
               <figcaption class="visually-hidden">Uploaded image preview</figcaption>
             </figure>
-          </div>
-
-          <div class="upload-right">
-            <label for="image-upload" class="file-label btn-primary">Choose an image</label>
             <input type="file" id="image-upload" class="visually-hidden" accept="image/*" required>
-
-            <div class="format-selector">
-              <label>Select Export Image Format</label>
-              <div class="format-toggle" role="tablist" aria-label="Image format">
-                <button type="button" class="format-btn" data-format="png">PNG</button>
-                <button type="button" class="format-btn" data-format="jpeg">JPEG</button>
-                <button type="button" class="format-btn active" data-format="webp">WEBP</button>
-                <span class="tips">* Upgrade Chrome to Support WebP Format</span>
-              </div>
-              <input type="hidden" id="image-format" value="webp">
-            </div>
           </div>
-
         </div>
 
         <section id="preview-grid" class="preview-grid" aria-live="polite">
@@ -71,8 +57,22 @@ permalink: /wallpaper-mutiple-size-generator/
             <button type="button" class="download-btn" data-device="applewatch">Download Apple Watch</button>
           </div>
         </section>
-        <div class="actions">
-          <button type="button" id="download-button" class="btn-primary">Download All Wallpapers</button>
+        
+        <div class="export-section">
+          <div class="format-selector">
+            <label>Export Format</label>
+            <div class="format-toggle" role="tablist" aria-label="Image format">
+              <button type="button" class="format-btn" data-format="png">PNG</button>
+              <button type="button" class="format-btn" data-format="jpeg">JPEG</button>
+              <button type="button" class="format-btn active" data-format="webp">WEBP</button>
+            </div>
+            <span class="tips">* Upgrade Chrome to Support WebP Format</span>
+            <input type="hidden" id="image-format" value="webp">
+          </div>
+          
+          <div class="actions">
+            <button type="button" id="download-button" class="btn-primary">Download All Wallpapers</button>
+          </div>
         </div>
       </form>
     </div>

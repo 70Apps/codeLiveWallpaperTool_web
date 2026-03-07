@@ -1,17 +1,17 @@
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --primary-color: #60A5FA;
-        --primary-hover: #3B82F6;
-        --secondary-color: #A78BFA;
+        --primary-color: #e75624;
+        --primary-hover: #ff7a47;
+        --secondary-color: #b33a12;
         --success-color: #34D399;
-        --background: #0F0F0F;
-        --card-bg: #1A1A1A;
-        --text-primary: #F8FAFC;
-        --text-secondary: #A1A1AA;
-        --border-color: #404040;
-        --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        --shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.4);
+        --background: #110011;
+        --card-bg: #221122;
+        --text-primary: rgb(230, 237, 243);
+        --text-secondary: rgb(150, 157, 163);
+        --border-color: rgba(230, 237, 243, 0.12);
+        --shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        --shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.6);
     }
 }
 
@@ -53,7 +53,7 @@ section {
 .upload-area:hover,
 .upload-area.drag-over {
     border-color: var(--primary-color);
-    background: rgba(59, 130, 246, 0.05);
+    background: rgba(231, 86, 36, 0.05);
 }
 
 .upload-icon {
@@ -232,7 +232,7 @@ section {
 
 .frame-item.selected {
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+    box-shadow: 0 0 0 4px rgba(231, 86, 36, 0.2);
 }
 
 .frame-item img {
@@ -303,7 +303,7 @@ section {
 
 .device-option:hover {
     border-color: var(--primary-color);
-    background: rgba(59, 130, 246, 0.05);
+    background: rgba(231, 86, 36, 0.05);
 }
 
 .device-option input[type="radio"] {
@@ -329,19 +329,19 @@ section {
     font-size: 0.85rem;
 }
 
-/* 原画大小选项特殊样式 */
+/* Original size option special style */
 .device-option.original-size {
-    background: rgba(59, 130, 246, 0.05);
+    background: rgba(231, 86, 36, 0.05);
 }
 
 .device-option.original-size:hover {
-    background: rgba(59, 130, 246, 0.15);
+    background: rgba(231, 86, 36, 0.15);
     border-color: var(--primary-color);
 }
 
-/* 原画大小选项被选中时的样式 */
+/* Original size option when selected */
 .device-option.original-size.selected {
-    background: rgba(59, 130, 246, 0.1);
+    background: rgba(231, 86, 36, 0.1);
     border-color: var(--primary-color);
 }
 
@@ -368,7 +368,7 @@ section {
 
 .format-option:hover {
     border-color: var(--primary-color);
-    background: rgba(59, 130, 246, 0.05);
+    background: rgba(231, 86, 36, 0.05);
 }
 
 .format-option input[type="radio"] {
