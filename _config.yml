@@ -18,23 +18,23 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-sitename: WallpaperTools
+sitename: Wallpaper Creator Tools
 domain: www.gpwzw.com/
-title: WallpaperTools - Wallpaper Master Web Toolsbox
+title: Wallpaper Creator Tools
 email: lockliveapp@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  Some web tools for wallpaper, including wallpaper mutiple size generator, wallpaper mockup generator, wallpaper color extractor, etc.
+  Lots of web tools for phone/pad/PC wallpaper, including wallpaper mutiple size generator, wallpaper mockup generator, wallpaper color extractor, Bing.com wallpaper downloader, etc.
 
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username:
 github_username:
-me: WallpaperTools
+me: LockLive Team
 copyright: '&copy; 2026 gpwzw.com. All rights reserved.'
 app_link: https://apps.apple.com/app/apple-store/id6747997192?pt=611621&ct=gpwzw&mt=8
 
 ad: >- # this means to ignore newlines until "baseurl:"
-  Wallpaper master web tools is free to use. If you like it, please consider supporting the developer by buying the pro version of Wallpaper Master on the App Store. Your support keeps the development going and is greatly appreciated!
+  Wallpaper Creator Tools is free to use. If you like it, please consider supporting the developer by buying the pro version of Wallpaper Master on the App Store. Your support keeps the development going and is greatly appreciated!
 
 # Build settings
 theme: minima
