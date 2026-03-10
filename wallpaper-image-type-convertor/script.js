@@ -57,7 +57,7 @@ function handleDrop(e) {
     
     if (files.length > 0) {
         const file = files[0];
-        
+        console.log("file.type");
         // Check if it's an image file
         if (file.type.startsWith('image/')) {
             handleImageFile(file);
@@ -69,9 +69,12 @@ function handleDrop(e) {
 
 function handleImageFile(file) {
     const reader = new FileReader();
+        console.log("reader");
     reader.onload = function(e) {
         const img = new Image();
+        console.log("new Image();");
         img.onload = function() {
+        console.log("img.onload");
             generateWallpapers(img);
         };
         img.src = e.target.result;
@@ -87,8 +90,6 @@ fileInput.addEventListener('change', function(event) {
     const file = event.target.files[0];
     if (!file) return;
     handleImageFile(file);
-});
-    reader.readAsDataURL(file);
 });
 
 function generateWallpapers(img) {
