@@ -1,33 +1,73 @@
 <header class="site-header">
+  <div class="site-header-inner">
 
-  <div class="wrapper">
-
-    <a class="site-title" href="{{ site.baseurl }}/"><img src="{{ "/images/logo.png" | prepend: site.baseurl }}" style="border-radius: 50%;width: 36px;margin-right: 5px;" title="{{ site.title }}">{{ site.sitename }}</a>
+    <a class="site-title" href="{{ site.baseurl }}/">
+      <span class="site-title-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      </span>
+      {{ site.sitename }}
+    </a>
 
     <nav class="site-nav">
-      <a href="#" class="menu-icon">
+      <a href="#" class="menu-icon" aria-label="Menu">
         <svg viewBox="0 0 18 15">
-          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
-          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
-          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+          <path fill="rgba(255,255,255,0.60)" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="rgba(255,255,255,0.60)" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="rgba(255,255,255,0.60)" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
         </svg>
       </a>
 
-      <div class="trigger">
-      <a class="page-link" href="{{ "/" | prepend: site.baseurl }}">Home</a>
-      <a class="page-link" href="{{ "/wallpaper-mutiple-size-generator/" | prepend: site.baseurl }}">Mutiple</a>
-      <a class="page-link" href="{{ "/gradient-wallpaper-generator/" | prepend: site.baseurl }}">Gradient</a>
-      <a class="page-link" href="{{ "/wallpaper-mockup-generator/" | prepend: site.baseurl }}">Mockup</a>
-      <a class="page-link" href="{{ "/about" | prepend: site.baseurl }}">About</a>
-      <a class="page-link" href="{{ "https://app.xlivewallpaper.com/" | prepend: site.baseurl }}">App</a>
-      <!--
-      {% for my_page in site.pages %}
-      {% if my_page.linkName %}<a class="page-link" href="{{ my_page.url | prepend: site.baseurl }}">{{ my_page.linkName }}</a>{% endif %}
-      {% endfor %}
-      -->
-      </div>
+      <ul class="nav-links">
+        <li><a class="page-link" href="{{ "/" | prepend: site.baseurl }}">Home</a></li>
+        <li><a class="page-link" href="{{ "/wallpaper-mutiple-size-generator/" | prepend: site.baseurl }}">Mutiple Size</a></li>
+        <li><a class="page-link" href="{{ "/wallpaper-image-type-convertor/" | prepend: site.baseurl }}">Image File Type</a></li>
+        <li><a class="page-link" href="{{ "/wallpaper-video-cut-generator/" | prepend: site.baseurl }}">Video Cut</a></li>
+        <li><a class="page-link" href="{{ "/about" | prepend: site.baseurl }}">About</a></li>
+      </ul>
     </nav>
 
+    <div class="nav-actions">
+      <!-- <button class="btn-icon" aria-label="Search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button> -->
+      <a class="btn-primary-nav" href="{{ site.app_link | default: "https://app.xlivewallpaper.com/" }}">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Get App
+      </a>
+      <!-- <div class="nav-avatar"></div> -->
+    </div>
+
   </div>
+
+  <script>
+    (function() {
+      var path = window.location.pathname.replace(/\/$/, '') || '/';
+      var links = document.querySelectorAll('.site-nav .page-link');
+      var bestMatch = null, bestLen = 0;
+      
+      links.forEach(function(link) {
+        var href = link.getAttribute('href').replace(/\/$/, '') || '/';
+        if (path === href) {
+          bestMatch = link;
+          bestLen = href.length + 1000;
+        } else if (href !== '' && href !== '/' && path.startsWith(href) && href.length > bestLen) {
+          bestMatch = link;
+          bestLen = href.length;
+        }
+      });
+      
+      if (!bestMatch) {
+        links.forEach(function(link) {
+          if ((link.getAttribute('href').replace(/\/$/, '') || '/') === '/') {
+            bestMatch = link;
+          }
+        });
+      }
+      
+      if (bestMatch) {
+        bestMatch.classList.add('active');
+      }
+    })();
+  </script>
 
 </header>

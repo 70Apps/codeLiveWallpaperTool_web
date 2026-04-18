@@ -1,0 +1,277 @@
+// Home page components — GPWZW Design System
+
+/* HERO */
+.hero {
+  padding: 96px 32px 64px;
+  text-align: center;
+  background: $background-color;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -40%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 900px;
+    height: 900px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.18) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+}
+
+.hero-title {
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 1.10;
+  letter-spacing: -1.5px;
+  color: $text-color;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-highlight {
+  color: $brand-color;
+}
+
+.hero-subtitle {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.50;
+  color: $text-color-dark;
+  max-width: 640px;
+  margin: 0 auto 40px;
+  position: relative;
+  z-index: 1;
+}
+
+@include media-query($on-palm) {
+  .hero {
+    padding: 64px 20px 48px;
+  }
+
+  .hero-title {
+    font-size: 40px;
+    letter-spacing: -1px;
+  }
+
+  .hero-subtitle {
+    font-size: 16px;
+  }
+}
+
+/* SECTIONS */
+.section {
+  padding: 64px 32px;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.section--surface {
+  background: $background-color-dark;
+  padding: 0;
+
+  .section-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 64px 32px;
+  }
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: $text-color-muted;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+.section-title {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.20;
+  letter-spacing: -0.5px;
+  margin-bottom: 32px;
+  color: $text-color;
+}
+
+.section-divider {
+  border: none;
+  border-top: $border-whisper;
+  margin: 0;
+}
+
+@include media-query($on-palm) {
+  .section {
+    padding: 48px 20px;
+  }
+
+  .section--surface .section-inner {
+    padding: 48px 20px;
+  }
+
+  .section-title {
+    font-size: 24px;
+  }
+}
+
+/* TOOLS GRID */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.tool-card {
+  background: $background-color-light;
+  border: $border-whisper;
+  border-radius: 12px;
+  padding: 24px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  box-shadow:
+    rgba(0, 0, 0, 0.4) 0px 4px 16px,
+    rgba(0, 0, 0, 0.2) 0px 2px 6px,
+    rgba(0, 0, 0, 0.1) 0px 0.5px 2px;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      rgba(0, 0, 0, 0.5) 0px 8px 32px,
+      rgba(0, 0, 0, 0.3) 0px 4px 12px,
+      rgba(139, 92, 246, 0.08) 0px 0px 24px;
+    border-color: rgba(139, 92, 246, 0.20);
+  }
+
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: $text-color;
+    margin-bottom: 6px;
+    letter-spacing: -0.125px;
+  }
+
+  p {
+    font-size: 14px;
+    color: $text-color-dark;
+    line-height: 1.50;
+  }
+}
+
+.tool-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  background: $brand-surface;
+  color: $brand-color-light;
+
+  img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+  }
+}
+
+.tool-card-icon--purple {
+  background: $brand-surface;
+  color: $brand-color-light;
+}
+
+.tool-card-icon--cyan {
+  background: $color-cyan-surface;
+  color: $color-cyan;
+}
+
+.tool-card-icon--amber {
+  background: rgba(245, 158, 11, 0.12);
+  color: $color-amber;
+}
+
+.tool-card-icon--emerald {
+  background: rgba(16, 185, 129, 0.12);
+  color: $color-emerald;
+}
+
+.tool-card-icon--rose {
+  background: $color-rose-surface;
+  color: $color-rose;
+}
+
+@media screen and (max-width: 1024px) {
+  .tools-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@include media-query($on-palm) {
+  .tools-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* FEATURES */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.feature-item {
+  text-align: center;
+  padding: 32px 24px;
+}
+
+.feature-icon {
+  width: 40px;
+  height: 40px;
+  color: $brand-color;
+  margin: 0 auto 16px;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.feature-item h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: $text-color;
+  margin-bottom: 8px;
+}
+
+.feature-item p {
+  font-size: 14px;
+  color: $text-color-dark;
+  line-height: 1.50;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 1024px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@include media-query($on-palm) {
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .feature-item {
+    padding: 24px 16px;
+  }
+}

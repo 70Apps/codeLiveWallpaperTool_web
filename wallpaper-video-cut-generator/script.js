@@ -28,7 +28,8 @@ let selectedFrameIndex = -1;
 const CACHE_KEYS = {
     DEVICE: 'wallpaper-video-cut-device',
     FORMAT: 'wallpaper-video-cut-format',
-    QUALITY: 'wallpaper-video-cut-quality'
+    QUALITY: 'wallpaper-video-cut-quality',
+    DEVICE_MODE: 'wallpaper-video-cut-device-mode'
 };
 
 // DOM 元素
@@ -44,13 +45,17 @@ const progressBar = document.getElementById('progressBar');
 const progressFill = document.getElementById('progressFill');
 const progressText = document.getElementById('progressText');
 const framesSection = document.getElementById('framesSection');
+const framesDivider = document.getElementById('framesDivider');
 const framesGrid = document.getElementById('framesGrid');
 const exportSection = document.getElementById('exportSection');
+const exportDivider = document.getElementById('exportDivider');
 const selectedCanvas = document.getElementById('selectedCanvas');
 const exportBtn = document.getElementById('exportBtn');
 const qualityInput = document.getElementById('quality');
 const qualityValue = document.getElementById('qualityValue');
 const qualityGroup = document.getElementById('qualityGroup');
+const toggleDeviceMode = document.getElementById('toggleDeviceMode');
+const modeText = document.getElementById('modeText');
 
 // 初始化
 function init() {
@@ -85,12 +90,32 @@ function init() {
         });
     });
     
-    // 格式选择变化 - 保存到缓存并处理显示
-    document.querySelectorAll('input[name="format"]').forEach(radio => {
-        radio.addEventListener('change', (e) => {
-            saveToCache(CACHE_KEYS.FORMAT, e.target.value);
-            handleFormatChange(e);
+    // 格式按钮点击事件
+    document.querySelectorAll('.format-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const format = btn.dataset.format;
+            
+            // 更新按钮状态
+            document.querySelectorAll('.format-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // 保存到缓存
+            saveToCache(CACHE_KEYS.FORMAT, format);
+            
+            // 处理质量显示
+            if (format === 'jpeg' || format === 'webp') {
+                qualityGroup.classList.remove('hidden');
+            } else {
+                qualityGroup.classList.add('hidden');
+            }
         });
+    });
+    
+    // 设备模式切换
+    toggleDeviceMode.addEventListener('click', () => {
+        const isAdvanced = document.body.classList.toggle('advanced-mode');
+        modeText.textContent = isAdvanced ? 'Simple' : 'Advanced';
+        saveToCache(CACHE_KEYS.DEVICE_MODE, isAdvanced ? 'advanced' : 'simple');
     });
     
     // 恢复上次的选择
@@ -139,8 +164,8 @@ function loadVideo(file) {
     videoPlayer.load();
     
     videoPlayer.addEventListener('loadedmetadata', () => {
-        uploadSection.style.display = 'none';
-        videoSection.style.display = 'block';
+        uploadSection.classList.add('hidden');
+        videoSection.classList.remove('hidden');
     });
 }
 
@@ -181,9 +206,10 @@ async function extractFrames() {
     }
     
     // 完成
-    progressBar.style.display = 'none';
+    progressBar.classList.add('hidden');
     extractBtn.disabled = false;
-    framesSection.style.display = 'block';
+    framesDivider.classList.remove('hidden');
+    framesSection.classList.remove('hidden');
     
     // 滚动到截图区域
     framesSection.scrollIntoView({ behavior: 'smooth' });
@@ -249,7 +275,8 @@ function selectFrame(index) {
     });
     
     // 显示导出区域
-    exportSection.style.display = 'block';
+    exportDivider.classList.remove('hidden');
+    exportSection.classList.remove('hidden');
     
     // 在画布上显示选中的帧
     const frame = extractedFrames[index];
@@ -272,14 +299,10 @@ function selectFrame(index) {
     exportSection.scrollIntoView({ behavior: 'smooth' });
 }
 
-// 格式变化处理
-function handleFormatChange(e) {
-    const format = e.target.value;
-    if (format === 'jpeg' || format === 'webp') {
-        qualityGroup.style.display = 'block';
-    } else {
-        qualityGroup.style.display = 'none';
-    }
+// 获取当前选中的格式
+function getSelectedFormat() {
+    const activeBtn = document.querySelector('.format-btn.active');
+    return activeBtn ? activeBtn.dataset.format : 'png';
 }
 
 // 保存到缓存
@@ -304,6 +327,16 @@ function getFromCache(key, defaultValue) {
 
 // 恢复用户偏好设置
 function restoreUserPreferences() {
+    // 恢复设备模式
+    const savedMode = getFromCache(CACHE_KEYS.DEVICE_MODE, 'simple');
+    if (savedMode === 'advanced') {
+        document.body.classList.add('advanced-mode');
+        modeText.textContent = 'Simple';
+    } else {
+        document.body.classList.remove('advanced-mode');
+        modeText.textContent = 'Advanced';
+    }
+    
     // 恢复设备选择
     const savedDevice = getFromCache(CACHE_KEYS.DEVICE, 'original');
     const deviceRadio = document.querySelector(`input[name="device"][value="${savedDevice}"]`);
@@ -313,11 +346,17 @@ function restoreUserPreferences() {
     
     // 恢复格式选择
     const savedFormat = getFromCache(CACHE_KEYS.FORMAT, 'png');
-    const formatRadio = document.querySelector(`input[name="format"][value="${savedFormat}"]`);
-    if (formatRadio) {
-        formatRadio.checked = true;
-        // 触发格式变化处理
-        handleFormatChange({ target: formatRadio });
+    const formatBtn = document.querySelector(`.format-btn[data-format="${savedFormat}"]`);
+    if (formatBtn) {
+        document.querySelectorAll('.format-btn').forEach(b => b.classList.remove('active'));
+        formatBtn.classList.add('active');
+        
+        // 处理质量显示
+        if (savedFormat === 'jpeg' || savedFormat === 'webp') {
+            qualityGroup.classList.remove('hidden');
+        } else {
+            qualityGroup.classList.add('hidden');
+        }
     }
     
     // 恢复质量设置
@@ -351,11 +390,16 @@ async function exportWallpaper() {
     }
     
     exportBtn.disabled = true;
-    exportBtn.textContent = '⏳ 正在生成...';
+    exportBtn.innerHTML = `
+        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        Generating...
+    `;
     
     // 获取选中的设备和格式
     const deviceValue = document.querySelector('input[name="device"]:checked').value;
-    const format = document.querySelector('input[name="format"]:checked').value;
+    const format = getSelectedFormat();
     const quality = parseInt(qualityInput.value) / 100;
     
     const device = DEVICE_SIZES[deviceValue];
@@ -395,7 +439,12 @@ async function exportWallpaper() {
             URL.revokeObjectURL(url);
             
             exportBtn.disabled = false;
-            exportBtn.textContent = '💾 导出壁纸';
+            exportBtn.innerHTML = `
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                </svg>
+                Export Wallpaper
+            `;
         }, mimeType, format === 'png' ? undefined : quality);
         
         return;
@@ -445,7 +494,12 @@ async function exportWallpaper() {
         URL.revokeObjectURL(url);
         
         exportBtn.disabled = false;
-        exportBtn.textContent = '💾 导出壁纸';
+        exportBtn.innerHTML = `
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+            </svg>
+            Export Wallpaper
+        `;
     }, mimeType, format === 'png' ? undefined : quality);
 }
 
@@ -468,11 +522,13 @@ function resetApp() {
     framesGrid.innerHTML = '';
     
     // 重置显示
-    uploadSection.style.display = 'block';
-    videoSection.style.display = 'none';
-    framesSection.style.display = 'none';
-    exportSection.style.display = 'none';
-    progressBar.style.display = 'none';
+    uploadSection.classList.remove('hidden');
+    videoSection.classList.add('hidden');
+    framesDivider.classList.add('hidden');
+    framesSection.classList.add('hidden');
+    exportDivider.classList.add('hidden');
+    exportSection.classList.add('hidden');
+    progressBar.classList.add('hidden');
     
     // 滚动到顶部
     window.scrollTo({ top: 0, behavior: 'smooth' });

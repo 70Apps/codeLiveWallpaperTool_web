@@ -2,93 +2,136 @@
 layout: default
 title: locklive livewallpaper
 ---
-<h1 class="home-title-1">Wallpaper Tools</h1>
-<h2 class="home-title-2">Tools for wallpaper creator</h2>
-<h3 class="home-title-3">Power by LockLive Team</h3>
 
-{% assign webAppList = site.pages | sort: 'orderid'  %}
-<div class="app-list-container">
-  <ul class="app-list">
+<!-- HERO -->
+<section class="hero">
+  <h1 class="hero-title">Professional Wallpaper <span class="hero-highlight">Tools</span></h1>
+  <p class="hero-subtitle">Crop, compress, convert formats, adjust resolution — all processing happens in your browser, no software installation required</p>
+</section>
 
-  {% for page in webAppList %}
-    {% if page.layout == "web-app"%}
+<hr class="section-divider">
 
-    <li class="app-list-item"> 
-        <a href="{{ page.url | remove: "index.html" }}" class="app-list-link">
-            <div class="app-list-show-image"><img src="/images/icon/{{ page.icon }}.webp"></div>
-            <div class="app-list-title">{{ page.title }}</div>
+<!-- TOOLS -->
+<section class="section" id="tools">
+  <div class="section-label">Core Tools</div>
+  <h2 class="section-title">All-in-One Wallpaper Toolkit</h2>
+  
+  {% assign webAppList = site.pages | sort: 'orderid' %}
+  <div class="tools-grid">
+    {% for page in webAppList %}
+      {% if page.layout == "web-app" %}
+        <a class="tool-card" href="{{ page.url | remove: "index.html" }}">
+          <div class="tool-card-icon tool-card-icon--purple">
+            <img src="{{ page.url | remove: "index.html" }}logo.svg" alt="{{ page.url | remove: "index.html" }}">
+          </div>
+          <h3>{{ page.title }}</h3>
+          <p>{{ page.description | default: "Professional wallpaper processing tool" }}</p>
         </a>
-    </li>
-
       {% endif %}
-  {% endfor %}
-  </ul>
-</div>
-<div class="home">
-<div class="post-list-container">
-  <ul class="post-list">
-    <!-- This loops through the paginated posts -->
-{% for post in paginator.posts %}
-<li>
-  <a class="post-list-link" href="{{ post.url | prepend: site.baseurl }}">
-    <div class="post-list-show-image">
-      <div class="post-list-show-image-image" data-bg="{{ post.date | date: "/images/%Y/%m/%Y%m%d.jpg" }}"></div>
-    </div>
-    <div class="post-list-title">{{ post.title }}</div>
-      <div class="post-list-description">{{ post.description }}</div>
-      <div class="post-list-info">
-        <span class="post-category post-category-{{ post.category }}"></span>
-        <span class="post-meta">{{ post.date | date: "%Y-%m-%d" }}</span>
+    {% endfor %}
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- FEATURES -->
+<section class="section section--surface" id="features">
+  <div class="section-inner">
+    <div class="section-label">Why Choose Us</div>
+    <h2 class="section-title">Core Advantages</h2>
+    <div class="features-grid">
+      <div class="feature-item">
+        <div class="feature-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>Privacy First</h3>
+        <p>All processing happens locally in your browser — your wallpapers are never uploaded to any server</p>
       </div>
-  </a>
-</li>
-{% endfor %}
-  </ul>
-</div>
+      <div class="feature-item">
+        <div class="feature-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <h3>Instant Processing</h3>
+        <p>Powered by WebAssembly and browser APIs for near-native processing speed</p>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <h3>Device Preview</h3>
+        <p>Preview your wallpaper live inside iPhone, iPad, MacBook, and other device frames in real time</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-<!-- 分页链接 -->
- {% if paginator.total_pages > 1 %}
-<div class="pagination">
-  {% if paginator.previous_page %}
-    <a href="{{ paginator.previous_page_path | relative_url }}">Previou</a>
-  {% else %}
-    <span>Previou</span>
-  {% endif %}
+<hr class="section-divider">
 
-  {% for page in (1..paginator.total_pages) %}
-    {% if page == paginator.page %}
-      <em>{{ page }}</em>
-    {% elsif page == 1 %}
-      <a href="{{ site.paginate_path | relative_url | replace: 'page-:num/', '' }}">{{ page }}</a>
+<!-- BLOG POSTS -->
+<section class="section" id="blog">
+  <div class="section-label">Latest Updates</div>
+  <h2 class="section-title">Wallpaper Tech Blog</h2>
+  
+  <div class="post-list-container">
+    <ul class="post-list">
+      {% for post in paginator.posts %}
+      <li>
+        <a class="post-list-link" href="{{ post.url | prepend: site.baseurl }}">
+          <div class="post-list-show-image">
+            <div class="post-list-show-image-image" data-bg="{{ post.date | date: "/images/%Y/%m/%Y%m%d.jpg" }}"></div>
+          </div>
+          <div class="post-list-title">{{ post.title }}</div>
+          <div class="post-list-description">{{ post.description }}</div>
+          <div class="post-list-info">
+            <span class="post-category post-category-{{ post.category }}"></span>
+            <span class="post-meta">{{ post.date | date: "%Y-%m-%d" }}</span>
+          </div>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- Pagination -->
+  {% if paginator.total_pages > 1 %}
+  <div class="pagination">
+    {% if paginator.previous_page %}
+      <a href="{{ paginator.previous_page_path | relative_url }}">Previous</a>
     {% else %}
-      <a href="{{ site.paginate_path | relative_url | replace: ':num', page }}">{{ page }}</a>
+      <span>Previous</span>
     {% endif %}
-  {% endfor %}
 
-  {% if paginator.next_page %}
-    <a href="{{ paginator.next_page_path | relative_url }}">Next</a>
-  {% else %}
-    <span>Next</span>
+    {% for page in (1..paginator.total_pages) %}
+      {% if page == paginator.page %}
+        <em>{{ page }}</em>
+      {% elsif page == 1 %}
+        <a href="{{ site.paginate_path | relative_url | replace: 'page-:num/', '' }}">{{ page }}</a>
+      {% else %}
+        <a href="{{ site.paginate_path | relative_url | replace: ':num', page }}">{{ page }}</a>
+      {% endif %}
+    {% endfor %}
+
+    {% if paginator.next_page %}
+      <a href="{{ paginator.next_page_path | relative_url }}">Next</a>
+    {% else %}
+      <span>Next</span>
+    {% endif %}
+  </div>
   {% endif %}
-</div>
-{% endif %}
-</div>
-<script>
-  // 检查浏览器是否支持webp
-  function isSupportWebP() {
-    return document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0;
-  }
+</section>
 
-  // 如果支持webp,则在img标签src上添加后缀
-  const imgList = document.querySelectorAll('.post-list-show-image-image');
- var i=0;
- imgList.forEach(img => {
-   let src = img.getAttribute('data-bg');
-   console.log(src);
-   img.style.backgroundImage = "url('" + src + "')";
-   setTimeout(function(){img.style.opacity=1;},300+300*i);
-   i++;
- });
-//  const h1 = document.querySelectorAll('h1.home-title-1');
-//  h1[0].innerHTML = "xLiveWallpaper"
+<script>
+  // Load post images with fade-in animation
+  (function() {
+    const imgList = document.querySelectorAll('.post-list-show-image-image');
+    imgList.forEach(function(img, i) {
+      const src = img.getAttribute('data-bg');
+      if (src) {
+        img.style.backgroundImage = "url('" + src + "')";
+        setTimeout(function() {
+          img.style.opacity = 1;
+        }, 300 + 300 * i);
+      }
+    });
+  })();
 </script>

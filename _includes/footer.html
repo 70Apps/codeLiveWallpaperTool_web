@@ -1,27 +1,29 @@
 <footer class="site-footer">
-
-  <div class="wrapper">
-
-<center class="footer-heading">
-    <h2>
-      {{ site.me }}
-      </h2>
-<h3>{{ site.ad }}</h3>
-<h5>{{ site.copyright }}</h3>
-<a href='/'>Home</a> |
-<a href='/about/'>About</a> |
-<a href='https://www.xlivewallpaper.com'>Live Wallpaper Web</a> |
-<a href='https://app.xlivewallpaper.com'>xLiveWallpaper App</a> |
-<a href='https://apps.apple.com/app/id6742252309?ct=gpwzw'>LockLive App</a> |
-<a href='mailto:{{ site.email }}'>Contact</a>
-</center>
-    <div class="footer-col-wrapper">
-      <div class="footer-col footer-col-1">
-        <ul class="contact-list">
-        </ul>
-      </div>
+  <div class="wrapper footer-inner">
+    
+    <div class="footer-brand">
+      <span class="footer-brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      </span>
+      {{ site.sitename | default: "Wallpaper Tools" }}
     </div>
-
+    <div class="footer-desc">{{ site.ad | default: "Professional wallpaper tools — all processing in your browser" }}</div>
+    
+    <div class="footer-links">
+      <a href="{{ "/" | prepend: site.baseurl }}">Home</a>
+      <a href="{{ "/wallpaper-mutiple-size-generator/" | prepend: site.baseurl }}">Multiple Size</a>
+      <a href="{{ "/gradient-wallpaper-generator/" | prepend: site.baseurl }}">Gradient</a>
+      <a href="{{ "/wallpaper-mockup-generator/" | prepend: site.baseurl }}">Mockup</a>
+      <a href="{{ "/about" | prepend: site.baseurl }}">About</a>
+      <a href="https://www.xlivewallpaper.com">Live Wallpaper Web</a>
+      <a href="https://app.xlivewallpaper.com">xLiveWallpaper App</a>
+      <a href="https://apps.apple.com/app/id6742252309?ct=gpwzw">LockLive App</a>
+      <a href="mailto:{{ site.email }}">Contact</a>
+    </div>
+    
+    <div class="footer-copy">
+      {{ site.copyright | default: "© 2026 Wallpaper Tools. All processing happens locally in your browser." }}
+    </div>
+    
   </div>
-
 </footer>

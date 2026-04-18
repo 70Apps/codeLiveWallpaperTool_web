@@ -1,264 +1,336 @@
-// js for wallpaper multiple size generator
+// Image Format Converter - GPWZW Design System
+// 图片格式转换器 - 智能设备尺寸匹配
 
-// Centralized device size map (keys match preview/download data-device ids)
-const DEVICE_SIZES = {
-    iphone: [1980, 4302],
-    ipad: [2064, 1548],
-    macbook: [4512, 2538],
-    applewatch: [1664, 1984],
-    flipphone: [750, 1000],
-    oldphone: [1080, 1920]
+// DOM Elements
+const uploadArea = document.getElementById('upload-preview-area');
+const imageUploadInput = document.getElementById('image-upload');
+const imagePreview = document.getElementById('image-preview');
+const previewSection = document.getElementById('preview-section');
+const exportSection = document.getElementById('export-section');
+const imageFormatInput = document.getElementById('image-format');
+
+// Device configurations with aspect ratios
+const DEVICE_CONFIGS = {
+  'iphone': { width: 1980, height: 4302, name: 'iPhone' },
+  'ipad': { width: 2064, height: 1548, name: 'iPad' },
+  'macbook': { width: 4512, height: 2538, name: 'MacBook' },
+  'applewatch': { width: 1664, height: 1984, name: 'Apple Watch' },
+  'flipphone': { width: 750, height: 1000, name: 'Flip Phone' },
+  'oldphone': { width: 1080, height: 1920, name: 'Old Phone' }
 };
 
-const fileInput = document.getElementById('image-upload');
-const previewImgRoot = document.getElementById('image-preview');
+// Initialize: Hide preview and export sections
+previewSection.classList.add('hidden');
+exportSection.classList.add('hidden');
 
-// Drag and Drop functionality
-const uploadPreview = document.querySelector('.upload-preview');
+// ============================================
+// Drag & Drop Functionality
+// ============================================
 
-// Prevent default drag behaviors on the entire document
 ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-    document.body.addEventListener(eventName, preventDefaults, false);
+  document.body.addEventListener(eventName, preventDefaults, false);
+  uploadArea.addEventListener(eventName, preventDefaults, false);
 });
 
 function preventDefaults(e) {
-    e.preventDefault();
-    e.stopPropagation();
+  e.preventDefault();
+  e.stopPropagation();
 }
 
-// Highlight drop area when dragging over it
 ['dragenter', 'dragover'].forEach(eventName => {
-    uploadPreview.addEventListener(eventName, highlight, false);
+  uploadArea.addEventListener(eventName, () => {
+    uploadArea.classList.add('drag-over');
+  }, false);
 });
 
 ['dragleave', 'drop'].forEach(eventName => {
-    uploadPreview.addEventListener(eventName, unhighlight, false);
+  uploadArea.addEventListener(eventName, () => {
+    uploadArea.classList.remove('drag-over');
+  }, false);
 });
 
-function highlight(e) {
-    uploadPreview.classList.add('drag-over');
-}
+uploadArea.addEventListener('drop', handleDrop, false);
 
-function unhighlight(e) {
-    uploadPreview.classList.remove('drag-over');
-}
-
-// Handle dropped files
-uploadPreview.addEventListener('drop', handleDrop, false);
-
-// Make upload preview area clickable
-uploadPreview.addEventListener('click', function() {
-    fileInput.click();
+uploadArea.addEventListener('click', () => {
+  imageUploadInput.click();
 });
 
 function handleDrop(e) {
-    const dt = e.dataTransfer;
-    const files = dt.files;
-    
-    if (files.length > 0) {
-        const file = files[0];
-        console.log("file.type");
-        // Check if it's an image file
-        if (file.type.startsWith('image/')) {
-            handleImageFile(file);
-        } else {
-            alert('Please drop an image file (PNG, JPEG, WEBP, etc.)');
-        }
+  const files = e.dataTransfer.files;
+  if (files.length > 0) {
+    const file = files[0];
+    if (file.type.startsWith('image/')) {
+      handleImageFile(file);
+    } else {
+      alert('Please drop an image file (PNG, JPEG, WebP, AVIF)');
     }
+  }
 }
+
+imageUploadInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    handleImageFile(file);
+  }
+});
+
+// ============================================
+// Image Processing
+// ============================================
 
 function handleImageFile(file) {
-    const reader = new FileReader();
-        console.log("reader");
-    reader.onload = function(e) {
-        const img = new Image();
-        console.log("new Image();");
-        img.onload = function() {
-        console.log("img.onload");
-            generateWallpapers(img);
-        };
-        img.src = e.target.result;
-
-        // set upload-preview image and attach listeners
-        attachPreviewListeners(previewImgRoot, document.querySelector('.upload-preview'));
-        previewImgRoot.src = img.src;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const img = new Image();
+    img.onload = () => {
+      // Show preview
+      imagePreview.src = img.src;
+      imagePreview.onload = () => {
+        imagePreview.classList.add('loaded');
+        uploadArea.classList.add('img-loaded');
+      };
+      
+      // Find best matching device and generate wallpaper
+      generateBestMatchWallpaper(img);
+      
+      // Show preview and export sections
+      previewSection.classList.remove('hidden');
+      exportSection.classList.remove('hidden');
+      
+      // Smooth scroll to preview
+      setTimeout(() => {
+        previewSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
     };
-    reader.readAsDataURL(file);
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
 }
 
-fileInput.addEventListener('change', function(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    handleImageFile(file);
-});
+function generateBestMatchWallpaper(sourceImg) {
+  if (!sourceImg || !sourceImg.complete) {
+    console.error('Invalid image provided');
+    return;
+  }
 
-function generateWallpapers(img) {
-    if (!img || !img.complete) return;
+  const format = imageFormatInput.value;
+  const { mimeType, quality } = getFormatSettings(format);
 
-    // determine mime/quality from selector
-    const imageFormat = document.getElementById('image-format').value;
-    let mimeType = 'image/png', quality;
-    if (imageFormat === 'jpeg') { mimeType = 'image/jpeg'; quality = 0.92; }
-    else if (imageFormat === 'webp') { mimeType = 'image/webp'; quality = 0.92; }
+  // Calculate source image aspect ratio
+  const srcWidth = sourceImg.width;
+  const srcHeight = sourceImg.height;
+  const srcAspect = srcWidth / srcHeight;
 
-    // source dimensions
-    const iw = img.width, ih = img.height;
-    const srcAspect = iw / ih;
+  // Find best matching device by aspect ratio
+  let bestDevice = null;
+  let smallestDiff = Infinity;
 
-    // pick best-match device by aspect difference
-    let bestKey = null, bestDiff = Infinity;
-    for (const [k, dims] of Object.entries(DEVICE_SIZES)) {
-        const [w, h] = dims;
-        const diff = Math.abs(srcAspect - (w / h));
-        if (diff < bestDiff) { bestDiff = diff; bestKey = k; }
+  Object.keys(DEVICE_CONFIGS).forEach(deviceKey => {
+    const config = DEVICE_CONFIGS[deviceKey];
+    const deviceAspect = config.width / config.height;
+    const diff = Math.abs(srcAspect - deviceAspect);
+    
+    if (diff < smallestDiff) {
+      smallestDiff = diff;
+      bestDevice = deviceKey;
     }
+  });
 
-    // hide all preview items and clear src
-    Object.keys(DEVICE_SIZES).forEach(k => {
-        const imgEl = document.getElementById(`${k}-preview`);
-        const parent = imgEl ? imgEl.closest('.preview-item') : null;
-        if (parent) parent.classList.add('hidden');
-        if (imgEl) imgEl.src = '';
-    });
+  // Hide all device cards first
+  document.querySelectorAll('.device-card').forEach(card => {
+    card.classList.add('hidden');
+    card.classList.remove('best-match');
+  });
 
-    // generate preview only for bestKey
-    if (!bestKey) return;
-    const [tw, th] = DEVICE_SIZES[bestKey];
+  // Show and generate only the best match
+  if (bestDevice) {
+    const config = DEVICE_CONFIGS[bestDevice];
     const canvas = document.createElement('canvas');
-    canvas.width = tw; canvas.height = th;
+    canvas.width = config.width;
+    canvas.height = config.height;
     const ctx = canvas.getContext('2d');
 
-    // center-crop source to target aspect
-    const targetAspect = tw / th;
-    let sx = 0, sy = 0, sWidth = iw, sHeight = ih;
-    if (iw / ih > targetAspect) {
-        sWidth = Math.round(ih * targetAspect);
-        sx = Math.round((iw - sWidth) / 2);
-    } else {
-        sHeight = Math.round(iw / targetAspect);
-        sy = Math.round((ih - sHeight) / 2);
-    }
-    ctx.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, tw, th);
+    // Center-crop image to target aspect ratio
+    const { sx, sy, sWidth, sHeight } = calculateCropDimensions(
+      srcWidth,
+      srcHeight,
+      config.width,
+      config.height
+    );
 
+    // Draw cropped and scaled image
+    ctx.drawImage(sourceImg, sx, sy, sWidth, sHeight, 0, 0, config.width, config.height);
+
+    // Generate data URL
     const dataURL = canvas.toDataURL(mimeType, quality);
 
-    const previewEl = document.getElementById(`${bestKey}-preview`);
-    if (previewEl) {
-        const parent = previewEl.closest('.preview-item');
-        attachPreviewListeners(previewEl, parent);
-        previewEl.src = dataURL;
-        if (parent) {
-            parent.classList.remove('hidden');
-            parent.classList.add('best-match');
-        }
+    // Update preview
+    const deviceCard = document.querySelector(`.device-card[data-device="${bestDevice}"]`);
+    const previewImg = document.getElementById(`${bestDevice}-preview`);
+    
+    if (deviceCard && previewImg) {
+      deviceCard.classList.remove('hidden');
+      deviceCard.classList.add('best-match');
+      
+      previewImg.src = dataURL;
+      previewImg.onload = () => {
+        previewImg.classList.add('loaded');
+      };
     }
 
-    // Show export section after generation
-    const exportSection = document.querySelector('.export-section');
-    if (exportSection) exportSection.classList.remove('hidden');
-
-    // cleanup
-    canvas.width = 0; canvas.height = 0;
+    // Cleanup
+    canvas.width = 0;
+    canvas.height = 0;
+  }
 }
 
-// single-device download (rebuilds canvas at device size)
-document.querySelectorAll('.download-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const device = btn.getAttribute('data-device');
-        if (!device) return;
-        downloadSingleWallpaper(device);
-    });
-});
+function calculateCropDimensions(srcWidth, srcHeight, targetWidth, targetHeight) {
+  const targetAspect = targetWidth / targetHeight;
+  let sx = 0, sy = 0, sWidth = srcWidth, sHeight = srcHeight;
 
-function downloadSingleWallpaper(device) {
-    const fmt = document.getElementById('image-format').value;
-    let mime = 'image/png', ext = 'png', quality;
-    if (fmt === 'jpeg') { mime = 'image/jpeg'; ext = 'jpg'; quality = 0.92; }
-    else if (fmt === 'webp') { mime = 'image/webp'; ext = 'webp'; quality = 0.92; }
+  if (srcWidth / srcHeight > targetAspect) {
+    // Source is wider - crop width
+    sWidth = Math.round(srcHeight * targetAspect);
+    sx = Math.round((srcWidth - sWidth) / 2);
+  } else {
+    // Source is taller - crop height
+    sHeight = Math.round(srcWidth / targetAspect);
+    sy = Math.round((srcHeight - sHeight) / 2);
+  }
 
-    const key = device.toLowerCase();
-    const dims = DEVICE_SIZES[key];
-    if (!dims) { console.error('Unknown device:', device); return; }
-    const [w, h] = dims;
-
-    const src = document.getElementById('image-preview').src;
-    if (!src) { console.error('No uploaded image to export'); return; }
-
-    const srcImg = new Image();
-    srcImg.onload = function() {
-        const canvas = document.createElement('canvas');
-        canvas.width = w; canvas.height = h;
-        const ctx = canvas.getContext('2d');
-
-        const iw = srcImg.width, ih = srcImg.height;
-        const targ = w / h;
-        let sx = 0, sy = 0, sW = iw, sH = ih;
-        if (iw / ih > targ) {
-            sW = Math.round(ih * targ);
-            sx = Math.round((iw - sW) / 2);
-        } else {
-            sH = Math.round(iw / targ);
-            sy = Math.round((ih - sH) / 2);
-        }
-        ctx.drawImage(srcImg, sx, sy, sW, sH, 0, 0, w, h);
-        const data = canvas.toDataURL(mime, quality);
-        const a = document.createElement('a');
-        a.href = data; a.download = `${key}_wallpaper.${ext}`;
-        document.body.appendChild(a); a.click(); document.body.removeChild(a);
-        canvas.width = 0; canvas.height = 0;
-    };
-    srcImg.onerror = function() { console.error('Failed to load source image for export'); };
-    srcImg.src = src;
+  return { sx, sy, sWidth, sHeight };
 }
 
-// Attach load/error listeners to a preview image and toggle placeholder classes
-function attachPreviewListeners(imgElement, container) {
-    if (!imgElement) return;
-    imgElement.onload = null; imgElement.onerror = null;
-    imgElement.onload = function() {
-        imgElement.classList.add('loaded');
-        if (container) container.classList.add('img-loaded');
-    };
-    imgElement.onerror = function() {
-        imgElement.classList.remove('loaded');
-        try { imgElement.src = ''; } catch (e) {}
-        if (container) container.classList.remove('img-loaded');
-    };
+function getFormatSettings(format) {
+  switch (format) {
+    case 'jpeg':
+      return { mimeType: 'image/jpeg', quality: 0.92, extension: 'jpg' };
+    case 'webp':
+      return { mimeType: 'image/webp', quality: 0.92, extension: 'webp' };
+    default:
+      return { mimeType: 'image/png', quality: undefined, extension: 'png' };
+  }
 }
 
-// format toggle buttons: sync hidden input and trigger change
+// ============================================
+// Format Selection
+// ============================================
+
 document.querySelectorAll('.format-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        if (this.disabled) return;
-        const fmt = this.getAttribute('data-format');
-        const hidden = document.getElementById('image-format');
-        if (!hidden) return;
-        document.querySelectorAll('.format-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        hidden.value = fmt; hidden.dispatchEvent(new Event('change', { bubbles: true }));
-    });
+  btn.addEventListener('click', function() {
+    if (this.disabled) return;
+    
+    const format = this.getAttribute('data-format');
+    
+    // Update active state
+    document.querySelectorAll('.format-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    
+    // Update hidden input
+    imageFormatInput.value = format;
+    
+    // Regenerate wallpaper if image is loaded
+    if (imagePreview.src && imagePreview.classList.contains('loaded')) {
+      const img = new Image();
+      img.onload = () => generateBestMatchWallpaper(img);
+      img.src = imagePreview.src;
+    }
+  });
 });
 
-// Detect WebP support; if unsupported, disable the WEBP toggle
-(function checkWebPSupport(){
-    let supported = false;
-    try {
-        const cvs = document.createElement('canvas');
-        supported = cvs.toDataURL('image/webp').indexOf('data:image/webp') === 0;
-    } catch(e) { supported = false; }
-    const webpBtn = document.querySelector('.format-btn[data-format="webp"]');
-    if (!supported && webpBtn) {
-        webpBtn.classList.add('disabled'); webpBtn.disabled = true; webpBtn.setAttribute('aria-disabled','true');
-        if (webpBtn.classList.contains('active')) {
-            const pngBtn = document.querySelector('.format-btn[data-format="png"]');
-            if (pngBtn) { webpBtn.classList.remove('active'); pngBtn.classList.add('active'); const hidden = document.getElementById('image-format'); if (hidden) { hidden.value = 'png'; hidden.dispatchEvent(new Event('change', { bubbles: true })); } }
-        }
+// Check WebP support
+(function checkWebPSupport() {
+  let supported = false;
+  try {
+    const canvas = document.createElement('canvas');
+    supported = canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+  } catch (e) {
+    supported = false;
+  }
+  
+  const webpBtn = document.querySelector('.format-btn[data-format="webp"]');
+  if (!supported && webpBtn) {
+    webpBtn.classList.add('disabled');
+    webpBtn.disabled = true;
+    webpBtn.setAttribute('aria-disabled', 'true');
+    
+    // Fallback to PNG if WebP was active
+    if (webpBtn.classList.contains('active')) {
+      const pngBtn = document.querySelector('.format-btn[data-format="png"]');
+      if (pngBtn) {
+        webpBtn.classList.remove('active');
+        pngBtn.classList.add('active');
+        imageFormatInput.value = 'png';
+      }
     }
+  }
 })();
 
-// regenerate previews when format changes (re-uses uploaded preview source)
-document.getElementById('image-format').addEventListener('change', function() {
-    const src = document.getElementById('image-preview').src;
-    if (!src) return;
-    const img = new Image(); img.onload = () => generateWallpapers(img); img.src = src;
+// ============================================
+// Download Functionality
+// ============================================
+
+const downloadButton = document.getElementById('download-button');
+
+downloadButton.addEventListener('click', function() {
+  // Find the visible (best match) device
+  const visibleCard = document.querySelector('.device-card.best-match:not(.hidden)');
+  if (visibleCard) {
+    const device = visibleCard.getAttribute('data-device');
+    downloadWallpaper(device);
+  } else {
+    alert('Please upload an image first');
+  }
 });
+
+function downloadWallpaper(deviceKey) {
+  const config = DEVICE_CONFIGS[deviceKey];
+  if (!config) {
+    console.error(`Unknown device: ${deviceKey}`);
+    return;
+  }
+
+  const format = imageFormatInput.value;
+  const { mimeType, quality, extension } = getFormatSettings(format);
+
+  // Get source image
+  const sourceSrc = imagePreview.src;
+  if (!sourceSrc) {
+    console.error('No image uploaded');
+    return;
+  }
+
+  const srcImg = new Image();
+  srcImg.onload = () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = config.width;
+    canvas.height = config.height;
+    const ctx = canvas.getContext('2d');
+
+    // Center-crop and draw
+    const { sx, sy, sWidth, sHeight } = calculateCropDimensions(
+      srcImg.width,
+      srcImg.height,
+      config.width,
+      config.height
+    );
+    ctx.drawImage(srcImg, sx, sy, sWidth, sHeight, 0, 0, config.width, config.height);
+
+    // Download
+    const dataURL = canvas.toDataURL(mimeType, quality);
+    const link = document.createElement('a');
+    link.href = dataURL;
+    link.download = `${config.name.replace(' ', '_')}_wallpaper.${extension}`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // Cleanup
+    canvas.width = 0;
+    canvas.height = 0;
+  };
+  srcImg.onerror = () => {
+    console.error('Failed to load source image');
+  };
+  srcImg.src = sourceSrc;
+}

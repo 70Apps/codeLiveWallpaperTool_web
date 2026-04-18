@@ -1,33 +1,35 @@
-// app-list: responsive grid of app buttons
+// app-list: responsive grid of tool cards — GPWZW Design System
 
-/**
- * Page content
- */
 .app-list-container {
-  padding: $spacing-unit 0 0;
-  clear:both;
-  display: grid;
+  padding: $spacing-unit 0;
+  clear: both;
 }
 
 .app-list {
   margin-left: 0;
   list-style: none;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
 
-  >li {
+  > li {
     display: block;
-    margin-bottom: calc($spacing-unit / 2);
 
     .app-list-link {
-      display: grid;
-      grid-template-columns: 1fr 3fr;
-
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
       background-color: $background-color-light;
-      font-size: 16px;
+      border: $border-whisper;
+      border-radius: 12px;
+      box-shadow:
+        rgba(0, 0, 0, 0.4) 0px 4px 16px,
+        rgba(0, 0, 0, 0.2) 0px 2px 6px,
+        rgba(0, 0, 0, 0.1) 0px 0.5px 2px;
       color: $text-color;
-      text-align: center;
-      border-radius: calc($spacing-unit / 2);
-      border:1px solid $brand-color;
-
+      text-decoration: none;
+      transition: box-shadow 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
 
       &:visited {
         color: $text-color;
@@ -36,101 +38,88 @@
       &:hover {
         color: $text-color;
         text-decoration: none;
-        background-color: $background-color-light-more;
+        background-color: $background-color-light-even;
+        transform: scale(1.02);
+        box-shadow:
+          rgba(0, 0, 0, 0.5) 0px 8px 32px,
+          rgba(0, 0, 0, 0.3) 0px 4px 12px,
+          rgba(139, 92, 246, 0.08) 0px 0px 24px;
       }
 
       &:active {
-        color: $text-color;
-        text-decoration: none;
-        background-color: $background-color-light-more;
+        transform: scale(0.98);
       }
     }
 
     div.app-list-show-image {
-      display: block;
-      width: 100%;
+      flex-shrink: 0;
+      width: 56px;
+      height: 56px;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 8px;
+      }
     }
 
     div.app-list-title {
-      color: $text-color;
-      height: 60px;
-      line-height: 24px;
-      font-size: $base-font-size * 1.2;
-      margin: calc($spacing-unit / 2);
+      color: $text-color-80;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.4;
+      flex: 1;
     }
   }
 }
-
 
 @media screen and (min-width: 480px) {
   .app-list {
-    margin-left: 0.5%;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
 
-    >li {
-      margin-bottom: $spacing-unit;
-      width: 50%;
-      float: left;
-
+    > li {
       .app-list-link {
-      display: grid;
-      grid-template-columns: 1fr 2fr;
-        margin-left: calc($spacing-unit / 2);
-        margin-right: calc($spacing-unit / 2);
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px;
+        gap: 12px;
       }
 
-      div.app-list-show-image {}
+      div.app-list-show-image {
+        width: 64px;
+        height: 64px;
+      }
 
       div.app-list-title {
+        font-size: 14px;
+        font-weight: 600;
         color: $text-color;
-        line-height: 24px;
-        font-size: $base-font-size * 1.2;
-        margin: calc($spacing-unit / 2);
-        text-align: left;
       }
     }
   }
 }
+
+@media screen and (min-width: 800px) {
+  .app-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 @media screen and (min-width: 1240px) {
   .app-list {
-    margin-left: 0.5%;
+    grid-template-columns: repeat(4, 1fr);
 
-    >li {
-      margin-bottom: $spacing-unit;
-      width: 25%;
-      float: left;
-
-      .app-list-link {
-        display: flex;
-      flex-direction: column;
-        margin-left: calc($spacing-unit / 2);
-        margin-right: calc($spacing-unit / 2);
-      }
-
-      a.app-list-link:hover {}
-
+    > li {
       div.app-list-show-image {
-        position: relative;
-        display: block;
-        width: 100%;
-        height:160px;
-        img {
-          position: relative;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -130px);
-        }
-
-      }
-
-      div.app-list-title {
-        text-align: center;
-      }
-
-      div.app-list-info {
-        position: absolute;
-        width: 80%;
-        bottom: 0;
-        margin-left: calc($spacing-unit / 4);
+        width: 72px;
+        height: 72px;
       }
     }
   }

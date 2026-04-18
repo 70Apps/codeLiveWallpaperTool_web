@@ -5,34 +5,55 @@
 
 
 
-// Our variables
-$base-font-family: -apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,"PingFang SC","Hiragino Sans GB",STHeiti,"Microsoft YaHei","Microsoft JhengHei","Source Han Sans SC","Noto Sans CJK SC","Source Han Sans CN","Noto Sans SC","Source Han Sans TC","Noto Sans CJK TC","WenQuanYi Micro Hei",SimSun,sans-serif;
+// Our variables — GPWZW Design System
+$base-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+$mono-font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
 $base-font-size:   16px;
 $base-font-weight: 400;
 $small-font-size:  $base-font-size * 0.875;
 $base-line-height: 1.5;
 
-$spacing-unit:     30px;
+$spacing-unit:     24px;
 
-$text-color:       rgb(230, 237, 243);
-$text-color-dark:       rgb(150, 157, 163);
-$text-color-highlight:       #ddb784;
-$background-color: #110011;
-$background-color-light:  #221122;
-$background-color-light-even: lighten($background-color-light, 5%);
-$background-color-light-more: lighten($background-color-light, 10%);
-$background-color-dark:  darken($background-color, 5%);
+// GPWZW Color Palette
+$text-color:            #ffffff;
+$text-color-80:         rgba(255, 255, 255, 0.80);
+$text-color-dark:       rgba(255, 255, 255, 0.60);
+$text-color-muted:      rgba(255, 255, 255, 0.40);
+$text-color-highlight:  #a78bfa;
 
-$brand-color:        #e75624;
-$brand-color-light: lighten($brand-color, 15%);
-$brand-color-dark:  darken($brand-color, 25%);
+// Backgrounds / Surfaces
+$background-color:            #000000;
+$background-color-light:      #141414;
+$background-color-light-even: #1a1a1a;
+$background-color-light-more: #222222;
+$background-color-dark:       #0a0a0a;
 
-$grey-color:       rgb(33, 38, 45);
-$grey-color-light: lighten($grey-color, 5%);
-$grey-color-dark:  darken($grey-color, 5%);
+// Brand
+$brand-color:       #8b5cf6;
+$brand-color-light: #a78bfa;
+$brand-color-dark:  #7c3aed;
+$brand-surface:     rgba(139, 92, 246, 0.12);
+$brand-glow:        rgba(139, 92, 246, 0.25);
 
+// Semantic
+$color-cyan:        #06b6d4;
+$color-cyan-surface: rgba(6, 182, 212, 0.12);
+$color-rose:        #f43f5e;
+$color-rose-surface: rgba(244, 63, 94, 0.12);
+$color-amber:       #f59e0b;
+$color-emerald:     #10b981;
 
-$focus-color:     #f97d1a;
+// Borders
+$border-whisper:    1px solid rgba(255, 255, 255, 0.06);
+$border-subtle:     1px solid rgba(255, 255, 255, 0.10);
+$border-medium:     1px solid rgba(255, 255, 255, 0.15);
+
+$grey-color:       #141414;
+$grey-color-light: #1a1a1a;
+$grey-color-dark:  #0a0a0a;
+
+$focus-color:      rgba(139, 92, 246, 0.40);
 
 // Width of the content area
 $content-width:    1110px;
@@ -64,6 +85,7 @@ $on-pc:            1080px;
         "layout",
         "user-define",
         "app-list",
+        "home",
         "toc",
         "rouge",
         "syntax-highlighting-dark-fix"

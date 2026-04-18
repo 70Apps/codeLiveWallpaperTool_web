@@ -11,21 +11,52 @@
 }
 
 .site-title {
-  color: rgb(165, 44, 168);
+  color: $brand-color-light;
+  font-weight: 700;
+  letter-spacing: -0.5px;
   -webkit-text-fill-color: transparent;
-  background: linear-gradient(90deg, #e75624 20%, #f97d1a 40%, #fdad25 60%, #f9a2ef 80%) 0 0 / 200% text;
-  animation: 5s ease-in-out 0s infinite alternate none running textShine;
+  background: linear-gradient(90deg, #8b5cf6 0%, #a78bfa 50%, #06b6d4 100%) 0 0 / 200% text;
+  animation: 6s ease-in-out 0s infinite alternate none running textShine;
 }
 
-.home-title-1,
-.home-title-2,
-.home-title-3 {
-  margin: 0 auto;
+.home-title-1 {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -1px;
+  color: $text-color;
+  margin: 48px auto 12px;
   text-align: center;
 }
+
+.home-title-2 {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: $text-color-dark;
+  margin: 0 auto 8px;
+  text-align: center;
+}
+
+.home-title-3 {
+  font-size: 13px;
+  font-weight: 500;
+  color: $text-color-muted;
+  margin: 0 auto 32px;
+  text-align: center;
+  letter-spacing: 0.25px;
+}
+
 @include media-query($on-palm) {
-  .home-title-1,
-  .home-title-2,
+  .home-title-1 {
+    font-size: 28px;
+    margin-top: 32px;
+  }
+
+  .home-title-2 {
+    font-size: 15px;
+  }
+
   .home-title-3 {
     display: none;
   }
@@ -182,9 +213,57 @@ h2#应用截图+p {
   }
 }
 
+.pagination {
+  clear: both;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 48px;
+  padding: 24px 0;
+}
+
 .pagination a,
+.pagination span,
 .pagination em {
-  padding: 10px;
+  padding: 8px 12px;
+  background-color: $background-color-light;
+  border: $border-whisper;
+  border-radius: 6px;
+  color: $text-color-80;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  min-width: 40px;
+  text-align: center;
+  font-style: normal;
+
+  &:hover {
+    background-color: $background-color-light-even;
+    color: $text-color;
+    text-decoration: none;
+  }
+}
+
+.pagination span {
+  color: $text-color-muted;
+  cursor: not-allowed;
+
+  &:hover {
+    background-color: $background-color-light;
+    color: $text-color-muted;
+  }
+}
+
+.pagination em {
+  background-color: $brand-color;
+  color: $text-color;
+  border-color: $brand-color;
+
+  &:hover {
+    background-color: $brand-color-dark;
+  }
 }
 
 ul.post-tags-list,
@@ -201,15 +280,18 @@ ul.site-tags-list li {
 
 ul.post-tags-list li a,
 ul.site-tags-list li a {
-  padding: 5px 10px;
-  background-color: $brand-color;
-  color: white;
-  border-radius: 10px;
-  font-size: $small-font-size;
+  padding: 4px 10px;
+  background-color: $brand-surface;
+  color: $brand-color-light;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
   text-decoration: none;
+  transition: background-color 0.2s ease;
 
   &:hover {
-    background-color: darken($brand-color, 10%);
+    background-color: rgba(139, 92, 246, 0.20);
   }
 }
 

@@ -114,7 +114,13 @@ a {
 
   &:hover {
     color: $brand-color-light;
-    text-decoration: underline;
+    text-decoration: none;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px $focus-color;
+    border-radius: 4px;
   }
 }
 /**

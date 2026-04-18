@@ -1,382 +1,342 @@
-// js for wallpaper mutiple size generator
+// Multiple Size Generator - GPWZW Design System
+// 壁纸多尺寸生成器
 
-// Drag and Drop functionality
-const uploadPreview = document.querySelector('.upload-preview');
+// DOM Elements
+const uploadArea = document.getElementById('upload-preview-area');
 const imageUploadInput = document.getElementById('image-upload');
+const imagePreview = document.getElementById('image-preview');
+const previewSection = document.getElementById('preview-section');
+const exportSection = document.getElementById('export-section');
+const downloadAllBtn = document.getElementById('download-button');
+const imageFormatInput = document.getElementById('image-format');
 
-// Prevent default drag behaviors on the entire document
+// Device configurations
+const DEVICE_CONFIGS = {
+  'iphone': { width: 1440, height: 3118, name: 'iPhone' },
+  'ipad': { width: 2880, height: 2160, name: 'iPad' },
+  'macbook': { width: 3840, height: 2160, name: 'MacBook' },
+  'applewatch': { width: 2160, height: 2160, name: 'Apple Watch' }
+};
+
+// Initialize: Hide preview and export sections
+previewSection.classList.add('hidden');
+exportSection.classList.add('hidden');
+
+// ============================================
+// Drag & Drop Functionality
+// ============================================
+
+// Prevent default drag behaviors
 ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-    document.body.addEventListener(eventName, preventDefaults, false);
+  document.body.addEventListener(eventName, preventDefaults, false);
+  uploadArea.addEventListener(eventName, preventDefaults, false);
 });
 
 function preventDefaults(e) {
-    e.preventDefault();
-    e.stopPropagation();
+  e.preventDefault();
+  e.stopPropagation();
 }
 
-// Highlight drop area when dragging over it
+// Highlight drop area
 ['dragenter', 'dragover'].forEach(eventName => {
-    uploadPreview.addEventListener(eventName, highlight, false);
+  uploadArea.addEventListener(eventName, () => {
+    uploadArea.classList.add('drag-over');
+  }, false);
 });
 
 ['dragleave', 'drop'].forEach(eventName => {
-    uploadPreview.addEventListener(eventName, unhighlight, false);
+  uploadArea.addEventListener(eventName, () => {
+    uploadArea.classList.remove('drag-over');
+  }, false);
 });
 
-function highlight(e) {
-    uploadPreview.classList.add('drag-over');
-}
-
-function unhighlight(e) {
-    uploadPreview.classList.remove('drag-over');
-}
-
 // Handle dropped files
-uploadPreview.addEventListener('drop', handleDrop, false);
+uploadArea.addEventListener('drop', handleDrop, false);
 
-// Make upload preview area clickable
-uploadPreview.addEventListener('click', function() {
-    imageUploadInput.click();
+// Make upload area clickable
+uploadArea.addEventListener('click', () => {
+  imageUploadInput.click();
 });
 
 function handleDrop(e) {
-    const dt = e.dataTransfer;
-    const files = dt.files;
-    
-    if (files.length > 0) {
-        const file = files[0];
-        
-        // Check if it's an image file
-        if (file.type.startsWith('image/')) {
-            handleImageFile(file);
-        } else {
-            alert('Please drop an image file (PNG, JPEG, WEBP, etc.)');
-        }
+  const files = e.dataTransfer.files;
+  if (files.length > 0) {
+    const file = files[0];
+    if (file.type.startsWith('image/')) {
+      handleImageFile(file);
+    } else {
+      alert('Please drop an image file (PNG, JPEG, WebP, AVIF)');
     }
+  }
 }
+
+// Handle file input change
+imageUploadInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    handleImageFile(file);
+  }
+});
+
+// ============================================
+// Image Processing
+// ============================================
 
 function handleImageFile(file) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        const img = new Image();
-        img.onload = function() {
-            generateWallpapers(img);
-        }
-        img.src = e.target.result;
-        // set preview image src and manage load/error UI
-        const previewImg = document.getElementById('image-preview');
-        attachPreviewListeners(previewImg, document.querySelector('.upload-preview'));
-        previewImg.src = img.src;
-    }
-    reader.readAsDataURL(file);
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const img = new Image();
+    img.onload = () => {
+      // Show preview
+      imagePreview.src = img.src;
+      imagePreview.onload = () => {
+        imagePreview.classList.add('loaded');
+        uploadArea.classList.add('img-loaded');
+      };
+      
+      // Generate wallpapers
+      generateWallpapers(img);
+      
+      // Show preview and export sections
+      previewSection.classList.remove('hidden');
+      exportSection.classList.remove('hidden');
+      
+      // Smooth scroll to preview
+      setTimeout(() => {
+        previewSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
 }
 
-document.getElementById('image-upload').addEventListener('change', function(event) {
-    const file = event.target.files[0];
-    if (file) {
-        handleImageFile(file);
+function generateWallpapers(sourceImg) {
+  if (!sourceImg || !sourceImg.complete) {
+    console.error('Invalid image provided');
+    return;
+  }
+
+  const format = imageFormatInput.value;
+  const { mimeType, quality } = getFormatSettings(format);
+
+  Object.keys(DEVICE_CONFIGS).forEach(deviceKey => {
+    const config = DEVICE_CONFIGS[deviceKey];
+    const canvas = document.createElement('canvas');
+    canvas.width = config.width;
+    canvas.height = config.height;
+    const ctx = canvas.getContext('2d');
+
+    // Center-crop image to target aspect ratio
+    const { sx, sy, sWidth, sHeight } = calculateCropDimensions(
+      sourceImg.width,
+      sourceImg.height,
+      config.width,
+      config.height
+    );
+
+    // Draw cropped and scaled image
+    ctx.drawImage(sourceImg, sx, sy, sWidth, sHeight, 0, 0, config.width, config.height);
+
+    // Generate data URL
+    const dataURL = canvas.toDataURL(mimeType, quality);
+
+    // Update preview
+    const previewImg = document.getElementById(`${deviceKey}-preview`);
+    if (previewImg) {
+      previewImg.src = dataURL;
+      previewImg.onload = () => {
+        previewImg.classList.add('loaded');
+      };
     }
-});
 
-// hide preview grid and export section on init
-const previewGrid = document.getElementById('preview-grid');
-const downloadAllBtn = document.getElementById('download-button');
-const exportSection = document.querySelector('.export-section');
-if (previewGrid) previewGrid.classList.add('hidden');
-if (downloadAllBtn) downloadAllBtn.classList.add('hidden');
-if (exportSection) exportSection.classList.add('hidden');
-
-function generateWallpapers(img) {
-    // 验证传入的图片对象
-    if (!img || !img.complete) {
-        console.error('Invalid image provided to generateWallpapers');
-        return;
-    }
-
-    // 获取用户选择的图像格式
-    const imageFormat = document.getElementById('image-format').value;
-    let mimeType;
-    let quality;
-    if (imageFormat === 'jpeg') {
-        mimeType = 'image/jpeg';
-        quality = 0.92;
-    } else if (imageFormat === 'webp') {
-        mimeType = 'image/webp';
-        quality = 0.92;
-    } else {
-        mimeType = 'image/png';
-        quality = undefined;
-    }
-
-    const sizes = {
-        'iPhone': [1980, 4302],
-        'iPad': [2064, 1548],
-        'MacBook': [4512, 2538],
-        'Apple Watch': [1664, 1984]
-        // add more sizes here
-        };
-    
-    for (const device in sizes) {
-        const [width, height] = sizes[device];
-        const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
-
-        // Compute source rect to center-crop image to target aspect ratio
-        const iw = img.width, ih = img.height;
-        const targetAspect = width / height;
-        let sx = 0, sy = 0, sWidth = iw, sHeight = ih;
-
-        if (iw / ih > targetAspect) {
-            // source is wider -> crop width
-            sWidth = Math.round(ih * targetAspect);
-            sx = Math.round((iw - sWidth) / 2);
-        } else {
-            // source is taller -> crop height
-            sHeight = Math.round(iw / targetAspect);
-            sy = Math.round((ih - sHeight) / 2);
-        }
-
-        // draw the cropped area scaled to target canvas size
-        ctx.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, width, height);
-        
-        // 根据选择的格式生成数据URL
-        const dataURL = canvas.toDataURL(mimeType, quality);
-        
-        // 获取目标预览元素
-        const previewElement = document.getElementById(`${device.toLowerCase().replace(' ', '')}-preview`);
-        
-        // 验证元素是否存在
-        if (previewElement) {
-            // attach listeners before assigning src so we capture load/error
-            const parentItem = previewElement.closest('.preview-item');
-            attachPreviewListeners(previewElement, parentItem);
-            previewElement.src = dataURL;
-        } else {
-            console.warn(`Preview element not found for ${device}`);
-        }
-        
-        // 清理canvas以释放内存
-        canvas.width = 0;
-        canvas.height = 0;
-    }
-    // reveal preview area and export section after generation
-    if (previewGrid) previewGrid.classList.remove('hidden');
-    if (downloadAllBtn) downloadAllBtn.classList.remove('hidden');
-    if (exportSection) exportSection.classList.remove('hidden');
+    // Cleanup
+    canvas.width = 0;
+    canvas.height = 0;
+  });
 }
 
-// 添加单个设备壁纸下载功能
-document.querySelectorAll('.download-btn').forEach(button => {
-    button.addEventListener('click', function() {
-        const device = this.getAttribute('data-device');
-        downloadSingleWallpaper(device);
-    });
-});
+function calculateCropDimensions(srcWidth, srcHeight, targetWidth, targetHeight) {
+  const targetAspect = targetWidth / targetHeight;
+  let sx = 0, sy = 0, sWidth = srcWidth, sHeight = srcHeight;
 
-function downloadSingleWallpaper(device) {
-    const imageFormat = document.getElementById('image-format').value;
-    let extension, mimeType, quality;
-    if (imageFormat === 'jpeg') {
-        extension = 'jpg';
-        mimeType = 'image/jpeg';
-        quality = 0.92;
-    } else if (imageFormat === 'webp') {
-        extension = 'webp';
-        mimeType = 'image/webp';
-        quality = 0.92;
-    } else {
-        extension = 'png';
-        mimeType = 'image/png';
-        quality = undefined;
-    }
+  if (srcWidth / srcHeight > targetAspect) {
+    // Source is wider - crop width
+    sWidth = Math.round(srcHeight * targetAspect);
+    sx = Math.round((srcWidth - sWidth) / 2);
+  } else {
+    // Source is taller - crop height
+    sHeight = Math.round(srcWidth / targetAspect);
+    sy = Math.round((srcHeight - sHeight) / 2);
+  }
 
-    // sizes keyed by lowercase device id used in data-device
-    /*
-    change export sizes here if needed  
-        'iPhone': [1980, 4302],
-        'iPad': [2064, 1548],
-        'MacBook': [4512, 2538],
-        'Apple Watch': [1664, 1984]
-         */ 
-        const sizes = {
-        'iphone': [1440, 3118],
-        'ipad': [2880, 2160],
-        'macbook': [4512, 2538],
-        'applewatch': [1664, 1984]
-        };
-
-
-    const key = device.toLowerCase();
-    const dims = sizes[key];
-    if (!dims) {
-        console.error(`Unknown device for download: ${device}`);
-        return;
-    }
-    const [width, height] = dims;
-
-    // use the uploaded preview image as source (dataURL kept in #image-preview)
-    const source = document.getElementById('image-preview').src;
-    if (!source) {
-        console.error('No uploaded image available for export');
-        return;
-    }
-
-    const srcImg = new Image();
-    srcImg.onload = function() {
-        const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
-
-        // center-crop source to target aspect then draw scaled
-        const iw = srcImg.width, ih = srcImg.height;
-        const targetAspect = width / height;
-        let sx = 0, sy = 0, sWidth = iw, sHeight = ih;
-        if (iw / ih > targetAspect) {
-            sWidth = Math.round(ih * targetAspect);
-            sx = Math.round((iw - sWidth) / 2);
-        } else {
-            sHeight = Math.round(iw / targetAspect);
-            sy = Math.round((ih - sHeight) / 2);
-        }
-        ctx.drawImage(srcImg, sx, sy, sWidth, sHeight, 0, 0, width, height);
-
-        const dataURL = canvas.toDataURL(mimeType, quality);
-        const link = document.createElement('a');
-        link.href = dataURL;
-        link.download = `${device}_wallpaper.${extension}`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
-    srcImg.onerror = function() {
-        console.error('Failed to load source image for export');
-    };
-    srcImg.src = source;
+  return { sx, sy, sWidth, sHeight };
 }
 
-// Attach load/error listeners to a preview image and toggle placeholder classes
-function attachPreviewListeners(imgElement, container) {
-    if (!imgElement) return;
-
-    // remove any existing handlers to avoid double-binding
-    imgElement.onload = null;
-    imgElement.onerror = null;
-
-    imgElement.onload = function() {
-        imgElement.classList.add('loaded');
-        if (container) container.classList.add('img-loaded');
-    };
-
-    imgElement.onerror = function() {
-        imgElement.classList.remove('loaded');
-        try { imgElement.src = ''; } catch (e) {}
-        if (container) container.classList.remove('img-loaded');
-    };
+function getFormatSettings(format) {
+  switch (format) {
+    case 'jpeg':
+      return { mimeType: 'image/jpeg', quality: 0.92, extension: 'jpg' };
+    case 'webp':
+      return { mimeType: 'image/webp', quality: 0.92, extension: 'webp' };
+    default:
+      return { mimeType: 'image/png', quality: undefined, extension: 'png' };
+  }
 }
 
-// 监听格式选择变化，重新生成壁纸
-document.getElementById('image-format').addEventListener('change', function() {
-    const previewImg = document.getElementById('image-preview');
-    if(previewImg.src) {
-        const img = new Image();
-        img.onload = function() {
-            generateWallpapers(img);
-        };
-        img.src = previewImg.src;
-    }
-});
+// ============================================
+// Format Selection
+// ============================================
 
-// format toggle buttons: sync hidden input and trigger change
 document.querySelectorAll('.format-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        if (this.disabled) return;
-        const fmt = this.getAttribute('data-format');
-        const hidden = document.getElementById('image-format');
-        if (!hidden) return;
-        // toggle active class
-        document.querySelectorAll('.format-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        // set hidden value and dispatch change so existing listener runs
-        hidden.value = fmt;
-        hidden.dispatchEvent(new Event('change', { bubbles: true }));
-    });
+  btn.addEventListener('click', function() {
+    if (this.disabled) return;
+    
+    const format = this.getAttribute('data-format');
+    
+    // Update active state
+    document.querySelectorAll('.format-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    
+    // Update hidden input
+    imageFormatInput.value = format;
+    
+    // Regenerate wallpapers if image is loaded
+    if (imagePreview.src && imagePreview.classList.contains('loaded')) {
+      const img = new Image();
+      img.onload = () => generateWallpapers(img);
+      img.src = imagePreview.src;
+    }
+  });
 });
 
-// Detect WebP support; if unsupported, disable the WEBP toggle
-(function checkWebPSupport(){
-    let supported = false;
-    try {
-        const cvs = document.createElement('canvas');
-        supported = cvs.toDataURL('image/webp').indexOf('data:image/webp') === 0;
-    } catch(e) {
-        supported = false;
+// Check WebP support
+(function checkWebPSupport() {
+  let supported = false;
+  try {
+    const canvas = document.createElement('canvas');
+    supported = canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+  } catch (e) {
+    supported = false;
+  }
+  
+  const webpBtn = document.querySelector('.format-btn[data-format="webp"]');
+  if (!supported && webpBtn) {
+    webpBtn.classList.add('disabled');
+    webpBtn.disabled = true;
+    webpBtn.setAttribute('aria-disabled', 'true');
+    
+    // Fallback to PNG if WebP was active
+    if (webpBtn.classList.contains('active')) {
+      const pngBtn = document.querySelector('.format-btn[data-format="png"]');
+      if (pngBtn) {
+        webpBtn.classList.remove('active');
+        pngBtn.classList.add('active');
+        imageFormatInput.value = 'png';
+      }
     }
-    const webpBtn = document.querySelector('.format-btn[data-format="webp"]');
-    if (!supported && webpBtn) {
-        webpBtn.classList.add('disabled');
-        webpBtn.disabled = true;
-        webpBtn.setAttribute('aria-disabled','true');
-        // if it was active, fallback to PNG
-        if (webpBtn.classList.contains('active')) {
-            const pngBtn = document.querySelector('.format-btn[data-format="png"]');
-            if (pngBtn) {
-                webpBtn.classList.remove('active');
-                pngBtn.classList.add('active');
-                const hidden = document.getElementById('image-format');
-                if (hidden) { hidden.value = 'png'; hidden.dispatchEvent(new Event('change', { bubbles: true })); }
-            }
-        }
-    }
+  }
 })();
 
-document.getElementById('download-button').addEventListener('click', function() {
-    const imageFormat = document.getElementById('image-format').value;
-    let extension, mimeType, quality;
-    if (imageFormat === 'jpeg') {
-        extension = 'jpg';
-        mimeType = 'image/jpeg';
-        quality = 0.92;
-    } else if (imageFormat === 'webp') {
-        extension = 'webp';
-        mimeType = 'image/webp';
-        quality = 0.92;
-    } else {
-        extension = 'png';
-        mimeType = 'image/png';
-        quality = undefined;
-    }
+// ============================================
+// Download Functionality
+// ============================================
+
+// Individual device download
+document.querySelectorAll('.btn-device-download').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const device = this.getAttribute('data-device');
+    downloadSingleWallpaper(device);
+  });
+});
+
+function downloadSingleWallpaper(deviceKey) {
+  const config = DEVICE_CONFIGS[deviceKey];
+  if (!config) {
+    console.error(`Unknown device: ${deviceKey}`);
+    return;
+  }
+
+  const format = imageFormatInput.value;
+  const { mimeType, quality, extension } = getFormatSettings(format);
+
+  // Get source image
+  const sourceSrc = imagePreview.src;
+  if (!sourceSrc) {
+    console.error('No image uploaded');
+    return;
+  }
+
+  const srcImg = new Image();
+  srcImg.onload = () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = config.width;
+    canvas.height = config.height;
+    const ctx = canvas.getContext('2d');
+
+    // Center-crop and draw
+    const { sx, sy, sWidth, sHeight } = calculateCropDimensions(
+      srcImg.width,
+      srcImg.height,
+      config.width,
+      config.height
+    );
+    ctx.drawImage(srcImg, sx, sy, sWidth, sHeight, 0, 0, config.width, config.height);
+
+    // Download
+    const dataURL = canvas.toDataURL(mimeType, quality);
+    const link = document.createElement('a');
+    link.href = dataURL;
+    link.download = `${config.name.replace(' ', '_')}_wallpaper.${extension}`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // Cleanup
+    canvas.width = 0;
+    canvas.height = 0;
+  };
+  srcImg.onerror = () => {
+    console.error('Failed to load source image');
+  };
+  srcImg.src = sourceSrc;
+}
+
+// Download all as ZIP
+downloadAllBtn.addEventListener('click', () => {
+  const format = imageFormatInput.value;
+  const { extension } = getFormatSettings(format);
+  
+  const zip = new JSZip();
+  
+  Object.keys(DEVICE_CONFIGS).forEach(deviceKey => {
+    const config = DEVICE_CONFIGS[deviceKey];
+    const previewImg = document.getElementById(`${deviceKey}-preview`);
     
-    const zip = new JSZip();
-    const sizes = {
-        'iPhone': [1440, 3118],
-        'iPad': [2880, 2160],
-        'MacBook': [3840, 2160],
-        'Apple Watch': [2160, 2160]
-        // add more sizes here
-    };
-    
-    for (const device in sizes) {
-        const imgSrc = document.getElementById(`${device.toLowerCase().replace(' ', '')}-preview`).src;
-        // 提取base64数据部分，注意根据所选格式调整正则表达式
-        const typePattern = imageFormat === 'jpeg' ? 'jpeg|jpg' : imageFormat === 'webp' ? 'webp' : 'png';
-        const regex = new RegExp(`^data:image\/(${typePattern});base64,`);
-        const base64Data = imgSrc.replace(regex, "");
-        zip.file(`${device}_wallpaper.${extension}`, base64Data, {base64: true});
+    if (previewImg && previewImg.src) {
+      // Extract base64 data
+      const base64Data = previewImg.src.replace(/^data:image\/(png|jpeg|jpg|webp);base64,/, '');
+      const filename = `${config.name.replace(' ', '_')}_wallpaper.${extension}`;
+      zip.file(filename, base64Data, { base64: true });
     }
-    zip.generateAsync({type:"blob"})
-    .then(function(content) {
-        saveAs(content, `wallpapers.${extension}.zip`);
+  });
+  
+  zip.generateAsync({ type: 'blob' })
+    .then(content => {
+      saveAs(content, `wallpapers_${format}.zip`);
+    })
+    .catch(err => {
+      console.error('Failed to generate ZIP:', err);
+      alert('Failed to create ZIP file. Please try downloading individually.');
     });
 });
 
 function saveAs(blob, filename) {
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(link.href);
 }
