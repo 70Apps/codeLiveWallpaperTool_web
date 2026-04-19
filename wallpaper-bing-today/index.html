@@ -1,95 +1,269 @@
 ---
 layout: web-app
 title: Bing Today Wallpaper Generator
+description: Upload today's Bing wallpaper and get perfectly sized wallpapers for iPhone, iPad, MacBook, and Apple Watch
 permalink: /wallpaper-bing-today/
-icon: m_bing
+tags: [Bing, Today]
 orderid: 4
 ---
-<!-- a one webpage utility tool for wallpaper mutiple size generation -->
-
 <link rel="stylesheet" href="style.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<main class="generator">
-  <div class="container">
-    <header class="hero">
-      <h1>Bing.com Today Wallpaper</h1>
-      <p class="lead">Generate today wallpaper from bing.com</p>
-    </header>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
-    <form id="wallpaper-form" class="controls">
-      <div class="controls-row">
-        <div class="upload-left">
-          <figure class="upload-preview">
-            <img id="image-preview" src="" alt="Preview">
-            <figcaption class="visually-hidden">Uploaded image preview</figcaption>
-          </figure>
-        </div>
-
-        <div class="upload-right">
-
-          <button type="button" id="update-button" class="btn-primary">Update Now</button>
-          <div class="toolbar">
-            <button type="button" id="prev-button" class="btn-primary"> << </button>
-                <span id="date-selected"></span>
-                <button type="button" id="next-button" class="btn-primary"> >> </button>
-          </div>
-          <div class="region-bar">
-
-          </div>
-
-          <div class="format-selector">
-            <label>Select Export Image Format</label>
-            <div class="format-toggle" role="tablist" aria-label="Image format">
-              <button type="button" class="format-btn" data-format="png">PNG</button>
-              <button type="button" class="format-btn" data-format="jpeg">JPEG</button>
-              <button type="button" class="format-btn active" data-format="webp">WEBP</button>
-            </div>
-            <input type="hidden" id="image-format" value="webp">
-          </div>
-        </div>
-
-      </div>
-
-      <section id="preview-grid" class="preview-grid" aria-live="polite">
-        <div class="preview-item">
-          <h3>iPhone</h3>
-          <div class="preview-media">
-            <img id="iphone-preview" src="" alt="iPhone Preview">
-          </div>
-          <button type="button" class="download-btn" data-device="iphone">Download iPhone</button>
-        </div>
-        <div class="preview-item">
-          <h3>iPad</h3>
-          <div class="preview-media">
-            <img id="ipad-preview" src="" alt="iPad Preview">
-          </div>
-          <button type="button" class="download-btn" data-device="ipad">Download iPad</button>
-        </div>
-        <div class="preview-item">
-          <h3>MacBook</h3>
-          <div class="preview-media">
-            <img id="macbook-preview" src="" alt="MacBook Preview">
-          </div>
-          <button type="button" class="download-btn" data-device="macbook">Download MacBook</button>
-        </div>
-        <div class="preview-item">
-          <h3>Apple Watch</h3>
-          <div class="preview-media">
-            <img id="applewatch-preview" src="" alt="Apple Watch Preview">
-          </div>
-          <button type="button" class="download-btn" data-device="applewatch">Download Apple Watch</button>
-        </div>
-      </section>
-      <div class="actions">
-        <button type="button" id="download-button" class="btn-primary">Download All Wallpapers</button>
-      </div>
-    </form>
-  </div>
-  <div class="thanks-note">
-    <h3>Thanks to</h3>
-    <div class="thanks-links">
-      <a href="https://github.com/TimothyYe/bing-wallpaper">TimothyYe GitHub</a>
+<main class="tool-page">
+  <!-- Hero Section -->
+  <section class="tool-hero">
+    <div class="tool-logo">
+      <img src="logo.svg" alt="Bing Today Wallpaper" width="120" height="120">
     </div>
-  </div>
+    <div class="section-label">Bing Today Wallpaper</div>
+    <h1 class="tool-title">Generate Today's Bing Wallpaper for All Devices</h1>
+    <p class="tool-desc">Get perfectly sized wallpapers for iPhone, iPad, MacBook, and Apple Watch — all processing happens in your browser</p>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- Step 1: Update -->
+  <section class="tool-section">
+    <div class="step-header">
+      <span class="step-number">1</span>
+      <div class="step-info">
+        <h2 class="step-title">Update Bing Wallpaper</h2>
+        <p class="step-desc">Fetch today's Bing wallpaper or navigate through previous days</p>
+      </div>
+    </div>
+
+    <div class="update-panel">
+      <div class="update-left">
+        <figure class="upload-preview">
+          <img id="image-preview" src="" alt="Preview">
+          <figcaption class="preview-placeholder-text">No image loaded</figcaption>
+        </figure>
+      </div>
+      <div class="update-right">
+        <div class="region-bar" id="region-bar">
+          <!-- Region buttons will be generated here -->
+        </div>
+        <div class="toolbar">
+          <button type="button" id="prev-button" class="btn-secondary"> << </button>
+          <span id="date-selected"></span>
+          <button type="button" id="next-button" class="btn-secondary"> >> </button>
+        </div>
+        <button type="button" id="update-button" class="btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12a9 9 0 1 1-9-9"/>
+            <path d="M21 12v7"/>
+            <path d="M8.5 8.5 12 12l3.5-3.5"/>
+          </svg>
+          <span id="update-button-text">Update Now</span>
+          <div id="loading-indicator" class="loading-spinner hidden">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12a9 9 0 1 1-9-9"/>
+            </svg>
+          </div>
+        </button>
+      </div>
+    </div>
+  </section>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- Step 2: Preview -->
+  <section class="tool-section" id="preview-section">
+    <div class="step-header">
+      <span class="step-number">2</span>
+      <div class="step-info">
+        <h2 class="step-title">Preview Generated Wallpapers</h2>
+        <p class="step-desc">See how your Bing wallpaper looks on each device — automatically cropped and optimized</p>
+      </div>
+    </div>
+
+    <div class="device-grid" id="preview-grid">
+      <div class="device-card">
+        <div class="device-card-header">
+          <svg class="device-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+            <line x1="12" y1="18" x2="12.01" y2="18"/>
+          </svg>
+          <h3>iPhone</h3>
+          <span class="device-size">1440 × 3118</span>
+        </div>
+        <div class="device-preview">
+          <img id="iphone-preview" src="" alt="iPhone Preview">
+          <div class="preview-placeholder">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+              <line x1="12" y1="18" x2="12.01" y2="18"/>
+            </svg>
+          </div>
+        </div>
+        <button type="button" class="btn-device-download" data-device="iphone">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download
+        </button>
+      </div>
+
+      <div class="device-card">
+        <div class="device-card-header">
+          <svg class="device-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="4" y="2" width="16" height="20" rx="2" ry="2"/>
+            <line x1="12" y1="18" x2="12.01" y2="18"/>
+          </svg>
+          <h3>iPad</h3>
+          <span class="device-size">2880 × 2160</span>
+        </div>
+        <div class="device-preview">
+          <img id="ipad-preview" src="" alt="iPad Preview">
+          <div class="preview-placeholder">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="4" y="2" width="16" height="20" rx="2" ry="2"/>
+              <line x1="12" y1="18" x2="12.01" y2="18"/>
+            </svg>
+          </div>
+        </div>
+        <button type="button" class="btn-device-download" data-device="ipad">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download
+        </button>
+      </div>
+
+      <div class="device-card">
+        <div class="device-card-header">
+          <svg class="device-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+            <line x1="8" y1="21" x2="16" y2="21"/>
+            <line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+          <h3>MacBook</h3>
+          <span class="device-size">3840 × 2160</span>
+        </div>
+        <div class="device-preview">
+          <img id="macbook-preview" src="" alt="MacBook Preview">
+          <div class="preview-placeholder">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+              <line x1="8" y1="21" x2="16" y2="21"/>
+              <line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+          </div>
+        </div>
+        <button type="button" class="btn-device-download" data-device="macbook">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download
+        </button>
+      </div>
+
+      <div class="device-card">
+        <div class="device-card-header">
+          <svg class="device-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="6" y="2" width="12" height="20" rx="6"/>
+            <circle cx="12" cy="18" r="1"/>
+          </svg>
+          <h3>Apple Watch</h3>
+          <span class="device-size">2160 × 2160</span>
+        </div>
+        <div class="device-preview">
+          <img id="applewatch-preview" src="" alt="Apple Watch Preview">
+          <div class="preview-placeholder">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="6" y="2" width="12" height="20" rx="6"/>
+              <circle cx="12" cy="18" r="1"/>
+            </svg>
+          </div>
+        </div>
+        <button type="button" class="btn-device-download" data-device="applewatch">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- Step 3: Export -->
+  <section class="tool-section" id="export-section">
+    <div class="step-header">
+      <span class="step-number">3</span>
+      <div class="step-info">
+        <h2 class="step-title">Choose Format & Download</h2>
+        <p class="step-desc">Select your preferred image format and download individually or all at once</p>
+      </div>
+    </div>
+
+    <div class="export-panel">
+      <div class="format-selector">
+        <label class="format-label">Export Format</label>
+        <div class="format-toggle">
+          <button type="button" class="format-btn" data-format="png">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            </svg>
+            PNG
+          </button>
+          <button type="button" class="format-btn" data-format="jpeg">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+            </svg>
+            JPEG
+          </button>
+          <button type="button" class="format-btn active" data-format="webp">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+              <polyline points="2 17 12 22 22 17"/>
+              <polyline points="2 12 12 17 22 12"/>
+            </svg>
+            WebP
+          </button>
+        </div>
+        <div class="format-hint">WebP offers best compression with high quality</div>
+        <input type="hidden" id="image-format" value="webp">
+      </div>
+
+      <button type="button" id="download-button" class="btn-download-all">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Download All as ZIP
+      </button>
+    </div>
+  </section>
 </main>
+
+<style>
+.loading-spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-spinner.hidden {
+  display: none;
+}
+</style>
 <script src="script.js"></script>

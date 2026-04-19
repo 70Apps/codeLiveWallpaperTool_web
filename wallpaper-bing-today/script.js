@@ -58,7 +58,7 @@ function updateRegionsButtons() {
     BING_REGIONS.forEach(function(region, index) { 
         const button = document.createElement('button');
         button.type = 'button';
-        button.className = 'btn-primary region-btn';
+        button.className = 'region-btn';
         button.innerText = region.title;
         if (index === INDEX_REGION) {
             button.classList.add('active');
@@ -82,42 +82,70 @@ function updateRegionsButtons() {
     
 }
 
+let updateInProgress = false;
+
 document.getElementById('update-button').addEventListener('click', function(event) {
+    if (updateInProgress) return;
+    
+    updateInProgress = true;
+    const updateButtonText = document.getElementById('update-button-text');
+    const loadingIndicator = document.getElementById('loading-indicator');
+    const updatePanel = document.querySelector('.update-panel');
+    updateButtonText.classList.add('hidden');
+    loadingIndicator.classList.remove('hidden');
+    updatePanel.classList.add('loading');
+
     const api_url = "https://bing.biturl.top/?resolution=UHD&format=json&index="+INDEX_DATE+"&mkt="+BING_REGIONS[INDEX_REGION].code+"";
-    /* Example response:
-{
-start_date: "20260118",
-end_date: "20260119",
-url: "https://www.bing.com/th?id=OHR.BubblesAbraham_ZH-CN7203734882_1920x1080.jpg",
-copyright: "亚伯拉罕湖冰封景象，艾伯塔省，加拿大 (© Luis F Arevalo/Getty Images)",
-copyright_link: "https://www.bing.com/search?q=%E4%BA%9A%E4%BC%AF%E6%8B%89%E7%BD%95%E6%B9%96&form=hpcapt&mkt=zh-cn"
-}
-    */
+    
     fetch(api_url)
     .then(response => response.json())
     .then(data => {
         const imageUrl = data.url;
         const img = new Image();
-        img.crossOrigin = "anonymous"; // to avoid CORS issues
+        img.crossOrigin = "anonymous"; 
         img.onload = function() {
             generateWallpapers(img);
+            updateInProgress = false;
+            updateButtonText.classList.remove('hidden');
+            loadingIndicator.classList.add('hidden');
+            updatePanel.classList.remove('loading');
+        }
+        img.onerror = function() {
+            updateInProgress = false;
+            updateButtonText.classList.remove('hidden');
+            loadingIndicator.classList.add('hidden');
+            updatePanel.classList.remove('loading');
+            console.error('Failed to load Bing image');
+            alert('Failed to load Bing image.');
         }
         img.src = imageUrl;
-        // set preview image src and manage load/error UI
+        
         const previewImg = document.getElementById('image-preview');
-        attachPreviewListeners(previewImg, document.querySelector('.upload-preview'));
+        attachPreviewListeners(previewImg, document.querySelector('.device-preview'));
         previewImg.src = img.src;
     })
     .catch(error => {
+        updateInProgress = false;
+        updateButtonText.classList.remove('hidden');
+        loadingIndicator.classList.add('hidden');
+        updatePanel.classList.remove('loading');
         console.error('Error fetching Bing wallpaper:', error);
         alert('Error fetching Bing wallpaper.');
     });
 });
 // hide preview grid and download-all button on init
-const previewGrid = document.getElementById('preview-grid');
-const downloadAllBtn = document.getElementById('download-button');
-if (previewGrid) previewGrid.classList.add('hidden');
-if (downloadAllBtn) downloadAllBtn.classList.add('hidden');
+const previewSection = document.getElementById('preview-section');
+const exportSection = document.getElementById('export-section');
+
+if (previewSection) previewSection.classList.add('hidden-grid');
+if (exportSection) exportSection.classList.add('hidden-export');
+
+document.getElementById('update-button').addEventListener('click', function(event) {
+    // existing code...
+    if (previewSection) previewSection.classList.add('hidden-grid');
+    if (exportSection) exportSection.classList.add('hidden-export');
+    // existing code...
+});
 
 
 function generateWallpapers(img) {
@@ -142,13 +170,13 @@ function generateWallpapers(img) {
         quality = undefined;
     }
 
-    const sizes = {
-        'iPhone': [1980, 4302],
-        'iPad': [2064, 1548],
-        'MacBook': [4512, 2538],
-        'Apple Watch': [1664, 1984]
-        // add more sizes here
-        };
+const sizes = {
+    'iPhone': [1440, 3118],
+    'iPad': [2880, 2160],
+    'MacBook': [3840, 2160],
+    'Apple Watch': [2160, 2160]
+    // add more sizes here
+};
     
     for (const device in sizes) {
         const [width, height] = sizes[device];
@@ -195,9 +223,8 @@ function generateWallpapers(img) {
         canvas.width = 0;
         canvas.height = 0;
     }
-    // reveal preview area and download-all button after generation
-    if (previewGrid) previewGrid.classList.remove('hidden');
-    if (downloadAllBtn) downloadAllBtn.classList.remove('hidden');
+if (previewSection) previewSection.classList.remove('hidden-grid');
+if (exportSection) exportSection.classList.remove('hidden-export');
 }
 
 // 添加单个设备壁纸下载功能

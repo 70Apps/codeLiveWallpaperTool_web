@@ -26,6 +26,12 @@ title: locklive livewallpaper
           </div>
           <h3>{{ page.title }}</h3>
           <p>{{ page.description | default: "Professional wallpaper processing tool" }}</p>
+          <!-- list tags  <span class="btn-pill" style="background:var(--purple-surface); color:var(--purple-light);">Creative</span> -->
+           <div class="btn-group">
+            {% for tag in page.tags %}
+              <span class="btn-pill" style="background:var(--{{ page.color | default: "purple" }}-surface); color:var(--{{ page.color | default: "purple" }});">{{ tag }}</span>
+            {% endfor %}
+          </div>
         </a>
       {% endif %}
     {% endfor %}

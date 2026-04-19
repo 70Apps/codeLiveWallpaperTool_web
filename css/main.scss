@@ -3,7 +3,40 @@
 ---
 @charset "utf-8";
 
-
+  :root {
+    --pure-white: #ffffff;
+    --pure-black: #000000;
+    --surface-base: #0a0a0a;
+    --surface-card: #141414;
+    --surface-hover: #1a1a1a;
+    --surface-elevated: #222222;
+    --white-80: rgba(255,255,255,0.80);
+    --white-60: rgba(255,255,255,0.60);
+    --white-40: rgba(255,255,255,0.40);
+    --white-20: rgba(255,255,255,0.20);
+    --white-10: rgba(255,255,255,0.10);
+    --white-06: rgba(255,255,255,0.06);
+    --gallery-purple: #8b5cf6;
+    --purple: #8b5cf6;
+    --purple-light: #a78bfa;
+    --purple-dark: #7c3aed;
+    --purple-surface: rgba(139,92,246,0.12);
+    --purple-glow: rgba(139,92,246,0.25);
+    --cyan: #06b6d4;
+    --cyan-surface: rgba(6,182,212,0.12);
+    --rose: #f43f5e;
+    --rose-surface: rgba(244,63,94,0.12);
+    --amber: #f59e0b;
+    --amber-surface: rgba(245,158,11,0.12);
+    --emerald: #10b981;
+    --emerald-surface: rgba(16,185,129,0.12);
+    --border-whisper: 1px solid var(--white-06);
+    --shadow-card: rgba(0,0,0,0.4) 0px 4px 16px 0px, rgba(0,0,0,0.2) 0px 2px 6px 0px, rgba(0,0,0,0.1) 0px 0.5px 2px 0px;
+    --shadow-hover: rgba(0,0,0,0.5) 0px 8px 32px 0px, rgba(0,0,0,0.3) 0px 4px 12px 0px, rgba(139,92,246,0.08) 0px 0px 24px 0px;
+    --shadow-modal: rgba(0,0,0,0.6) 0px 16px 48px 0px, rgba(0,0,0,0.4) 0px 8px 24px 0px, rgba(0,0,0,0.2) 0px 2px 8px 0px;
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+  }
 
 // Our variables — GPWZW Design System
 $base-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;

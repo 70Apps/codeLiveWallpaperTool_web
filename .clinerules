@@ -1,0 +1,22 @@
+# Project Information
+This is a Jekyll project.
+The site is about wallpaper tools, including features like cropping, compressing, and converting formats.
+
+# Development Environment
+Run on http://localhost:4002/.
+
+# Common Commands
+To build the site: bundle exec jekyll build
+To serve the site: bundle exec jekyll serve -P 4002
+To update dependencies: bundle update
+
+# Important Files
+- _config.yml: Main configuration file for Jekyll
+- index.html: Homepage of the site
+- _posts/: Directory for blog posts
+- _includes/: Directory for reusable content snippets
+- css/main.scss: Main stylesheet for the site
+
+# Notes
+- Make sure to run `bundle install` after cloning the repository to install dependencies.
+- Use `bundle exec` before Jekyll commands to ensure the correct version is used.
