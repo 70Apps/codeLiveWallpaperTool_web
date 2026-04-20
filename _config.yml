@@ -62,5 +62,5 @@ plugins:
 #   - vendor/gems/
 #   - vendor/ruby/
 
-paginate: 12
+paginate: 4
 paginate_path: "/page-:num/"

@@ -10,7 +10,7 @@ orderid: 2
 
 <link rel="stylesheet" href="style.css">
 
-<main class="tool-page">
+<main class="tool-page webapp-design-system">
   <!-- Hero Section -->
   <section class="tool-hero">
     <div class="tool-logo">
@@ -59,7 +59,6 @@ orderid: 2
     </div>
 
     <div class="preview-export-container">
-      <div class="device-card-single" id="preview-grid">
       <div class="device-card-single" id="preview-grid">
         <!-- Best match device card will be shown here -->
         <div class="device-card hidden" data-device="iphone">
@@ -192,23 +191,23 @@ orderid: 2
       </div>
 
       <!-- Export Panel -->
-      <div class="export-panel" id="export-section">
-        <div class="format-selector">
+      <div class="export-panel vertical" id="export-section">
+        <div class="format-selector centered">
           <label class="format-label">Export Format</label>
-          <div class="format-toggle">
-            <button type="button" class="format-btn" data-format="png">
+          <div class="format-toggle full-width">
+            <button type="button" class="format-btn flex-equal" data-format="png">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
               </svg>
               PNG
             </button>
-            <button type="button" class="format-btn" data-format="jpeg">
+            <button type="button" class="format-btn flex-equal" data-format="jpeg">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="12" cy="12" r="10"/>
               </svg>
               JPEG
             </button>
-            <button type="button" class="format-btn active" data-format="webp">
+            <button type="button" class="format-btn flex-equal active" data-format="webp">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polygon points="12 2 2 7 12 12 22 7 12 2"/>
                 <polyline points="2 17 12 22 22 17"/>
@@ -221,7 +220,7 @@ orderid: 2
           <input type="hidden" id="image-format" value="webp">
         </div>
 
-        <button type="button" id="download-button" class="btn-download-main">
+        <button type="button" id="download-button" class="btn-download-main full-width">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
             <polyline points="7 10 12 15 17 10"/>
