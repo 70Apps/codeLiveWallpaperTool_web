@@ -7,4 +7,6 @@ _site/
 vendor/
 .DS_Store
 _local
-*.DS_Store
+.DS_Store
+**/.DS_Store
+.DS_Store?

@@ -11,73 +11,99 @@ orderid: 5
 <!-- 上传图片，计算最接受的设备比例，截取后，生成图片，支持多格式导出 -->
 
 <link rel="stylesheet" href="style.css">
-<main class="generator">
+<main class="tool-page generator">
   <div class="container">
-    <header class="hero">
-      <h1>Wallpaper Mockup Generator</h1>
-      <p class="lead">Generate mockup images for various devices from a single image.</p>
-    </header>
+    <section class="tool-hero">
+      <div class="tool-logo">
+        <img src="logo.svg" alt="Mockup Generator" width="120" height="120">
+      </div>
+      <div class="section-label">Mockup Generator</div>
+      <h1 class="tool-title">Create Device Mockups from One Image</h1>
+      <p class="tool-desc">Upload a single wallpaper and preview it inside iPhone, iPad, MacBook, and Apple Watch mockups.</p>
+    </section>
 
-    <form id="wallpaper-form" class="controls">
-      <div class="controls-row">
-        <div class="upload-center">
-          <figure class="upload-preview" id="upload-preview-area" title="Click or drag image here">
-            <img id="image-preview" src="" alt="Preview">
-            <figcaption class="visually-hidden">Uploaded image preview</figcaption>
-          </figure>
-          <input type="file" id="image-upload" class="visually-hidden" accept="image/*" required>
+    <hr class="section-divider">
+
+    <section class="tool-section">
+      <div class="step-header">
+        <span class="step-number">1</span>
+        <div class="step-info">
+          <h2 class="step-title">Upload Your Image</h2>
+          <p class="step-desc">Drop or click to browse — supports PNG, JPG, WebP, AVIF</p>
         </div>
       </div>
-    </form>
-    
-    <section id="preview-grid" class="preview-grid" aria-live="polite">
-      <div class="preview-item">
+
+      <div class="upload-area" id="upload-preview-area" title="Click or drag image here">
+        <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/>
+          <line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+        <div class="upload-text">Drop your image here, or click to upload</div>
+        <div class="upload-hint">Recommended: high resolution images for best results</div>
+        <img id="image-preview" class="upload-preview-img" src="" alt="Preview">
+        <input type="file" id="image-upload" class="visually-hidden" accept="image/*" required>
+      </div>
+    </section>
+
+    <section id="preview-grid" class="preview-grid device-grid hidden" aria-live="polite">
+      <div class="preview-item device-card">
         <h3>iPhone</h3>
-        <div class="preview-media">
+        <div class="preview-media device-preview">
           <img id="iphone-preview" src="" alt="iPhone Preview">
         </div>
-        <button type="button" class="download-btn" data-device="iphone">iPhone</button>
+        <button type="button" class="download-btn btn-device-download" data-device="iphone">iPhone</button>
       </div>
-      <div class="preview-item">
+      <div class="preview-item device-card">
         <h3>iPad</h3>
-        <div class="preview-media">
+        <div class="preview-media device-preview">
           <img id="ipad-preview" src="" alt="iPad Preview">
         </div>
-        <button type="button" class="download-btn" data-device="ipad">iPad</button>
+        <button type="button" class="download-btn btn-device-download" data-device="ipad">iPad</button>
       </div>
-      <div class="preview-item">
+      <div class="preview-item device-card">
         <h3>MacBook</h3>
-        <div class="preview-media">
+        <div class="preview-media device-preview">
           <img id="macbook-preview" src="" alt="MacBook Preview">
         </div>
-        <button type="button" class="download-btn" data-device="macbook">MacBook</button>
+        <button type="button" class="download-btn btn-device-download" data-device="macbook">MacBook</button>
       </div>
-      <div class="preview-item">
+      <div class="preview-item device-card">
         <h3>Apple Watch</h3>
-        <div class="preview-media">
+        <div class="preview-media device-preview">
           <img id="applewatch-preview" src="" alt="Apple Watch Preview">
         </div>
-        <button type="button" class="download-btn" data-device="applewatch">Apple Watch</button>
+        <button type="button" class="download-btn btn-device-download" data-device="applewatch">Apple Watch</button>
       </div>
 
     </section>
     
-    <div class="export-section hidden">
-      <div class="format-selector">
-        <label>Export Format</label>
-        <div class="format-toggle" role="tablist" aria-label="Image format">
-          <button type="button" class="format-btn" data-format="png">PNG</button>
-          <button type="button" class="format-btn" data-format="jpeg">JPEG</button>
-          <button type="button" class="format-btn active" data-format="webp">WEBP</button>
+    <section class="tool-section export-section hidden">
+      <div class="step-header">
+        <span class="step-number">2</span>
+        <div class="step-info">
+          <h2 class="step-title">Choose Format & Make Mockup</h2>
+          <p class="step-desc">Select export format and generate the device mockup within your browser.</p>
         </div>
-        <span class="tips">* Upgrade Chrome to Support WebP Format</span>
-        <input type="hidden" id="image-format" value="webp">
       </div>
-      
-      <div class="actions">
-        <button id="button-make-mockup" type="button" class="btn-primary">Make Mockup</button>
+
+      <div class="export-panel">
+        <div class="format-selector format-row">
+          <label>Export Format</label>
+          <div class="format-toggle" role="tablist" aria-label="Image format">
+            <button type="button" class="format-btn" data-format="png">PNG</button>
+            <button type="button" class="format-btn" data-format="jpeg">JPEG</button>
+            <button type="button" class="format-btn active" data-format="webp">WEBP</button>
+          </div>
+          <input type="hidden" id="image-format" value="webp">
+        </div>
+
+        <div class="actions action-with-format">
+          <button id="button-make-mockup" type="button" class="btn-primary">Make Mockup</button>
+          <span class="tips">* Upgrade Chrome to support WebP</span>
+        </div>
       </div>
-    </div>
+    </section>
     
     <section id="mockup-grid" class="mockup-grid hidden" aria-live="polite">
 

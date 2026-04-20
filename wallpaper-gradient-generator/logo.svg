@@ -1,89 +1,45 @@
 <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background Circle -->
-  <circle cx="60" cy="60" r="58" fill="url(#gradient-bg)" opacity="0.12"/>
-  
+  <!-- Background -->
+  <rect x="0" y="0" width="120" height="120" fill="url(#gradient-bg)"/>
+
   <!-- Gradient Definitions -->
   <defs>
     <linearGradient id="gradient-bg" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#8b5cf6"/>
-      <stop offset="100%" stop-color="#a78bfa"/>
+      <stop offset="0%" stop-color="#4c1d95"/>
+      <stop offset="100%" stop-color="#7e22ce"/>
     </linearGradient>
-    <linearGradient id="gradient-main" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
+    <linearGradient id="gradient-main" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
       <stop offset="0%" stop-color="#a78bfa"/>
       <stop offset="100%" stop-color="#8b5cf6"/>
     </linearGradient>
-    <linearGradient id="gradient-cyan" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#06b6d4"/>
-      <stop offset="100%" stop-color="#0891b2"/>
-    </linearGradient>
   </defs>
-  
-  <!-- Source Image Frame (Left) -->
-  <g transform="translate(20, 35)">
-    <rect x="0" y="0" width="32" height="40" rx="3" fill="url(#gradient-main)" opacity="0.9">
-      <animate attributeName="opacity" values="0.7;0.9;0.7" dur="3s" repeatCount="indefinite"/>
-    </rect>
-    <rect x="2" y="2" width="28" height="36" rx="2" fill="#0a0a0a"/>
-    <!-- Image icon inside -->
-    <rect x="8" y="8" width="16" height="16" rx="2" fill="none" stroke="#a78bfa" stroke-width="1.5"/>
-    <circle cx="12" cy="12" r="1.5" fill="#a78bfa"/>
-    <path d="M 10 20 L 13 17 L 16 19 L 18 16" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+  <!-- Main Icon -->
+  <g transform="translate(30, 30)">
+    <rect x="0" y="0" width="60" height="60" rx="8" fill="url(#gradient-main)" opacity="0.9"/>
+    <path d="M 10 30 L 30 10 L 50 30 L 30 50 Z" fill="#ffffff" opacity="0.7"/>
   </g>
-  
-  <!-- Conversion Arrow (Center) -->
-  <g transform="translate(60, 55)">
-    <circle cx="0" cy="0" r="12" fill="url(#gradient-main)" opacity="0.2">
-      <animate attributeName="r" values="12;14;12" dur="2s" repeatCount="indefinite"/>
-    </circle>
-    <path d="M -8 0 L 4 0 M 0 -4 L 4 0 L 0 4" stroke="url(#gradient-main)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-      <animateTransform attributeName="transform" type="translate" values="0 0; 2 0; 0 0" dur="1.5s" repeatCount="indefinite"/>
-    </path>
+
+  <!-- Gradient Palette -->
+  <g transform="translate(80, 40)">
+    <circle cx="0" cy="0" r="10" fill="#a78bfa"/>
+    <circle cx="8" cy="8" r="10" fill="#8b5cf6" opacity="0.8"/>
+    <circle cx="-8" cy="8" r="10" fill="#c4b5fd" opacity="0.6"/>
   </g>
-  
-  <!-- Target Format Icons (Right) -->
-  <!-- PNG -->
-  <g transform="translate(72, 25)">
-    <rect x="0" y="0" width="20" height="20" rx="2" fill="url(#gradient-cyan)" opacity="0.8">
-      <animate attributeName="opacity" values="0.6;0.8;0.6" dur="3s" begin="0.5s" repeatCount="indefinite"/>
-    </rect>
-    <text x="10" y="14" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="#0a0a0a" text-anchor="middle">PNG</text>
-  </g>
-  
-  <!-- JPEG -->
-  <g transform="translate(72, 50)">
-    <rect x="0" y="0" width="20" height="20" rx="2" fill="url(#gradient-main)" opacity="0.8">
-      <animate attributeName="opacity" values="0.6;0.8;0.6" dur="3s" begin="1s" repeatCount="indefinite"/>
-    </rect>
-    <text x="10" y="14" font-family="Arial, sans-serif" font-size="7" font-weight="bold" fill="#0a0a0a" text-anchor="middle">JPG</text>
-  </g>
-  
-  <!-- WebP -->
-  <g transform="translate(72, 75)">
-    <rect x="0" y="0" width="20" height="20" rx="2" fill="url(#gradient-main)" opacity="0.8">
-      <animate attributeName="opacity" values="0.6;0.8;0.6" dur="3s" begin="1.5s" repeatCount="indefinite"/>
-    </rect>
-    <text x="10" y="14" font-family="Arial, sans-serif" font-size="6" font-weight="bold" fill="#0a0a0a" text-anchor="middle">WebP</text>
-  </g>
-  
-  <!-- Sparkles/Magic Effect -->
-  <g opacity="0.6">
-    <circle cx="50" cy="30" r="1.5" fill="#a78bfa">
-      <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite"/>
-    </circle>
-    <circle cx="70" cy="40" r="1" fill="#06b6d4">
-      <animate attributeName="opacity" values="0;1;0" dur="2s" begin="0.5s" repeatCount="indefinite"/>
-    </circle>
-    <circle cx="55" cy="85" r="1.5" fill="#a78bfa">
-      <animate attributeName="opacity" values="0;1;0" dur="2s" begin="1s" repeatCount="indefinite"/>
-    </circle>
-    <circle cx="95" cy="60" r="1" fill="#06b6d4">
-      <animate attributeName="opacity" values="0;1;0" dur="2s" begin="1.5s" repeatCount="indefinite"/>
-    </circle>
-  </g>
-  
-  <!-- Glow Effect -->
-  <circle cx="60" cy="60" r="58" fill="none" stroke="url(#gradient-main)" stroke-width="0.5" opacity="0.2">
-    <animate attributeName="r" values="58;62;58" dur="4s" repeatCount="indefinite"/>
-    <animate attributeName="opacity" values="0.2;0.4;0.2" dur="4s" repeatCount="indefinite"/>
+
+  <!-- Dynamic Effects -->
+  <circle cx="60" cy="60" r="40" fill="none" stroke="url(#gradient-main)" stroke-width="2" opacity="0.4">
+    <animate attributeName="r" values="40;45;40" dur="4s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.4;0.6;0.4" dur="4s" repeatCount="indefinite"/>
   </circle>
+
+  <!-- Sparkles -->
+  <g opacity="0.6">
+    <circle cx="40" cy="80" r="2" fill="#ffffff">
+      <animate attributeName="r" values="2;3;2" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="80" cy="30" r="1.5" fill="#ffffff">
+      <animate attributeName="r" values="1.5;2;1.5" dur="2s" begin="1s" repeatCount="indefinite"/>
+    </circle>
+  </g>
 </svg>

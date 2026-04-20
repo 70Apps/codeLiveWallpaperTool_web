@@ -66,7 +66,7 @@ function initBackgroundSelectors() {
 initBackgroundSelectors();
 
 // Drag and Drop functionality
-const uploadPreview = document.querySelector('.upload-preview');
+const uploadPreview = document.querySelector('.upload-area');
 const imageUploadInput = document.getElementById('image-upload');
 
 // Prevent default drag behaviors on the entire document
@@ -130,7 +130,7 @@ function handleImageFile(file) {
         img.src = e.target.result;
         // set preview image src and manage load/error UI
         const previewImg = document.getElementById('image-preview');
-        attachPreviewListeners(previewImg, document.querySelector('.upload-preview'));
+        attachPreviewListeners(previewImg, document.querySelector('.upload-area'));
         previewImg.src = img.src;
     }
     reader.readAsDataURL(file);
@@ -218,8 +218,8 @@ function generateWallpapers(img) {
         canvas.width = 0;
         canvas.height = 0;
     }
-    // reveal preview area and download-all button after generation
-    // if (previewGrid) previewGrid.classList.remove('hidden');
+    // reveal preview area and export controls after generation
+    if (previewGrid) previewGrid.classList.remove('hidden');
     if (exportSection) exportSection.classList.remove('hidden');
     
     makeMockupPreview()
