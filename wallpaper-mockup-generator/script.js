@@ -222,7 +222,8 @@ function generateWallpapers(img) {
     if (previewGrid) previewGrid.classList.remove('hidden');
     if (exportSection) exportSection.classList.remove('hidden');
     
-    makeMockupPreview()
+    // Don't auto-generate mockup - let user click the button
+    // makeMockupPreview() is now triggered by button click only
 }
 
 // 添加单个设备壁纸下载功能
@@ -484,10 +485,23 @@ function saveAs(blob, filename) {
 function makeMockupPreview() {
     // check device preview images are available
     const previewImg = document.getElementById('iphone-preview');
-    if(!previewImg.src) {
-        alert('Please upload an image and generate wallpapers before making a mockup.');
+    if(!previewImg || !previewImg.src) {
+        alert('Please upload an image first.');
         return;
     }
+    
+    // Show loading state on button
+    const makeMockupBtn = document.getElementById('button-make-mockup');
+    if (makeMockupBtn) {
+        makeMockupBtn.disabled = true;
+        makeMockupBtn.innerHTML = `
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 8px; animation: spin 1s linear infinite;">
+                <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+            </svg>
+            Generating...
+        `;
+    }
+    
     // new canvas for mockup, add preview image
     const mockupImg = document.getElementById('mockup-image-preview');
     const mockupCanvas = document.createElement('canvas');
@@ -496,18 +510,13 @@ function makeMockupPreview() {
     mockupCanvas.height = size;
     const ctx = mockupCanvas.getContext('2d');
 
-    // white background
-    // ctx.fillStyle = '#FFF';
-    // ctx.fillRect(0,0,size,size);
-
     // update background by mockup_background_current
-    // like { a: '#ff7a18', b: '#af002d', deg: 180 }
     const bg = mockup_background_current;
-    const gradient = ctx.createLinearGradient(0,0,size,size);
+    const gradient = ctx.createLinearGradient(0, 0, size, size);
     gradient.addColorStop(0, bg.a);
     gradient.addColorStop(1, bg.b);
     ctx.fillStyle = gradient;
-    ctx.fillRect(0,0,size,size);
+    ctx.fillRect(0, 0, size, size);
 
     
     const sizes = DEVICE_SIZES;
@@ -531,10 +540,10 @@ function makeMockupPreview() {
                 ctx.save();
                 roundedRect(ctx, x, y, destW, destH, preset.roundCorners);
                 ctx.clip();
-                ctx.drawImage(img, 0,0, img.width, img.height, x, y, destW, destH);
+                ctx.drawImage(img, 0, 0, img.width, img.height, x, y, destW, destH);
                 ctx.restore();
             } else {
-                ctx.drawImage(img, 0,0, img.width, img.height, x, y, destW, destH);
+                ctx.drawImage(img, 0, 0, img.width, img.height, x, y, destW, destH);
             }
         } catch (e) {
             console.warn('Failed to draw device in mockup:', device, e);
@@ -542,24 +551,58 @@ function makeMockupPreview() {
     });
     
     Promise.all(drawPromises).then(() => {
-        const dataURL = mockupCanvas.toDataURL('image/png');
-        mockupImg.src = dataURL;
         // add foreground overlay if available
         loadImage('appledevicesmockup.png').then(overlayImg => {
             ctx.drawImage(overlayImg, 0, 0, size, size);
             const finalDataURL = mockupCanvas.toDataURL('image/png');
+            
+            // Set image source and handle load event
+            mockupImg.onload = () => {
+                console.log('Mockup image loaded successfully');
+            };
+            mockupImg.onerror = () => {
+                console.error('Failed to load mockup image');
+            };
             mockupImg.src = finalDataURL;
         }).catch(() => {
             console.warn('appledevicesmockup.png not found or failed to load');
+            const dataURL = mockupCanvas.toDataURL('image/png');
+            
+            // Set image source even without overlay
+            mockupImg.onload = () => {
+                console.log('Mockup image loaded successfully (no overlay)');
+            };
+            mockupImg.onerror = () => {
+                console.error('Failed to load mockup image');
+            };
+            mockupImg.src = dataURL;
         });
-        // show mockup section
+        
+        // Show mockup section (includes preview, background selector, and export format)
         const mockupSection = document.getElementById('mockup-grid');
         if (mockupSection) {
             mockupSection.classList.remove('hidden');
         }
+        
+        // Show download button
         const downloadBtn = document.getElementById('button-download-mockup');
         if (downloadBtn) {
             downloadBtn.classList.remove('hidden');
+            // Scroll to download button smoothly
+            setTimeout(() => {
+                downloadBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 300);
+        }
+
+        // Reset button state
+        if (makeMockupBtn) {
+            makeMockupBtn.disabled = false;
+            makeMockupBtn.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 8px;">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                </svg>
+                Make Mockup
+            `;
         }
     });
 }

@@ -732,6 +732,56 @@
   cursor: pointer;
 }
 
+.btn-download-all,
+.btn-download-main {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--gallery-purple);
+  color: var(--pure-white);
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  font-family: var(--font-sans);
+  
+  &:hover {
+    background: var(--purple-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(139,92,246,0.3);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+  
+  // Main download button with stronger shadow
+  &.btn-download-main {
+    padding: 14px 32px;
+    font-size: 16px;
+    box-shadow: 0 4px 12px rgba(139,92,246,0.3);
+    
+    &:hover {
+      box-shadow: 0 6px 20px rgba(139,92,246,0.4);
+    }
+  }
+  
+  // Full width modifier
+  &.full-width {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
 // ============================================
 // Responsive Breakpoints
 // ============================================
@@ -1291,6 +1341,94 @@ body.advanced-mode {
 }
 
 // ============================================
+// Format Selector Component
+// ============================================
+
+.format-selector {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  
+  // Center alignment modifier
+  &.centered {
+    align-items: center;
+    text-align: center;
+  }
+}
+
+.format-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pure-white);
+  margin-bottom: 4px;
+}
+
+.format-toggle {
+  display: inline-flex;
+  background: var(--surface-base);
+  padding: 4px;
+  border-radius: 8px;
+  border: var(--border-whisper);
+  gap: 4px;
+  width: fit-content;
+  
+  // Full width modifier
+  &.full-width {
+    width: 100%;
+  }
+}
+
+.format-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: var(--white-60);
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 13px;
+  transition: all 0.15s;
+  font-family: var(--font-sans);
+  
+  &:hover {
+    background: var(--surface-hover);
+    color: var(--pure-white);
+  }
+  
+  &.active {
+    background: var(--gallery-purple);
+    color: var(--pure-white);
+  }
+  
+  &.disabled,
+  &[disabled] {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  
+  // Flex modifier for equal width buttons
+  &.flex-equal {
+    flex: 1;
+    justify-content: center;
+  }
+  
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.format-hint {
+  font-size: 13px;
+  color: var(--white-40);
+  margin: 0;
+}
+
+// ============================================
 // Responsive Updates for New Components
 // ============================================
 
@@ -1411,5 +1549,225 @@ body.advanced-mode {
   .btn-export {
     width: 100%;
     justify-content: center;
+  }
+}
+
+// ============================================
+// Mockup Grid Component (Mockup Generator)
+// ============================================
+
+.mockup-grid {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 32px;
+  padding: 48px 32px;
+  background: var(--surface-base);
+  border-top: var(--border-whisper);
+}
+
+.mockup-item {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--pure-white);
+    margin: 0;
+    letter-spacing: -0.25px;
+  }
+}
+
+.mockup-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.mockup-item-media {
+  background: var(--surface-card);
+  border: var(--border-whisper);
+  border-radius: 16px;
+  padding: 24px;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  
+  img {
+    width: 100%;
+    height: auto;
+    max-height: 600px;
+    object-fit: contain;
+    border-radius: 12px;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+    
+    // Fade in effect when src changes
+    &[src=""] {
+      opacity: 0;
+    }
+  }
+  
+  // Placeholder when no image
+  &::before {
+    content: 'Mockup preview will appear here';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--white-40);
+    font-size: 14px;
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  // Hide placeholder when image has valid src
+  &:has(img[src]:not([src=""]))::before {
+    display: none;
+  }
+}
+
+.mockup-item-background-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--pure-white);
+    margin: 0;
+    letter-spacing: -0.25px;
+  }
+}
+
+.mockup-export-format {
+  background: var(--surface-card);
+  border: var(--border-whisper);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  
+  .format-selector {
+    margin: 0;
+    
+    .format-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--white-60);
+      margin-bottom: 12px;
+      display: block;
+    }
+    
+    .format-toggle {
+      margin-bottom: 8px;
+    }
+    
+    .format-hint {
+      font-size: 12px;
+      color: var(--white-40);
+      margin-top: 8px;
+      text-align: center;
+    }
+  }
+  
+  .btn-download-main {
+    margin-top: 8px;
+  }
+}
+
+#mockup-item-background-list {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+
+.mockup-bg-btn {
+  aspect-ratio: 1;
+  border: 2px solid var(--white-06);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+    border-color: rgba(139,92,246,0.30);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+  
+  // Active/selected state
+  &.active {
+    border-color: var(--gallery-purple);
+    box-shadow: 0 0 0 3px rgba(139,92,246,0.20);
+  }
+}
+
+@media (max-width: 1024px) {
+  .mockup-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 32px 20px;
+  }
+  
+  .mockup-sidebar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  
+  #mockup-item-background-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .mockup-grid {
+    padding: 24px 16px;
+    gap: 20px;
+  }
+  
+  .mockup-sidebar {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .mockup-item-media {
+    min-height: 300px;
+    padding: 16px;
+  }
+  
+  #mockup-item-background-list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  
+  .mockup-bg-btn {
+    border-radius: 8px;
+  }
+  
+  .mockup-export-format {
+    padding: 16px;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
