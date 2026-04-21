@@ -149,7 +149,8 @@ const angleValue = document.getElementById('angle-value');
 const imagePreview = document.getElementById('image-preview');
 const formatHidden = document.getElementById('image-format');
 // nodes for preview grid and download-all
-const previewGrid = document.getElementById('preview-grid');
+const previewSection = document.getElementById('preview-section');
+const exportSection = document.getElementById('export-section');
 const downloadAllBtn = document.getElementById('download-button');
 
 // store last canvases for downloads
@@ -212,13 +213,13 @@ function generatePreviews() {
         const data = canvas.toDataURL(mime, quality);
         const imgEl = document.getElementById(`${key}-preview`);
         if (imgEl) {
-            attachPreviewListeners(imgEl, imgEl.closest('.preview-item'));
+            attachPreviewListeners(imgEl, imgEl.closest('.device-card'));
             imgEl.src = data;
         }
     }
-    // reveal preview area and download-all button after generation
-    if (previewGrid) previewGrid.classList.remove('hidden');
-    if (downloadAllBtn) downloadAllBtn.classList.remove('hidden');
+    // reveal preview and export sections after generation
+    if (previewSection) previewSection.classList.remove('hidden');
+    if (exportSection) exportSection.classList.remove('hidden');
 }
 
 // wire events (no automatic preview generation; use toolbar button)
@@ -266,7 +267,7 @@ function initFormatToggles() {
 }
 
 // single-device download
-document.querySelectorAll('.download-btn').forEach(btn => {
+document.querySelectorAll('.btn-device-download').forEach(btn => {
     btn.addEventListener('click', () => {
         const device = btn.getAttribute('data-device');
         if (!device) return;
@@ -317,10 +318,6 @@ if (redoBtn) redoBtn.addEventListener('click', () => doRedo());
 
 // init format toggles after DOM ready
 initFormatToggles();
-
-// hide previews and download-all on init
-if (previewGrid) previewGrid.classList.add('hidden');
-if (downloadAllBtn) downloadAllBtn.classList.add('hidden');
 
 // Download All (zip) - build canvases for each device and package
 if (downloadAllBtn) {
