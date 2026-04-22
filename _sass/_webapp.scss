@@ -1786,7 +1786,7 @@ body.advanced-mode {
 
 .recommend {
   width: 100%;
-  height: 100px;
+  height: 200px;
   overflow-x: scroll;
   
   &::-webkit-scrollbar {
@@ -2021,6 +2021,99 @@ body.advanced-mode {
   }
 }
 
+/* Preset Gradients Grid Layout */
+.preset-gradients {
+  margin-top: 8px;
+}
+
+.recommend-grid {
+  width: 100%;
+}
+
+.recommend {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+  gap: 8px;
+  max-height: 280px;
+  overflow-y: auto;
+  padding: 4px;
+  
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: var(--surface-base);
+    border-radius: 3px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: rgba(139, 92, 246, 0.3);
+    border-radius: 3px;
+    
+    &:hover {
+      background: rgba(139, 92, 246, 0.5);
+    }
+  }
+}
+
+.recommend-list {
+  display: contents; /* Allows children to participate in parent grid */
+}
+
+/* Individual Recommendation Swatch Button - Compact Grid Style */
+.recommend-swatch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 6px;
+  border-radius: 8px;
+  border: 1px solid var(--white-06);
+  background: rgba(255, 255, 255, 0.01);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  aspect-ratio: 1;
+  
+  &:hover {
+    border-color: rgba(139, 92, 246, 0.40);
+    background: rgba(139, 92, 246, 0.06);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+  }
+  
+  &:focus {
+    outline: 2px solid rgba(139, 92, 246, 0.40);
+    outline-offset: 2px;
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.swatch-preview {
+  width: 100%;
+  height: 100%;
+  max-width: 48px;
+  max-height: 48px;
+  border-radius: 6px;
+  display: block;
+  flex-shrink: 0;
+}
+
+.swatch-meta {
+  font-size: 0.7rem;
+  color: var(--white-40);
+  text-align: center;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* Deprecated: Use .device-grid instead */
 /* Specialized Preview Grid for Gradient Generator
    iPhone spans 3 rows to match combined height of other devices */
 .preview-grid {
@@ -2061,28 +2154,218 @@ body.advanced-mode {
   }
 }
 
+/* iPhone Frame for Gradient Preview */
+.iphone-frame {
+  position: relative;
+  width: 280px;
+  height: 570px;
+  background: #1a1a1a;
+  border-radius: 40px;
+  padding: 12px;
+  box-shadow: 
+    0 0 0 2px #2a2a2a,
+    0 0 0 4px #0a0a0a,
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    inset 0 0 20px rgba(0, 0, 0, 0.3);
+  margin: 0 auto;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 
+      0 0 0 2px #2a2a2a,
+      0 0 0 4px #0a0a0a,
+      0 30px 80px rgba(139, 92, 246, 0.3),
+      inset 0 0 20px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* iPhone Notch */
+  .iphone-notch {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 28px;
+    background: #0a0a0a;
+    border-radius: 0 0 18px 18px;
+    z-index: 10;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 6px;
+      background: #1a1a1a;
+      border-radius: 3px;
+    }
+  }
+  
+  /* Screen Area */
+  .color-swatch {
+    width: 100%;
+    height: 100%;
+    border-radius: 32px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Side Buttons */
+  &::before {
+    content: '';
+    position: absolute;
+    right: -6px;
+    top: 120px;
+    width: 4px;
+    height: 60px;
+    background: linear-gradient(to bottom, #2a2a2a, #1a1a1a);
+    border-radius: 0 2px 2px 0;
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    left: -6px;
+    top: 100px;
+    width: 4px;
+    height: 30px;
+    background: linear-gradient(to bottom, #2a2a2a, #1a1a1a);
+    border-radius: 2px 0 0 2px;
+    box-shadow: 0 50px 0 #1a1a1a, 0 90px 0 #1a1a1a;
+  }
+}
+
+/* Gradient Workspace - Left-Right Layout */
+.gradient-workspace {
+  display: grid;
+  grid-template-columns: minmax(320px, 480px) 1fr;
+  gap: 40px;
+  align-items: start;
+  margin-top: 24px;
+}
+
+.gradient-preview-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: sticky;
+  top: 24px;
+}
+
+.gradient-controls-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.section-subtitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pure-white);
+  margin-bottom: 12px;
+  display: block;
+}
+
+.preset-gradients {
+  margin-top: 8px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface-base);
+  color: var(--white-80);
+  border: var(--border-whisper);
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: var(--font-sans);
+  
+  &:hover {
+    background: var(--surface-hover);
+    color: var(--pure-white);
+    border-color: rgba(139, 92, 246, 0.30);
+  }
+  
+  &:active {
+    transform: scale(0.98);
+  }
+  
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.btn-icon-only {
+  padding: 10px;
+  min-width: 40px;
+  justify-content: center;
+}
+
+.btn-generate-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(135deg, var(--gallery-purple), var(--purple-dark));
+  color: var(--pure-white);
+  border: none;
+  border-radius: 12px;
+  padding: 18px 32px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font-sans);
+  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4);
+  margin-top: 8px;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.6);
+    background: linear-gradient(135deg, var(--purple-dark), #6b21a8);
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
+  }
+  
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
 // ============================================
 // Responsive Updates for Gradient Generator
 // ============================================
 
 @media (max-width: 1024px) {
-  .preview-grid {
-    grid-template-columns: repeat(2, 1fr);
-    
-    > .device-card:first-child {
-      grid-column: auto;
-      grid-row: auto;
-    }
-    
-    > .device-card:not(:first-child) {
-      grid-column: auto;
-    }
-    
-    > .device-card:nth-child(2),
-    > .device-card:nth-child(3),
-    > .device-card:nth-child(4) {
-      grid-row: auto;
-    }
+  .gradient-workspace {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  
+  .gradient-preview-area {
+    position: static;
+    order: -1;
   }
   
   .controls-row {
@@ -2102,6 +2385,30 @@ body.advanced-mode {
 }
 
 @media (max-width: 640px) {
+  .gradient-workspace {
+    gap: 24px;
+  }
+  
+  .gradient-controls-panel {
+    gap: 20px;
+  }
+  
+  /* Preset Gradients Grid - Mobile Adjustments */
+  .recommend {
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+    gap: 6px;
+    max-height: 240px;
+  }
+  
+  .swatch-preview {
+    max-width: 40px;
+    max-height: 40px;
+  }
+  
+  .swatch-meta {
+    font-size: 0.65rem;
+  }
+  
   .gradient-controls {
     .colors {
       input[type="color"] {
@@ -2114,6 +2421,52 @@ body.advanced-mode {
   .upload-preview {
     max-width: 100%;
     margin: 0 auto;
+  }
+  
+  /* iPhone Frame Responsive Adjustments */
+  .iphone-frame {
+    width: 220px;
+    height: 450px;
+    border-radius: 34px;
+    padding: 9px;
+    
+    .iphone-notch {
+      width: 90px;
+      height: 22px;
+      
+      &::before {
+        width: 45px;
+        height: 5px;
+      }
+    }
+    
+    .color-swatch {
+      border-radius: 26px;
+    }
+    
+    &::before {
+      right: -4px;
+      top: 90px;
+      width: 3px;
+      height: 45px;
+    }
+    
+    &::after {
+      left: -4px;
+      top: 78px;
+      width: 3px;
+      height: 22px;
+      box-shadow: 0 38px 0 #1a1a1a, 0 68px 0 #1a1a1a;
+    }
+  }
+  
+  .action-buttons {
+    justify-content: center;
+  }
+  
+  .btn-generate-primary {
+    padding: 16px 24px;
+    font-size: 16px;
   }
   
   .toolbar {
