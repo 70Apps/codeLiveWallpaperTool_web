@@ -15,9 +15,8 @@ title: locklive livewallpaper
 <section class="section" id="tools">
   <div class="section-label">Core Tools</div>
   <h2 class="section-title">All-in-One Wallpaper Toolkit</h2>
-  
-  {% assign webAppList = site.pages | sort: 'orderid' %}
   <div class="tools-grid">
+  {% assign webAppList = site.pages | sort: 'orderid' %}
     {% for page in webAppList %}
       {% if page.layout == "web-app" %}
         <a class="tool-card" href="{{ page.url | remove: "index.html" }}">
