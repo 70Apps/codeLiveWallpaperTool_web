@@ -1,0 +1,25 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="60" cy="60" r="56" fill="url(#gradient)" fill-opacity="0.12"/>
+  <circle cx="60" cy="60" r="56" stroke="url(#gradient)" stroke-width="2"/>
+  
+  <path d="M60 20V40M60 80V100M20 60H40M80 60H100" stroke="url(#gradient)" stroke-width="3" stroke-linecap="round"/>
+  
+  <path d="M85 35L60 60L35 35" stroke="url(#gradient)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M35 85L60 60L85 85" stroke="url(#gradient)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <circle cx="60" cy="60" r="20" stroke="url(#gradient)" stroke-width="2"/>
+  
+  <path d="M60 60L80 50" stroke="url(#gradient)" stroke-width="2" stroke-linecap="round"/>
+  <path d="M60 60L80 70" stroke="url(#gradient)" stroke-width="2" stroke-linecap="round"/>
+  <path d="M60 60L40 50" stroke="url(#gradient)" stroke-width="2" stroke-linecap="round"/>
+  <path d="M60 60L40 70" stroke="url(#gradient)" stroke-width="2" stroke-linecap="round"/>
+  
+  <circle cx="60" cy="60" r="8" fill="url(#gradient)"/>
+  
+  <defs>
+    <linearGradient id="gradient" x1="10" y1="10" x2="110" y2="110" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#06b6d4"/>
+      <stop offset="1" stop-color="#8b5cf6"/>
+    </linearGradient>
+  </defs>
+</svg>

@@ -1,0 +1,210 @@
+---
+layout: web-app
+title: Wallpaper Rotate Tool
+description: Upload an image and instantly get 5 variations - rotated and flipped
+permalink: /wallpaper-rotate-tool/
+tags: [Rotate, Edit, DIY]
+color: cyan
+orderid: 11
+---
+
+<main class="tool-page">
+  <!-- Hero Section -->
+  <section class="tool-hero">
+    <div class="tool-logo">
+      <img src="logo.svg" alt="Rotate Tool" width="120" height="120">
+    </div>
+    <div class="section-label">Rotate Tool</div>
+    <h1 class="tool-title">Rotate Your Wallpapers Perfectly</h1>
+    <p class="tool-desc">Upload an image and instantly get 5 variations - rotated and flipped</p>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- Step 1: Upload -->
+  <section class="tool-section">
+    <div class="step-header">
+      <span class="step-number">1</span>
+      <div class="step-info">
+        <h2 class="step-title">Upload Your Image</h2>
+        <p class="step-desc">Drag & drop or click to browse — supports PNG, JPG, WebP, AVIF</p>
+      </div>
+    </div>
+
+    <div class="upload-area" id="upload-preview-area">
+      <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="17 8 12 3 7 8"/>
+        <line x1="12" y1="3" x2="12" y2="15"/>
+      </svg>
+      <div class="upload-text">Drop your image here, or click to upload</div>
+      <div class="upload-hint">Recommended: High resolution images (2000px+) for best results</div>
+      <img id="image-preview" class="upload-preview-img" src="" alt="Preview">
+      <input type="file" id="image-upload" class="visually-hidden" accept="image/*" required>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- Step 2: Generated Results -->
+  <section class="tool-section" id="results-section">
+    <div class="step-header">
+      <span class="step-number">2</span>
+      <div class="step-info">
+        <h2 class="step-title">Generated Variations</h2>
+        <p class="step-desc">Five variations ready for all your devices — no adjustments needed</p>
+      </div>
+    </div>
+
+    <div class="variations-container" id="variations-container">
+      <!-- Variation 1: -90° -->
+      <div class="variation-card" data-variation="rotate-90">
+        <div class="variation-header">
+          <span class="variation-label">Rotate -90°</span>
+          <span class="variation-badge">Portrait</span>
+        </div>
+        <div class="variation-preview">
+          <img id="rotate-90-preview" src="" alt="Rotate -90° Preview">
+        </div>
+        <button type="button" class="download-single-btn" title="Download this variation">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download
+        </button>
+      </div>
+
+      <!-- Variation 2: 90° -->
+      <div class="variation-card" data-variation="rotate-270">
+        <div class="variation-header">
+          <span class="variation-label">Rotate 90°</span>
+          <span class="variation-badge">Portrait</span>
+        </div>
+        <div class="variation-preview">
+          <img id="rotate-270-preview" src="" alt="Rotate 90° Preview">
+        </div>
+        <button type="button" class="download-single-btn" title="Download this variation">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download
+        </button>
+      </div>
+
+      <!-- Variation 3: 180° -->
+      <div class="variation-card" data-variation="rotate-180">
+        <div class="variation-header">
+          <span class="variation-label">Rotate 180°</span>
+          <span class="variation-badge">Upside Down</span>
+        </div>
+        <div class="variation-preview">
+          <img id="rotate-180-preview" src="" alt="Rotate 180° Preview">
+        </div>
+        <button type="button" class="download-single-btn" title="Download this variation">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download
+        </button>
+      </div>
+
+      <!-- Variation 4: Horizontal Flip -->
+      <div class="variation-card" data-variation="flip-x">
+        <div class="variation-header">
+          <span class="variation-label">Horizontal Flip</span>
+          <span class="variation-badge">Mirror X</span>
+        </div>
+        <div class="variation-preview">
+          <img id="flip-x-preview" src="" alt="Horizontal Flip Preview">
+        </div>
+        <button type="button" class="download-single-btn" title="Download this variation">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download
+        </button>
+      </div>
+
+      <!-- Variation 5: Vertical Flip -->
+      <div class="variation-card" data-variation="flip-y">
+        <div class="variation-header">
+          <span class="variation-label">Vertical Flip</span>
+          <span class="variation-badge">Mirror Y</span>
+        </div>
+        <div class="variation-preview">
+          <img id="flip-y-preview" src="" alt="Vertical Flip Preview">
+        </div>
+        <button type="button" class="download-single-btn" title="Download this variation">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- Step 3: Export -->
+  <section class="tool-section" id="export-section">
+    <div class="step-header">
+      <span class="step-number">3</span>
+      <div class="step-info">
+        <h2 class="step-title">Download All</h2>
+        <p class="step-desc">Download all 5 variations as a ZIP file</p>
+      </div>
+    </div>
+
+    <div class="export-panel">
+      <div class="format-selector">
+        <label class="format-label">Export Format</label>
+        <div class="format-toggle">
+          <button type="button" class="format-btn" data-format="png">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            </svg>
+            PNG
+          </button>
+          <button type="button" class="format-btn" data-format="jpeg">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+            </svg>
+            JPEG
+          </button>
+          <button type="button" class="format-btn active" data-format="webp">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+              <polyline points="2 17 12 22 22 17"/>
+              <polyline points="2 12 12 17 22 12"/>
+            </svg>
+            WebP
+          </button>
+        </div>
+        <div class="format-hint">WebP offers best compression with high quality</div>
+        <input type="hidden" id="image-format" value="webp">
+      </div>
+
+      <button type="button" id="download-button" class="btn-download-all">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Download All as ZIP
+      </button>
+    </div>
+  </section>
+</main>
+
+<script src="script.js"></script>

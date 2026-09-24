@@ -2498,3 +2498,114 @@ body.advanced-mode {
   }
 }
 
+// ============================================
+// Wallpaper Rotate Tool Components
+// ============================================
+
+/* Variations Container */
+.variations-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.variation-card {
+  background: var(--surface-card);
+  border: var(--border-whisper);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.2s;
+  
+  &:hover {
+    box-shadow: var(--shadow-hover);
+    border-color: rgba(139, 92, 246, 0.20);
+  }
+}
+
+.variation-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: var(--surface-hover);
+  border-bottom: var(--border-whisper);
+}
+
+.variation-label {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--pure-white);
+}
+
+.variation-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  background: var(--purple-surface);
+  color: var(--purple-light);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.variation-preview {
+  padding: 24px;
+  background: var(--surface-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.variation-preview img {
+  max-width: 100%;
+  max-height: 400px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  object-fit: contain;
+}
+
+.variation-preview img.loaded {
+  opacity: 1;
+}
+
+// ============================================
+// Individual Download Button for Variations
+// ============================================
+
+.download-single-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: calc(100% - 48px);
+  margin: 0 24px 24px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, var(--purple-dark), var(--brand-color));
+  color: var(--pure-white);
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: rgba(139, 92, 246, 0.3) 0px 4px 12px;
+  
+  svg {
+    flex-shrink: 0;
+  }
+  
+  &:hover {
+    background: linear-gradient(135deg, var(--brand-color), var(--purple-light));
+    box-shadow: rgba(139, 92, 246, 0.5) 0px 6px 20px;
+    transform: translateY(-2px);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+  
+  &:focus {
+    outline: 2px solid var(--purple-light);
+    outline-offset: 2px;
+  }
+}
+
