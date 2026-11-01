@@ -1,0 +1,378 @@
+---
+layout: web-app
+title: iPhone Duo 壁纸拼贴
+description: 上传外屏 / 内屏竖 / 内屏横三张壁纸，一键拼接成一张整图，用一张图实现折叠屏三屏不同的专属壁纸。
+permalink: /wallpaper-iphone-duo-collage/
+tags: [iPhone, Foldable, Wallpaper]
+color: purple
+orderid: 9
+---
+
+<main class="tool-page generator">
+  <style>
+    /* ===== iPhone Duo Wallpaper Collage (self-contained styles) ===== */
+    .duo-tool { --duo-purple:#8b5cf6; --duo-purple-light:#a78bfa; --duo-purple-dark:#7c3aed;
+      --duo-cyan:#06b6d4; --duo-surface:#141414; --duo-surface-2:#1a1a1a;
+      --white-80:rgba(255,255,255,0.80); --white-60:rgba(255,255,255,0.60);
+      --white-40:rgba(255,255,255,0.40); --white-10:rgba(255,255,255,0.10);
+      --white-06:rgba(255,255,255,0.06); }
+
+    .generator .container { background: var(--duo-surface); border-radius: 24px; padding: 40px;
+      border: 1px solid rgba(255,255,255,0.08); box-shadow: rgba(0,0,0,0.4) 0px 4px 16px 0px; }
+
+    .tool-hero { padding: 56px 32px 44px; text-align: center; }
+    .tool-logo { margin-bottom: 22px; display: inline-block; animation: duo-float 6s ease-in-out infinite; }
+    .tool-logo img { display:block; filter: drop-shadow(0 8px 24px rgba(139,92,246,0.35)); }
+    @keyframes duo-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+    .section-label { font-size:12px; font-weight:600; color:var(--white-40); text-transform:uppercase;
+      letter-spacing:1px; margin-bottom:8px; }
+    .tool-title { font-size:38px; font-weight:700; line-height:1.15; letter-spacing:-1px; color:#fff; margin-bottom:14px; }
+    .tool-desc { font-size:17px; color:var(--white-60); max-width:720px; margin:0 auto; line-height:1.55; }
+    .section-divider { border:none; border-top:var(--white-06); margin:0; }
+    .tool-section { padding:44px 32px; }
+    .step-header { display:flex; align-items:flex-start; gap:16px; margin-bottom:28px; }
+    .step-number { width:40px; height:40px; border-radius:50%; background:rgba(139,92,246,0.12);
+      color:var(--duo-purple-light); display:flex; align-items:center; justify-content:center;
+      font-size:18px; font-weight:700; flex-shrink:0; }
+    .step-title { font-size:23px; font-weight:700; color:#fff; margin:0 0 6px; letter-spacing:-0.5px; }
+    .step-desc { font-size:14px; color:var(--white-60); line-height:1.5; margin:0; }
+
+    /* Upload grid */
+    .duo-upload-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+    .duo-slot { display:flex; flex-direction:column; gap:10px; }
+    .duo-slot-head { display:flex; align-items:baseline; justify-content:space-between; gap:8px; }
+    .duo-slot-title { font-size:16px; font-weight:600; color:#fff; }
+    .duo-slot-size { font-size:12px; font-family:'JetBrains Mono',monospace; color:var(--white-40); }
+    .duo-slot-size b { color:var(--duo-purple-light); font-weight:600; }
+
+    .upload-area { background:var(--duo-surface); border:2px dashed rgba(255,255,255,0.15); border-radius:16px;
+      min-height:300px; padding:28px 18px; display:flex; flex-direction:column; align-items:center;
+      justify-content:center; cursor:pointer; transition:all .2s; text-align:center; position:relative; overflow:hidden; }
+    .upload-area:hover { border-color:rgba(139,92,246,0.45); background:rgba(139,92,246,0.04); }
+    .upload-area.drag-over { border-color:var(--duo-purple); background:rgba(139,92,246,0.10); border-width:3px; }
+    .upload-icon { width:44px; height:44px; color:var(--white-40); margin-bottom:14px; transition:all .2s; }
+    .upload-area:hover .upload-icon { color:var(--duo-purple-light); transform:translateY(-2px); }
+    .upload-text { font-size:15px; font-weight:600; color:var(--white-80); margin-bottom:6px; }
+    .upload-hint { font-size:12px; color:var(--white-40); }
+    .upload-preview-img { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0;
+      transition:opacity .3s; padding:10px; background:#000; }
+    .upload-area.img-loaded .upload-preview-img { opacity:1; }
+    .upload-area.img-loaded .upload-icon,
+    .upload-area.img-loaded .upload-text,
+    .upload-area.img-loaded .upload-hint { display:none; }
+    .upload-area.img-loaded { border-style:solid; border-color:var(--white-10); }
+    .duo-clear { align-self:flex-end; background:transparent; border:1px solid var(--white-10); color:var(--white-60);
+      border-radius:6px; padding:5px 12px; font-size:12px; cursor:pointer; transition:all .15s; font-family:inherit; }
+    .duo-clear:hover { border-color:rgba(244,63,94,0.5); color:#f43f5e; }
+    .duo-progress { margin-top:18px; font-size:13px; color:var(--white-40); min-height:18px; }
+
+    /* Buttons */
+    .actions { display:flex; align-items:center; justify-content:center; gap:16px; flex-wrap:wrap; }
+    .btn-primary { display:inline-flex; align-items:center; gap:8px; background:var(--duo-purple); color:#fff;
+      border:none; border-radius:10px; padding:14px 30px; font-size:16px; font-weight:600; cursor:pointer;
+      transition:all .15s; white-space:nowrap; font-family:inherit; }
+    .btn-primary:hover:not(:disabled) { background:var(--duo-purple-dark); transform:translateY(-1px);
+      box-shadow:0 4px 14px rgba(139,92,246,0.35); }
+    .btn-primary:disabled { opacity:.45; cursor:not-allowed; }
+    .hidden { display:none !important; }
+
+    /* Compose result */
+    .duo-compose-wrap { margin-top:28px; display:grid; grid-template-columns:1fr 320px; gap:22px; align-items:start; }
+    .duo-compose-media { background:var(--duo-surface); border:var(--white-06) 1px solid; border-radius:14px;
+      padding:16px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .duo-compose-inner { position:relative; width:100%; }
+    .duo-compose-inner img { width:100%; height:auto; display:block; border-radius:6px; }
+    .duo-band-label { position:absolute; left:8px; transform:translateY(-50%); background:rgba(10,10,10,0.65);
+      color:#fff; font-size:12px; font-weight:600; padding:3px 10px; border-radius:20px; backdrop-filter:blur(4px);
+      border:1px solid var(--white-10); white-space:nowrap; }
+    .duo-compose-meta { background:var(--duo-surface); border:var(--white-06) 1px solid; border-radius:14px; padding:20px; display:flex; flex-direction:column; gap:14px; }
+    .duo-meta-row { display:flex; justify-content:space-between; gap:12px; font-size:13px; color:var(--white-60); }
+    .duo-meta-row b { color:#fff; font-weight:600; text-align:right; }
+    .duo-meta-row b.duo-mono { font-family:'JetBrains Mono',monospace; }
+
+    /* Format selector */
+    .format-selector { display:flex; flex-direction:column; gap:10px; }
+    .format-label { font-size:14px; font-weight:600; color:#fff; }
+    .format-toggle { display:inline-flex; background:var(--duo-surface-2); padding:4px; border-radius:10px; border:var(--white-06) 1px solid; gap:4px; width:fit-content; }
+    .format-btn { display:inline-flex; align-items:center; gap:6px; background:transparent; border:none; color:var(--white-60);
+      padding:9px 16px; border-radius:7px; cursor:pointer; font-weight:500; font-size:14px; transition:all .15s; font-family:inherit; }
+    .format-btn:hover { background:var(--duo-surface); color:#fff; }
+    .format-btn.active { background:var(--duo-purple); color:#fff; }
+    .format-hint { font-size:12px; color:var(--white-40); }
+    .format-toggle.full-width { width:100%; }
+    .format-toggle.full-width .format-btn { flex:1; justify-content:center; }
+    .visually-hidden { position:absolute !important; width:1px; height:1px; overflow:hidden; clip:rect(1px,1px,1px,1px); white-space:nowrap; }
+    .btn-download-main { display:inline-flex; align-items:center; justify-content:center; gap:8px; background:var(--duo-purple);
+      color:#fff; border:none; border-radius:10px; padding:13px 20px; font-size:15px; font-weight:600; cursor:pointer;
+      transition:all .15s; font-family:inherit; }
+    .btn-download-main:hover { background:var(--duo-purple-dark); }
+    .full-width { width:100%; }
+    .centered { align-items:center; }
+
+    /* Export grid (4 images: 3 cropped screens + collage) */
+    .duo-export-note { font-size:12.5px; color:var(--white-60); line-height:1.5; background:var(--duo-surface-2);
+      border:var(--white-06) 1px solid; border-radius:10px; padding:10px 12px; }
+    .duo-export-note b { color:var(--duo-purple-light); }
+    .duo-export-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:2px; }
+    .duo-export-card { background:var(--duo-surface-2); border:var(--white-06) 1px solid; border-radius:12px;
+      overflow:hidden; display:flex; flex-direction:column; }
+    .duo-export-thumb { width:100%; height:auto; display:block; background:#000; }
+    .duo-export-info { display:flex; justify-content:space-between; align-items:center; gap:8px; padding:9px 12px 5px; }
+    .duo-export-name { font-size:14px; font-weight:600; color:#fff; }
+    .duo-export-dim { font-size:12px; font-family:'JetBrains Mono',monospace; color:var(--duo-purple-light); }
+    .duo-export-dl { margin:0 12px 12px; background:rgba(139,92,246,0.15); color:var(--duo-purple-light);
+      border:1px solid rgba(139,92,246,0.30); border-radius:8px; padding:8px; font-size:13px; font-weight:600;
+      cursor:pointer; font-family:inherit; transition:all .15s; }
+    .duo-export-dl:hover { background:var(--duo-purple); color:#fff; border-color:var(--duo-purple); }
+
+    /* Screen preview */
+    .duo-screen-preview { margin-top:24px; display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+    .phone-frame { position:relative; background:#000; border:7px solid #2a2a2a; border-radius:18px; overflow:hidden; }
+    .phone-frame.phone--outer { aspect-ratio:1398/2034; }
+    .phone-frame.phone--ip { aspect-ratio:1878/2670; }
+    .phone-frame.phone--il { aspect-ratio:2670/1878; }
+    .phone-screen { width:100%; height:100%; background-size:cover; background-position:center; background-color:#111; opacity:0; transition:opacity .3s; }
+    .phone-screen.loaded { opacity:1; }
+    .phone-frame-label { position:absolute; left:0; right:0; bottom:0; padding:8px 10px; font-size:12px; font-weight:600;
+      color:#fff; background:linear-gradient(transparent, rgba(0,0,0,0.7)); display:flex; justify-content:space-between; }
+    .phone-frame-label .sz { font-family:'JetBrains Mono',monospace; color:var(--duo-purple-light); font-weight:500; }
+
+    /* Operation method */
+    .op-steps { list-style:none; counter-reset:op; padding:0; margin:18px 0 0; display:flex; flex-direction:column; gap:14px; }
+    .op-step { counter-increment:op; position:relative; padding:16px 18px 16px 56px; background:var(--duo-surface);
+      border:var(--white-06) 1px solid; border-radius:12px; }
+    .op-step::before { content:counter(op); position:absolute; left:16px; top:16px; width:26px; height:26px; border-radius:50%;
+      background:rgba(139,92,246,0.15); color:var(--duo-purple-light); display:flex; align-items:center; justify-content:center;
+      font-size:13px; font-weight:700; }
+    .op-step h4 { margin:0 0 4px; font-size:15px; color:#fff; font-weight:600; }
+    .op-step p { margin:0; font-size:13.5px; color:var(--white-60); line-height:1.55; }
+    .op-step b { color:var(--duo-purple-light); font-weight:600; }
+    .op-tip { margin-top:18px; padding:14px 18px; border-radius:12px; background:rgba(6,182,212,0.08);
+      border:1px solid rgba(6,182,212,0.25); font-size:13.5px; color:var(--white-80); line-height:1.6; }
+    .op-tip b { color:#22d3ee; }
+
+    @media (max-width:900px){ .duo-compose-wrap{grid-template-columns:1fr;} }
+    @media (max-width:760px){
+      .duo-upload-grid{grid-template-columns:1fr;}
+      .duo-screen-preview{grid-template-columns:1fr; max-width:340px; margin-left:auto; margin-right:auto;}
+      .generator .container{padding:24px 16px;}
+      .tool-section{padding:32px 16px;}
+      .tool-title{font-size:28px;}
+      .tool-hero{padding:40px 12px 28px;}
+    }
+  </style>
+
+  <div class="container duo-tool">
+    <!-- Hero -->
+    <section class="tool-hero">
+      <div class="tool-logo">
+        <img src="logo.svg" alt="iPhone Duo Wallpaper" width="120" height="120">
+      </div>
+      <div class="section-label">iPhone Duo · Foldable</div>
+      <h1 class="tool-title">iPhone Duo 壁纸拼贴</h1>
+      <p class="tool-desc">上传三张壁纸（外屏 / 内屏竖 / 内屏横），一键拼接成一张整图；配合「一张图三屏不同」的设置法，让折叠屏每一面都显示专属画面。</p>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- Step 1: Upload -->
+    <section class="tool-section">
+      <div class="step-header">
+        <span class="step-number">1</span>
+        <div class="step-info">
+          <h2 class="step-title">上传三张壁纸</h2>
+          <p class="step-desc">分别上传外屏、内屏竖、内屏横三张图片，建议分辨率达到目标尺寸以保证清晰度。支持 PNG / JPG / WebP。</p>
+        </div>
+      </div>
+
+      <div class="duo-upload-grid">
+        <!-- Outer -->
+        <div class="duo-slot">
+          <div class="duo-slot-head">
+            <span class="duo-slot-title">外屏</span>
+            <span class="duo-slot-size">目标 <b>1398×2034</b></span>
+          </div>
+          <div class="upload-area" data-input="outer">
+            <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <div class="upload-text">点击或拖拽上传</div>
+            <div class="upload-hint">Outer Screen · 竖屏</div>
+            <img class="upload-preview-img" data-preview="outer" src="" alt="外屏预览">
+            <input type="file" class="visually-hidden duo-file" data-input="outer" accept="image/*">
+          </div>
+          <button class="duo-clear" data-clear="outer" hidden>清除</button>
+        </div>
+
+        <!-- Inner Portrait -->
+        <div class="duo-slot">
+          <div class="duo-slot-head">
+            <span class="duo-slot-title">内屏竖</span>
+            <span class="duo-slot-size">目标 <b>1878×2670</b></span>
+          </div>
+          <div class="upload-area" data-input="innerPortrait">
+            <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <div class="upload-text">点击或拖拽上传</div>
+            <div class="upload-hint">Inner Screen · 竖屏</div>
+            <img class="upload-preview-img" data-preview="innerPortrait" src="" alt="内屏竖预览">
+            <input type="file" class="visually-hidden duo-file" data-input="innerPortrait" accept="image/*">
+          </div>
+          <button class="duo-clear" data-clear="innerPortrait" hidden>清除</button>
+        </div>
+
+        <!-- Inner Landscape -->
+        <div class="duo-slot">
+          <div class="duo-slot-head">
+            <span class="duo-slot-title">内屏横</span>
+            <span class="duo-slot-size">目标 <b>2670×1878</b></span>
+          </div>
+          <div class="upload-area" data-input="innerLandscape">
+            <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <div class="upload-text">点击或拖拽上传</div>
+            <div class="upload-hint">Inner Screen · 横屏</div>
+            <img class="upload-preview-img" data-preview="innerLandscape" src="" alt="内屏横预览">
+            <input type="file" class="visually-hidden duo-file" data-input="innerLandscape" accept="image/*">
+          </div>
+          <button class="duo-clear" data-clear="innerLandscape" hidden>清除</button>
+        </div>
+      </div>
+
+      <div class="duo-progress" id="duo-progress">已上传 0 / 3 张</div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- Step 2: Compose -->
+    <section class="tool-section">
+      <div class="step-header">
+        <span class="step-number">2</span>
+        <div class="step-info">
+          <h2 class="step-title">拼接成一张图片</h2>
+          <p class="step-desc">按「左上外屏 · 右上内屏竖 · 下方内屏横」拼为一张整图，并自动放大各区域，确保每张都不小于标准尺寸。输出尺寸 3276 × 4548。</p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="btn-compose" class="btn-primary" disabled>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:8px;">
+            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+          </svg>
+          合成一张拼接图
+        </button>
+      </div>
+
+      <div class="duo-compose-wrap hidden" id="compose-wrap">
+        <div class="duo-compose-media">
+          <div class="duo-compose-inner">
+            <img id="compose-preview" src="" alt="拼接预览">
+            <span class="duo-band-label" style="top:8%; left:8px;">外屏</span>
+            <span class="duo-band-label" style="top:8%; right:8px; left:auto;">内屏竖</span>
+            <span class="duo-band-label" style="top:64%; left:8px;">内屏横</span>
+          </div>
+        </div>
+        <div class="duo-compose-meta">
+          <div class="duo-meta-row"><span>拼贴尺寸</span><b class="duo-mono" id="compose-size">3276 × 4548</b></div>
+          <div class="duo-meta-row"><span>布局</span><b>左上外屏 · 右上内屏竖 · 下方内屏横</b></div>
+          <div class="format-selector centered">
+            <label class="format-label">导出格式</label>
+            <div class="format-toggle full-width">
+              <button type="button" class="format-btn flex-equal" data-format="png">PNG</button>
+              <button type="button" class="format-btn flex-equal active" data-format="webp">WebP</button>
+              <button type="button" class="format-btn flex-equal" data-format="jpeg">JPEG</button>
+            </div>
+            <div class="format-hint">WebP 体积小、清晰度高，推荐用于传输</div>
+            <input type="hidden" id="export-format" value="webp">
+          </div>
+          <div class="duo-export-note">导出包含：<b>外屏</b> / <b>内屏竖</b> / <b>内屏横</b>（已裁剪为标准尺寸）+ <b>拼贴图</b>，共 <b>4 张</b>。可单张下载，或一键打包 ZIP。</div>
+          <div class="duo-export-grid" id="export-grid"></div>
+          <button id="btn-zip" class="btn-download-main full-width">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            打包下载 ZIP（4 张）
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- Step 3: Screen preview -->
+    <section class="tool-section">
+      <div class="step-header">
+        <span class="step-number">3</span>
+        <div class="step-info">
+          <h2 class="step-title">三屏对应预览</h2>
+          <p class="step-desc">上传后这里会显示三块屏幕各自将呈现的画面（竖屏 / 竖屏 / 横屏），帮助你确认每张图的位置与构图。</p>
+        </div>
+      </div>
+
+      <div class="duo-screen-preview" id="screen-preview">
+        <div class="phone-frame phone--outer">
+          <div class="phone-screen" data-screen="outer"></div>
+          <span class="phone-frame-label"><span>外屏</span><span class="sz">1398×2034</span></span>
+        </div>
+        <div class="phone-frame phone--ip">
+          <div class="phone-screen" data-screen="innerPortrait"></div>
+          <span class="phone-frame-label"><span>内屏竖</span><span class="sz">1878×2670</span></span>
+        </div>
+        <div class="phone-frame phone--il">
+          <div class="phone-screen" data-screen="innerLandscape"></div>
+          <span class="phone-frame-label"><span>内屏横</span><span class="sz">2670×1878</span></span>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- Operation method -->
+    <section class="tool-section">
+      <div class="step-header">
+        <span class="step-number">★</span>
+        <div class="step-info">
+          <h2 class="step-title">操作方法：一张图，三屏不同</h2>
+          <p class="step-desc">拼接图只是一张长图。借助 iPhone「自定义」壁纸与双指调整，就能让外屏、内屏竖、内屏横分别显示其中对应的那一段。</p>
+        </div>
+      </div>
+
+      <ol class="op-steps">
+        <li class="op-step">
+          <h4>导出 4 张壁纸</h4>
+          <p>点击「合成」后，在右侧选择格式，<b>单张下载</b>外屏 / 内屏竖 / 内屏横（已裁剪为标准尺寸），或一键<b>打包 ZIP</b> 得到全部 4 张。</p>
+        </li>
+        <li class="op-step">
+          <h4>把图片传到 iPhone Duo</h4>
+          <p>通过隔空投送 / 微信 / 数据线，将图片存入相册。建议原图保存，避免压缩导致模糊。</p>
+        </li>
+        <li class="op-step">
+          <h4>进入壁纸设置</h4>
+          <p>打开「设置 → 墙纸（壁纸）」，为<b>外屏</b>与<b>内屏</b>分别添加墙纸；可先设一处，再「复制」到另一处后单独微调。</p>
+        </li>
+        <li class="op-step">
+          <h4>长按进入自定义</h4>
+          <p>在对应屏幕上，<b>长按</b>锁定 / 主屏壁纸区域进入编辑；点击底部的「<b>自定义（Custom）</b>」。</p>
+        </li>
+        <li class="op-step">
+          <h4>双指调整位置</h4>
+          <p>用<b>双指捏合缩放、拖动</b>，把该屏对应的那张壁纸居中并调整到合适位置，点击「完成」保存。三屏分别设置即可。</p>
+        </li>
+      </ol>
+
+      <div class="op-tip">
+        <b>小提示：</b>如果你更想用「一张图」实现三屏不同，也可以只把<b>拼贴图</b>设为三屏壁纸，再在每屏「自定义」里双指拖动，让对应区域（<b>左上外屏 / 右上内屏竖 / 下方内屏横</b>）进入取景框即可。
+      </div>
+    </section>
+  </div>
+</main>
+
+<script src="script.js"></script>

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" fill="none">
+  <defs>
+    <linearGradient id="duo-outer" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#a78bfa"/>
+      <stop offset="1" stop-color="#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="duo-inner" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#22d3ee"/>
+      <stop offset="1" stop-color="#06b6d4"/>
+    </linearGradient>
+  </defs>
+  <!-- inner screen (landscape, open) -->
+  <rect x="42" y="36" width="68" height="50" rx="10" fill="url(#duo-inner)"/>
+  <!-- outer screen (portrait, folded in front) -->
+  <rect x="22" y="22" width="38" height="76" rx="9" fill="url(#duo-outer)"/>
+  <!-- camera/notch hint on outer -->
+  <rect x="34" y="28" width="14" height="4" rx="2" fill="rgba(255,255,255,0.55)"/>
+  <!-- subtle inner highlight -->
+  <rect x="48" y="42" width="56" height="38" rx="6" fill="rgba(255,255,255,0.12)"/>
+</svg>

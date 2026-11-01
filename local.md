@@ -23,6 +23,11 @@ cp -f GemfileLocal Gemfile
 bundle exec jekyll serve --port 4002 --future
 cp -f GemfileOnline Gemfile
 ~~~
+~~~
+cd /Volumes/User/Github/codeLiveWallpaperTool_web
+export PATH=/opt/homebrew/lib/ruby/gems/3.0.0/bin:$PATH
+bundle exec jekyll serve --port 4002 --future
+~~~
 
  * 访问
 
