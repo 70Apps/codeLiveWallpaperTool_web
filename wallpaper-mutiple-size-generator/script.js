@@ -11,8 +11,12 @@ const downloadAllBtn = document.getElementById('download-button');
 const imageFormatInput = document.getElementById('image-format');
 
 // Device configurations
+// iPhone Duo sizes mirror wallpaper-iphone-duo-collage/script.js (outer 1398×2034, inner 1878×2670, inner landscape 2670×1878)
 const DEVICE_CONFIGS = {
   'iphone': { width: 1440, height: 3118, name: 'iPhone' },
+  'duo-outer': { width: 1398, height: 2034, name: 'iPhone Duo Outer' },
+  'duo-inner-portrait': { width: 1878, height: 2670, name: 'iPhone Duo Inner Portrait' },
+  'duo-inner-landscape': { width: 2670, height: 1878, name: 'iPhone Duo Inner Landscape' },
   'ipad': { width: 2880, height: 2160, name: 'iPad' },
   'macbook': { width: 3840, height: 2160, name: 'MacBook' },
   'applewatch': { width: 2160, height: 2160, name: 'Apple Watch' }
@@ -287,7 +291,7 @@ function downloadSingleWallpaper(deviceKey) {
     const dataURL = canvas.toDataURL(mimeType, quality);
     const link = document.createElement('a');
     link.href = dataURL;
-    link.download = `${config.name.replace(' ', '_')}_wallpaper.${extension}`;
+    link.download = `${config.name.replace(/\s+/g, '_')}_wallpaper.${extension}`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -316,7 +320,7 @@ downloadAllBtn.addEventListener('click', () => {
     if (previewImg && previewImg.src) {
       // Extract base64 data
       const base64Data = previewImg.src.replace(/^data:image\/(png|jpeg|jpg|webp);base64,/, '');
-      const filename = `${config.name.replace(' ', '_')}_wallpaper.${extension}`;
+      const filename = `${config.name.replace(/\s+/g, '_')}_wallpaper.${extension}`;
       zip.file(filename, base64Data, { base64: true });
     }
   });
