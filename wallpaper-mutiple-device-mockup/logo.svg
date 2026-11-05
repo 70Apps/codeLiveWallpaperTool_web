@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" fill="none">
+  <defs>
+    <linearGradient id="mp-body" x1="18" y1="12" x2="104" y2="108" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#a78bfa"/>
+      <stop offset="0.55" stop-color="#8b5cf6"/>
+      <stop offset="1" stop-color="#6d28d9"/>
+    </linearGradient>
+    <linearGradient id="mp-screen" x1="30" y1="22" x2="92" y2="98" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0a0a0a"/>
+      <stop offset="0.5" stop-color="#221133"/>
+      <stop offset="1" stop-color="#0a0a0a"/>
+    </linearGradient>
+    <linearGradient id="mp-glare" x1="36" y1="26" x2="74" y2="62" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffffff" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect x="14" y="10" width="92" height="100" rx="16" fill="url(#mp-body)"/>
+  <rect x="22" y="18" width="76" height="84" rx="11" fill="url(#mp-screen)"/>
+  <rect x="28" y="24" width="64" height="72" rx="8" fill="#050505"/>
+  <path d="M32 26h34L40 74H28V32c0-3.3 1.8-6 4-6Z" fill="url(#mp-glare)"/>
+  <circle cx="60" cy="88" r="3" fill="#8b5cf6" opacity="0.7"/>
+  <path d="M104 34v34" stroke="#c4b5fd" stroke-width="3" stroke-linecap="round"/>
+</svg>
