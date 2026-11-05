@@ -131,6 +131,7 @@
   ];
 
   const BACKGROUNDS = [
+    { name: 'Transparent', type: 'transparent' },
     { name: 'Black', type: 'solid', value: '#000000' },
     { name: 'Graphite', type: 'solid', value: '#1c1c1e' },
     { name: 'Charcoal', type: 'solid', value: '#2b2b2f' },
@@ -142,7 +143,18 @@
     { name: 'Sunset', type: 'gradient', from: '#ff7e5f', to: '#feb47b', deg: 165 },
     { name: 'Mint', type: 'gradient', from: '#43e97b', to: '#38f9d7', deg: 135 },
     { name: 'Coral', type: 'gradient', from: '#fa709a', to: '#fee140', deg: 120 },
-    { name: 'Midnight', type: 'gradient', from: '#141e30', to: '#243b55', deg: 180 }
+    { name: 'Midnight', type: 'gradient', from: '#141e30', to: '#243b55', deg: 180 },
+    { name: 'Mesh', type: 'gradient', from: '#8ec5fc', to: '#e0c3fc', deg: 135 },
+    { name: 'Noir', type: 'gradient', from: '#232526', to: '#414345', deg: 160 },
+    { name: 'Sand', type: 'gradient', from: '#e6c9a8', to: '#b08968', deg: 120 },
+    { name: 'Ocean', type: 'gradient', from: '#2193b0', to: '#6dd5ed', deg: 135 },
+    { name: 'Forest', type: 'gradient', from: '#134e5e', to: '#71b280', deg: 145 },
+    { name: 'Lilac', type: 'gradient', from: '#b6a6e8', to: '#efe3ff', deg: 130 },
+    { name: 'Ember', type: 'gradient', from: '#f12711', to: '#f5af19', deg: 120 },
+    { name: 'Ice', type: 'gradient', from: '#83a4d4', to: '#b6fbff', deg: 160 },
+    { name: 'Rose', type: 'gradient', from: '#ee9ca7', to: '#ffdde1', deg: 140 },
+    { name: 'Dusk', type: 'gradient', from: '#355c7d', to: '#c06c84', deg: 135 },
+    { name: 'Moss', type: 'gradient', from: '#606c38', to: '#dda15e', deg: 150 }
   ];
 
   const FINISHES = {
@@ -165,7 +177,8 @@
   const QUALITY_MIN = 0.10;
   const QUALITY_MAX = 1.00;
   const QUALITY_DEFAULT = 0.92;
-  const PREFS_KEY = 'mockup-studio:v1';
+  const PREFS_KEY = 'mockup-studio:v2';
+  const LEGACY_PREFS_KEY = 'mockup-studio:v1';
 
   // ----------------------------------------------------------------------------
   // State
@@ -207,6 +220,7 @@
   function savePrefs() {
     try {
       localStorage.setItem(PREFS_KEY, JSON.stringify({
+        v: 2,
         deviceIndex: STATE.deviceIndex,
         colors: STATE.colors,
         background: STATE.background,
@@ -218,31 +232,40 @@
     }
   }
 
-  function restorePrefs() {
+  function readPrefs(key) {
     let raw = null;
     try {
-      raw = localStorage.getItem(PREFS_KEY);
+      raw = localStorage.getItem(key);
     } catch (err) {
-      return;
+      return null;
     }
-    if (!raw) return;
-
-    let data = null;
+    if (!raw) return null;
     try {
-      data = JSON.parse(raw);
+      const data = JSON.parse(raw);
+      if (data && typeof data === 'object' && !Array.isArray(data)) return data;
     } catch (err) {
-      data = null;
+      // fall through to cleanup
     }
-    if (!data || typeof data !== 'object' || Array.isArray(data)) {
-      try { localStorage.removeItem(PREFS_KEY); } catch (err) {}
-      return;
+    try { localStorage.removeItem(key); } catch (err) {}
+    return null;
+  }
+
+  function restorePrefs() {
+    let data = readPrefs(PREFS_KEY);
+    let legacy = false;
+    if (!data) {
+      data = readPrefs(LEGACY_PREFS_KEY);
+      legacy = !!data;
     }
+    if (!data) return;
 
     if (Number.isInteger(data.deviceIndex) && data.deviceIndex >= 0 && data.deviceIndex < DEVICES.length) {
       STATE.deviceIndex = data.deviceIndex;
     }
-    if (Number.isInteger(data.background) && data.background >= 0 && data.background < BACKGROUNDS.length) {
-      STATE.background = data.background;
+    // v1 stored backgrounds without the leading Transparent entry.
+    const bgIndex = legacy && Number.isInteger(data.background) ? data.background + 1 : data.background;
+    if (Number.isInteger(bgIndex) && bgIndex >= 0 && bgIndex < BACKGROUNDS.length) {
+      STATE.background = bgIndex;
     }
     if (Array.isArray(data.colors)) {
       DEVICES.forEach(function (device, index) {
@@ -257,6 +280,11 @@
     }
     if (typeof data.quality === 'number' && isFinite(data.quality)) {
       STATE.quality = clamp(Math.round(data.quality * 100) / 100, QUALITY_MIN, QUALITY_MAX);
+    }
+
+    if (legacy) {
+      try { localStorage.removeItem(LEGACY_PREFS_KEY); } catch (err) {}
+      savePrefs();
     }
   }
 
@@ -1030,11 +1058,16 @@
   function configureBackground(index) {
     STATE.background = index;
     const bg = BACKGROUNDS[index];
-    if (bg.type === 'solid') {
+    if (bg.type === 'transparent') {
+      scene.background = null;
+      renderer.setClearColor(0x000000, 0);
+    } else if (bg.type === 'solid') {
       scene.background = new THREE.Color(bg.value);
+      renderer.setClearColor(0x000000, 1);
     } else {
       if (!bgTextures[index]) bgTextures[index] = makeBackgroundTexture(bg);
       scene.background = bgTextures[index];
+      renderer.setClearColor(0x000000, 1);
     }
   }
 
@@ -1047,6 +1080,21 @@
     camera.updateProjectionMatrix();
   }
 
+  function encodeExport(fmt, quality) {
+    // JPEG has no alpha, so a transparent stage is flattened onto pure black.
+    if (STATE.format === 'jpeg' && BACKGROUNDS[STATE.background].type === 'transparent') {
+      const flat = document.createElement('canvas');
+      flat.width = EXPORT_SIZE;
+      flat.height = EXPORT_SIZE;
+      const ctx = flat.getContext('2d');
+      ctx.fillStyle = '#000000';
+      ctx.fillRect(0, 0, EXPORT_SIZE, EXPORT_SIZE);
+      ctx.drawImage(renderer.domElement, 0, 0);
+      return flat.toDataURL(fmt.mime);
+    }
+    return renderer.domElement.toDataURL(fmt.mime, quality);
+  }
+
   function captureSquare() {
     renderer.setPixelRatio(1);
     renderer.setSize(EXPORT_SIZE, EXPORT_SIZE, false);
@@ -1055,7 +1103,7 @@
     renderer.render(scene, camera);
     const fmt = EXPORT_FORMATS[STATE.format] || EXPORT_FORMATS.png;
     const quality = STATE.format === 'webp' ? STATE.quality : undefined;
-    const url = renderer.domElement.toDataURL(fmt.mime, quality);
+    const url = encodeExport(fmt, quality);
     resizeStage();
     renderer.render(scene, camera);
     return url;
@@ -1134,6 +1182,8 @@
       chip.className = 'bg-chip';
       if (bg.type === 'solid') {
         chip.style.background = bg.value;
+      } else if (bg.type === 'transparent') {
+        chip.classList.add('is-transparent');
       } else {
         chip.style.background = 'linear-gradient(' + bg.deg + 'deg, ' + bg.from + ', ' + bg.to + ')';
       }
@@ -1398,7 +1448,7 @@
         await tick();
 
         renderer.render(scene, camera);
-        const url = renderer.domElement.toDataURL(fmt.mime, quality);
+        const url = encodeExport(fmt, quality);
         const bytes = await dataURLToBytes(url);
         files.push({ name: DEVICES[i].id + '.' + fmt.ext, data: bytes });
       }
@@ -1601,7 +1651,7 @@
 
     renderer = new THREE.WebGLRenderer({
       antialias: true,
-      alpha: false,
+      alpha: true,
       preserveDrawingBuffer: true
     });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
