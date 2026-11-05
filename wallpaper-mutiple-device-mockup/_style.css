@@ -510,6 +510,91 @@
   color: var(--mp-accent-light);
 }
 
+.mockup-export-options {
+  display: flex;
+  align-items: flex-end;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.mockup-format-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mockup-option-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--mp-text-40);
+}
+
+.mockup-format-buttons {
+  display: inline-flex;
+  padding: 3px;
+  gap: 3px;
+  border: 1px solid var(--mp-border);
+  border-radius: 10px;
+  background: var(--mp-surface-2);
+}
+
+.mockup-format-btn {
+  padding: 7px 13px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--mp-text-60);
+  font: 600 12.5px var(--font-sans, sans-serif);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.mockup-format-btn:hover {
+  color: #fff;
+}
+
+.mockup-format-btn.active {
+  background: rgba(139, 92, 246, 0.22);
+  color: var(--mp-accent-light);
+  box-shadow: inset 0 0 0 1px rgba(139, 92, 246, 0.45);
+}
+
+.mockup-quality {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 150px;
+}
+
+.mockup-quality[hidden] {
+  display: none;
+}
+
+.mockup-quality-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.mockup-quality-value {
+  font: 600 12.5px var(--font-mono, monospace);
+  color: var(--mp-accent-light);
+}
+
+.mockup-quality input[type="range"] {
+  width: 100%;
+  accent-color: var(--mp-accent);
+  cursor: pointer;
+}
+
+.mockup-quality input[type="range"]:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .mockup-specs {
   margin-top: 22px;
   border: 1px solid var(--mp-border);
@@ -595,6 +680,23 @@
 
   .mockup-export-panel {
     padding: 18px;
+  }
+
+  .mockup-export-options {
+    width: 100%;
+  }
+
+  .mockup-format-group,
+  .mockup-quality {
+    width: 100%;
+  }
+
+  .mockup-format-buttons {
+    width: 100%;
+  }
+
+  .mockup-format-btn {
+    flex: 1;
   }
 
   .mockup-export-actions,

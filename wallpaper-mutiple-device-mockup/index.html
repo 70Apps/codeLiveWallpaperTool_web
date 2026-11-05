@@ -1,7 +1,7 @@
 ---
 layout: web-app
 title: 3D Device Mockup Generator
-description: Turn one wallpaper into realistic 3D mockups for iPhone Duo, iPhone (Latest), iPad, Mac, MacBook Pro and Apple Watch — rotate, zoom, recolor and export 1024×1024 PNGs.
+description: Turn one wallpaper into realistic 3D mockups for iPhone Duo, iPhone (Latest), iPad, Mac, MacBook Pro and Apple Watch — rotate, zoom, recolor and export 1024×1024 PNG, JPEG or WebP.
 permalink: /wallpaper-mutiple-device-mockup/
 tags: [iPhone, iPad, Mac, Apple Watch, Mockup]
 color: rose
@@ -21,7 +21,7 @@ orderid: 12
       </div>
       <div class="section-label">3D Mockup Studio</div>
       <h1 class="tool-title">Put Your Wallpaper on Every Device</h1>
-      <p class="tool-desc">Upload one image, choose a device, and drag the 3D mockup to any angle. Swap body finishes and backgrounds, then export a 1024×1024 PNG or all seven devices in one ZIP.</p>
+      <p class="tool-desc">Upload one image, choose a device, and drag the 3D mockup to any angle. Swap body finishes and backgrounds, then export 1024×1024 PNG, JPEG or WebP — one view or all seven devices in a ZIP.</p>
     </section>
 
     <hr class="section-divider">
@@ -116,14 +116,31 @@ orderid: 12
         <span class="step-number">3</span>
         <div class="step-info">
           <h2 class="step-title">Export Mockups</h2>
-          <p class="step-desc">PNG at 1024×1024. The current export keeps your angle, zoom, body color, and background. The ZIP uses a straight-on view with default zoom for all seven devices.</p>
+          <p class="step-desc">Export at 1024×1024 as PNG, JPEG or WebP. The current export keeps your angle, zoom, body color, and background. The ZIP uses a straight-on view with default zoom for all seven devices.</p>
         </div>
       </div>
 
       <div class="mockup-export-panel">
         <div class="mockup-export-copy">
-          <strong>PNG · 1024 × 1024</strong>
+          <strong id="export-format-summary">PNG · 1024 × 1024</strong>
           <p>Current view captures exactly what you see on the stage. ZIP includes one front-view image per device, each at its own selected body color and the current background.</p>
+        </div>
+        <div class="mockup-export-options">
+          <div class="mockup-format-group">
+            <span class="mockup-option-label" id="export-format-label">File type</span>
+            <div class="mockup-format-buttons" id="export-format-group" role="group" aria-labelledby="export-format-label">
+              <button type="button" class="mockup-format-btn active" data-format="png" aria-pressed="true">PNG</button>
+              <button type="button" class="mockup-format-btn" data-format="jpeg" aria-pressed="false">JPEG</button>
+              <button type="button" class="mockup-format-btn" data-format="webp" aria-pressed="false">WebP</button>
+            </div>
+          </div>
+          <div class="mockup-quality" id="quality-group" hidden>
+            <div class="mockup-quality-head">
+              <span class="mockup-option-label" id="quality-label">WebP quality</span>
+              <span class="mockup-quality-value" id="quality-value">0.92</span>
+            </div>
+            <input type="range" id="quality-range" min="0.10" max="1.00" step="0.01" value="0.92" aria-labelledby="quality-label">
+          </div>
         </div>
         <div class="mockup-export-actions">
           <button type="button" id="btn-export-current" class="mockup-btn primary">

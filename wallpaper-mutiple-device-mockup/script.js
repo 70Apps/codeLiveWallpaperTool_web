@@ -41,8 +41,8 @@
         ['Starlight', '#e7dfd3']
       ],
       asymmetricCorners: true,
-      island: 'right',
-      note: 'Duo outer preset (1398 × 2034) with a straight hinge-side (left) edge and a top-right Dynamic Island.'
+      island: 'punch',
+      note: 'Duo outer preset (1398 × 2034): straight hinge-side (left) edge with 0.2R left corners, full R on the right, and a top-right front-camera punch hole.'
     },
     {
       id: 'iphone-18-pro-max',
@@ -157,6 +157,16 @@
   const ZOOM_MAX = 1.60;
   const EXPORT_SIZE = 1024;
 
+  const EXPORT_FORMATS = {
+    png: { label: 'PNG', mime: 'image/png', ext: 'png' },
+    jpeg: { label: 'JPEG', mime: 'image/jpeg', ext: 'jpg' },
+    webp: { label: 'WebP', mime: 'image/webp', ext: 'webp' }
+  };
+  const QUALITY_MIN = 0.10;
+  const QUALITY_MAX = 1.00;
+  const QUALITY_DEFAULT = 0.92;
+  const PREFS_KEY = 'mockup-studio:v1';
+
   // ----------------------------------------------------------------------------
   // State
   // ----------------------------------------------------------------------------
@@ -167,6 +177,8 @@
     zoom: 1,
     colors: DEVICES.map(function () { return 0; }),
     background: 0,
+    format: 'png',
+    quality: QUALITY_DEFAULT,
     hasImage: false
   };
 
@@ -188,6 +200,65 @@
   // ----------------------------------------------------------------------------
   function clamp(v, min, max) { return Math.min(max, Math.max(min, v)); }
   function tick() { return new Promise(function (r) { setTimeout(r, 0); }); }
+
+  // ----------------------------------------------------------------------------
+  // Preferences (localStorage)
+  // ----------------------------------------------------------------------------
+  function savePrefs() {
+    try {
+      localStorage.setItem(PREFS_KEY, JSON.stringify({
+        deviceIndex: STATE.deviceIndex,
+        colors: STATE.colors,
+        background: STATE.background,
+        format: STATE.format,
+        quality: STATE.quality
+      }));
+    } catch (err) {
+      // Storage may be unavailable (private mode / quota); the tool still works.
+    }
+  }
+
+  function restorePrefs() {
+    let raw = null;
+    try {
+      raw = localStorage.getItem(PREFS_KEY);
+    } catch (err) {
+      return;
+    }
+    if (!raw) return;
+
+    let data = null;
+    try {
+      data = JSON.parse(raw);
+    } catch (err) {
+      data = null;
+    }
+    if (!data || typeof data !== 'object' || Array.isArray(data)) {
+      try { localStorage.removeItem(PREFS_KEY); } catch (err) {}
+      return;
+    }
+
+    if (Number.isInteger(data.deviceIndex) && data.deviceIndex >= 0 && data.deviceIndex < DEVICES.length) {
+      STATE.deviceIndex = data.deviceIndex;
+    }
+    if (Number.isInteger(data.background) && data.background >= 0 && data.background < BACKGROUNDS.length) {
+      STATE.background = data.background;
+    }
+    if (Array.isArray(data.colors)) {
+      DEVICES.forEach(function (device, index) {
+        const value = data.colors[index];
+        if (Number.isInteger(value) && value >= 0 && value < device.colors.length) {
+          STATE.colors[index] = value;
+        }
+      });
+    }
+    if (typeof data.format === 'string' && Object.prototype.hasOwnProperty.call(EXPORT_FORMATS, data.format)) {
+      STATE.format = data.format;
+    }
+    if (typeof data.quality === 'number' && isFinite(data.quality)) {
+      STATE.quality = clamp(Math.round(data.quality * 100) / 100, QUALITY_MIN, QUALITY_MAX);
+    }
+  }
 
   function roundedRectShape(w, h, r) {
     const x = -w / 2;
@@ -606,15 +677,32 @@
   }
 
   // 3D Dynamic Island: a thin, pure-black extruded capsule lying on the glass.
-  // align 'center' places it top-center; 'right' tucks it into the top-right
-  // corner for the Duo outer screen.
+  // align 'center' places it top-center. align 'punch' is the Duo outer's
+  // single front camera: a small circular punch hole tucked into the top-right.
   function addDynamicIsland(parent, w, h, screenZ, align) {
+    if (align === 'punch') {
+      const diameter = w * 0.075;
+      const punchR = diameter / 2;
+      const marginTop = h * 0.045;
+      const marginRight = w * 0.055;
+      const cx = w / 2 - marginRight - punchR;
+      const cy = h / 2 - marginTop - punchR;
+      const punchDepth = Math.min(h * 0.0045, 0.016);
+      const punch = new THREE.Mesh(
+        new THREE.CylinderGeometry(punchR, punchR, punchDepth, 48),
+        new THREE.MeshBasicMaterial({ color: 0x000000, toneMapped: false })
+      );
+      punch.rotation.x = Math.PI / 2;
+      punch.position.set(cx, cy, screenZ + 0.004 + punchDepth / 2);
+      parent.add(punch);
+      return;
+    }
+
     const islandW = w * 0.30;
     const islandH = islandW / 3.4;
     const islandR = islandH / 2;
     const marginTop = h * 0.028;
-    const sideMargin = w * 0.055;
-    const cx = align === 'right' ? w / 2 - sideMargin - islandW / 2 : 0;
+    const cx = 0;
     const cy = h / 2 - marginTop - islandH / 2;
     const depth = Math.min(h * 0.0075, 0.026);
 
@@ -662,14 +750,19 @@
     const sharp = H * 0.0025;
     const screenR = W * spec.screenCornerRatio;
 
+    // Duo outer: hinge side (left) keeps its straight edge, but both left
+    // corners get a small 0.2R relief; the two right corners keep the full R.
+    const leftRatio = 0.2;
+    const leftR = radius * leftRatio;
+    const glassR = Math.max(radius - bezel * 0.25, 0.02);
     const bodyRadii = spec.asymmetricCorners
-      ? { tl: sharp, bl: sharp, tr: radius, br: radius }
+      ? { tl: leftR, bl: leftR, tr: radius, br: radius }
       : null;
     const glassRadii = spec.asymmetricCorners
-      ? { tl: sharp, bl: sharp, tr: Math.max(radius - bezel * 0.25, 0.02), br: Math.max(radius - bezel * 0.25, 0.02) }
+      ? { tl: glassR * leftRatio, bl: glassR * leftRatio, tr: glassR, br: glassR }
       : null;
     const screenRadii = spec.asymmetricCorners
-      ? { tl: sharp, bl: sharp, tr: screenR, br: screenR }
+      ? { tl: screenR * leftRatio, bl: screenR * leftRatio, tr: screenR, br: screenR }
       : null;
 
     const mat = bodyMaterial(colorHex, spec.finish);
@@ -954,13 +1047,15 @@
     camera.updateProjectionMatrix();
   }
 
-  function captureSquarePNG() {
+  function captureSquare() {
     renderer.setPixelRatio(1);
     renderer.setSize(EXPORT_SIZE, EXPORT_SIZE, false);
     camera.aspect = 1;
     camera.updateProjectionMatrix();
     renderer.render(scene, camera);
-    const url = renderer.domElement.toDataURL('image/png');
+    const fmt = EXPORT_FORMATS[STATE.format] || EXPORT_FORMATS.png;
+    const quality = STATE.format === 'webp' ? STATE.quality : undefined;
+    const url = renderer.domElement.toDataURL(fmt.mime, quality);
     resizeStage();
     renderer.render(scene, camera);
     return url;
@@ -1019,6 +1114,7 @@
         STATE.colors[STATE.deviceIndex] = index;
         bodyMats.forEach(function (mat) { mat.color.set(color[1]); });
         renderColors();
+        savePrefs();
       });
       wrap.appendChild(btn);
     });
@@ -1054,6 +1150,7 @@
         document.querySelectorAll('.bg-swatch').forEach(function (el, i) {
           el.classList.toggle('active', i === index);
         });
+        savePrefs();
       });
       wrap.appendChild(btn);
     });
@@ -1069,6 +1166,47 @@
     });
   }
 
+  function renderExportFormat() {
+    document.querySelectorAll('.mockup-format-btn').forEach(function (btn) {
+      const active = btn.getAttribute('data-format') === STATE.format;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+
+    const qualityGroup = document.getElementById('quality-group');
+    if (qualityGroup) qualityGroup.hidden = STATE.format !== 'webp';
+    const range = document.getElementById('quality-range');
+    if (range) range.value = STATE.quality.toFixed(2);
+    const value = document.getElementById('quality-value');
+    if (value) value.textContent = STATE.quality.toFixed(2);
+    const summary = document.getElementById('export-format-summary');
+    if (summary) summary.textContent = EXPORT_FORMATS[STATE.format].label + ' · 1024 × 1024';
+  }
+
+  function setupExportOptions() {
+    document.querySelectorAll('.mockup-format-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (busy) return;
+        const format = btn.getAttribute('data-format');
+        if (!EXPORT_FORMATS[format] || format === STATE.format) return;
+        STATE.format = format;
+        renderExportFormat();
+        savePrefs();
+      });
+    });
+
+    const range = document.getElementById('quality-range');
+    range.addEventListener('input', function () {
+      if (busy) {
+        range.value = STATE.quality.toFixed(2);
+        return;
+      }
+      STATE.quality = clamp(parseFloat(range.value) || QUALITY_DEFAULT, QUALITY_MIN, QUALITY_MAX);
+      document.getElementById('quality-value').textContent = STATE.quality.toFixed(2);
+      savePrefs();
+    });
+  }
+
   function selectDevice(index) {
     STATE.deviceIndex = index;
     STATE.yaw = 0;
@@ -1077,6 +1215,7 @@
     buildCurrentDevice();
     updateTabs();
     renderColors();
+    savePrefs();
   }
 
   function setStatus(text, isBusy) {
@@ -1211,11 +1350,13 @@
   async function exportCurrent() {
     if (busy) return;
     setBusy(true);
+    const fmt = EXPORT_FORMATS[STATE.format];
     setStatus('Rendering current view…', true);
     try {
-      const url = captureSquarePNG();
-      downloadURL(url, DEVICES[STATE.deviceIndex].id + '-mockup.png');
-      setStatus('Exported ' + DEVICES[STATE.deviceIndex].label + ' at 1024 × 1024 PNG.', false);
+      const url = captureSquare();
+      downloadURL(url, DEVICES[STATE.deviceIndex].id + '-mockup.' + fmt.ext);
+      const qualityNote = STATE.format === 'webp' ? ' · quality ' + STATE.quality.toFixed(2) : '';
+      setStatus('Exported ' + DEVICES[STATE.deviceIndex].label + ' at 1024 × 1024 ' + fmt.label + qualityNote + '.', false);
     } catch (err) {
       console.error(err);
       setStatus('Export failed: ' + err.message, false);
@@ -1227,6 +1368,8 @@
   async function exportZip() {
     if (busy) return;
     setBusy(true);
+    const fmt = EXPORT_FORMATS[STATE.format];
+    const quality = STATE.format === 'webp' ? STATE.quality : undefined;
     const original = {
       deviceIndex: STATE.deviceIndex,
       yaw: STATE.yaw,
@@ -1255,14 +1398,15 @@
         await tick();
 
         renderer.render(scene, camera);
-        const url = renderer.domElement.toDataURL('image/png');
+        const url = renderer.domElement.toDataURL(fmt.mime, quality);
         const bytes = await dataURLToBytes(url);
-        files.push({ name: DEVICES[i].id + '.png', data: bytes });
+        files.push({ name: DEVICES[i].id + '.' + fmt.ext, data: bytes });
       }
 
       const blob = buildZip(files);
       downloadBlob(blob, 'apple-device-mockups-1024.zip');
-      setStatus('Exported 7 front-view mockups (1024 × 1024 each) as ZIP.', false);
+      const qualityNote = STATE.format === 'webp' ? ' · quality ' + STATE.quality.toFixed(2) : '';
+      setStatus('Exported 7 front-view mockups (1024 × 1024 each) as ' + fmt.label + qualityNote + ' in a ZIP.', false);
     } catch (err) {
       console.error(err);
       setStatus('ZIP export failed: ' + err.message, false);
@@ -1448,6 +1592,7 @@
   // ----------------------------------------------------------------------------
   function init() {
     stage = document.getElementById('mockup-stage');
+    restorePrefs();
 
     if (typeof THREE === 'undefined') {
       setStatus('three.min.js failed to load — the 3D preview is unavailable.', false);
@@ -1519,10 +1664,12 @@
     renderColors();
     renderBackgrounds();
     renderSpecs();
+    renderExportFormat();
     updateTabs();
     applyView();
     setupUpload();
     setupControls();
+    setupExportOptions();
 
     document.getElementById('btn-export-current').addEventListener('click', exportCurrent);
     document.getElementById('btn-export-zip').addEventListener('click', exportZip);
